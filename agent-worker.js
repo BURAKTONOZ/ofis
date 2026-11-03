@@ -353,29 +353,22 @@ KURALLAR VE DOĞRUDAN FIRESTORE GÜNCELLEME YETKİSİ:
     });
   }
 
-  // Ofis / UI yaması varsa hem Ortak Klasöre yedekle hem Onay Kutusuna sun
-  const hasPatch = decision.officePatch && decision.officePatch.hasPatch;
-  const isFinal = decision.submitFinalApproval && decision.submitFinalApproval.ready;
-  if (hasPatch || isFinal) {
-    if (hasPatch) {
-      await db.collection('files').add({
-        path: `yama-${Date.now()}.json`,
-        content: JSON.stringify(decision.officePatch, null, 2),
-        kind: 'json',
-        owner: `${agent.name} (${agent.role})`,
-        version: 1,
-        createdAt: FV.serverTimestamp(),
-        updatedAt: FV.serverTimestamp()
-      });
-    }
+  // SADECE gerçek bir 2.5D ofis veya arayüz değişikliği (officePatch) varsa Onay Kutusuna sun
+  const op = decision.officePatch || {};
+  const hasSceneOrUiChanges = (Array.isArray(op.sceneMods) && op.sceneMods.some(s => s && s.drawJs))
+    || (Array.isArray(op.uiMods) && op.uiMods.some(u => u && (u.html || u.css || u.js)))
+    || (Array.isArray(op.removeSceneIds) && op.removeSceneIds.length > 0);
+
+  if (op.hasPatch && hasSceneOrUiChanges) {
     await db.collection('approvals').add({
-      title: (decision.officePatch && decision.officePatch.title) || mail.subject || 'Çalışma Onayı',
-      summary: (decision.officePatch && decision.officePatch.summary) || (decision.submitFinalApproval && decision.submitFinalApproval.summary) || 'Ekip çalışmayı tamamladı ve onayınıza sunar.',
+      title: op.title || mail.subject || 'Tasarım Onayı',
+      summary: op.summary || 'Ekip istediğiniz ofis/arayüz değişikliğini hazırladı ve onayınıza sunar.',
       createdBy: `${agent.name} (${agent.role})`,
       status: 'pending',
-      hasPatch: !!hasPatch,
-      sceneMods: (decision.officePatch && Array.isArray(decision.officePatch.sceneMods)) ? decision.officePatch.sceneMods : [],
-      uiMods: (decision.officePatch && Array.isArray(decision.officePatch.uiMods)) ? decision.officePatch.uiMods : [],
+      hasPatch: true,
+      removeSceneIds: Array.isArray(op.removeSceneIds) ? op.removeSceneIds : [],
+      sceneMods: Array.isArray(op.sceneMods) ? op.sceneMods.filter(s => s && s.drawJs) : [],
+      uiMods: Array.isArray(op.uiMods) ? op.uiMods.filter(u => u && (u.html || u.css || u.js)) : [],
       threadId: mail.threadId || mail.id,
       createdAt: FV.serverTimestamp()
     });

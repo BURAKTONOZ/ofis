@@ -8,7 +8,7 @@
 <style>
 :root{
   --bg:#090b11;
-  --card:rgba(15,19,30,.92);
+  --card:rgba(15,19,30,.94);
   --card-2:#141927;
   --card-3:#1c2336;
   --tx:#f1f5f9;
@@ -64,7 +64,7 @@ html,body{
 .brand-title span{font-size:11px;color:var(--mut);font-weight:600;display:block}
 
 #ext-header-menu,#ext-top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#ext-floating-widget{position:fixed;left:18px;bottom:84px;z-index:25;display:flex;flex-direction:column;gap:8px}
+#ext-floating-widget{position:fixed;left:18px;bottom:94px;z-index:25;display:flex;flex-direction:column;gap:8px}
 
 .badge{
   font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;
@@ -87,6 +87,7 @@ button.p:hover{filter:brightness(1.08)}
 button.ok{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.45);color:#34d399}
 button.warn{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.45);color:#fbbf24}
 button.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#f87171}
+button.sm{padding:4px 8px;font-size:11px;border-radius:8px}
 
 input,select,textarea{
   border:1px solid var(--ln);border-radius:11px;padding:8px 12px;
@@ -98,17 +99,43 @@ label{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin:10p
 .note{font-size:12px;color:var(--mut)}
 .row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}
 
-/* ALT YÜZEN GÖREV KOMUT ÇUBUĞU (SADECE YÖNETİCİDE AÇILIR) */
+/* ALT YÜZEN GÖREV KOMUT ÇUBUĞU VE İKİ SATIRLI PERSONEL SEÇİCİ */
 #cmdDock{
   display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-  width:min(1120px,calc(100vw - 36px));z-index:20;
+  width:min(1180px,calc(100vw - 36px));z-index:20;
   background:var(--card);backdrop-filter:blur(16px);
   border:1px solid var(--ln);border-radius:18px;padding:10px 14px;
-  box-shadow:0 16px 48px rgba(0,0,0,.6);
-  grid-template-columns:220px 1fr auto;gap:10px;align-items:center;
+  box-shadow:0 16px 48px rgba(0,0,0,.65);
+  grid-template-columns:270px 1fr auto;gap:10px;align-items:center;
 }
 #cmdDock.on{display:grid}
-@media(max-width:900px){#cmdDock.on{grid-template-columns:1fr}}
+@media(max-width:920px){#cmdDock.on{grid-template-columns:1fr}}
+
+.staff-picker-wrap{position:relative;width:100%}
+.staff-picker-btn{
+  width:100%;text-align:left;padding:7px 12px;border-radius:12px;
+  background:#0c101b;border:1px solid var(--ln);cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.staff-picker-btn:hover{border-color:var(--acc);background:var(--card-2)}
+.sp-info{display:flex;flex-direction:column;overflow:hidden;line-height:1.25}
+.sp-name{font-weight:700;font-size:13px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.sp-role{font-size:11px;color:var(--mut);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.staff-picker-menu{
+  display:none;position:absolute;bottom:calc(100% + 10px);left:0;width:340px;max-height:340px;
+  overflow-y:auto;background:var(--card);backdrop-filter:blur(18px);
+  border:1px solid var(--acc);border-radius:16px;padding:8px;
+  box-shadow:0 20px 50px rgba(0,0,0,.8);z-index:60;
+}
+.staff-picker-menu.open{display:block}
+.sp-item{
+  padding:9px 11px;border-radius:11px;cursor:pointer;transition:.14s;
+  border:1px solid transparent;margin-bottom:4px;
+}
+.sp-item:hover,.sp-item.active{background:var(--card-3);border-color:var(--acc)}
+.sp-item-top{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:13px;color:#fff}
+.sp-item-sub{font-size:11px;color:#cbd5e1;margin-top:2px;font-weight:600}
+.sp-item-skills{font-size:10.5px;color:var(--mut);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
 /* SAĞ ÜST BİLDİRİM / ONAY UYARI KARTI */
 #ap{
@@ -121,23 +148,33 @@ label{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin:10p
 
 /* SOL ALT KARAKTER BİLGİ KARTI (HOVER HUD) */
 #hoverHud{
-  display:none;position:fixed;bottom:84px;left:18px;z-index:18;
+  display:none;position:fixed;bottom:92px;left:18px;z-index:18;
   background:var(--card);backdrop-filter:blur(12px);
   border:1px solid var(--acc);border-radius:14px;padding:10px 14px;
-  pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.55);max-width:340px;
+  pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.55);max-width:350px;
+}
+
+/* SAĞ ALT KAMERA YAKINLAŞTIRMA KONTROLLERİ */
+.cam-controls{
+  position:fixed;right:18px;bottom:92px;z-index:18;
+  display:flex;flex-direction:column;gap:6px;
+}
+.cam-controls button{
+  width:36px;height:36px;padding:0;justify-content:center;
+  border-radius:11px;background:var(--card);font-size:15px;
 }
 
 /* AÇILIR PENCERE (MODAL WINDOW) SİSTEMİ */
 .win-backdrop{
   display:none;position:fixed;inset:0;z-index:40;
-  background:rgba(5,7,12,.55);backdrop-filter:blur(6px);
-  place-items:center;padding:24px;
+  background:rgba(5,7,12,.58);backdrop-filter:blur(6px);
+  place-items:center;padding:20px;
 }
 .win-backdrop.open{display:grid}
 .win-box{
-  width:min(1180px,96vw);max-height:84vh;
+  width:min(1220px,96vw);max-height:86vh;
   background:var(--card);border:1px solid var(--ln);border-radius:22px;
-  box-shadow:0 25px 70px rgba(0,0,0,.75);
+  box-shadow:0 25px 70px rgba(0,0,0,.78);
   display:flex;flex-direction:column;overflow:hidden;
   user-select:text;
 }
@@ -151,20 +188,20 @@ label{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin:10p
 table{width:100%;border-collapse:collapse;font-size:13px}
 td,th{text-align:left;padding:10px 11px;border-bottom:1px solid var(--ln);vertical-align:middle}
 th{color:var(--mut);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:rgba(15,23,42,.4)}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;flex-shrink:0}
 .bar{height:7px;border-radius:99px;background:#090c14;margin:4px 0;overflow:hidden;border:1px solid var(--ln)}
 .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--cyan));transition:width .35s}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.mail-grid{display:grid;grid-template-columns:350px 1fr;gap:16px}
+.mail-grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
 @media(max-width:860px){.mail-grid{grid-template-columns:1fr}}
-.mail-list{max-height:58vh;overflow-y:auto;border-right:1px solid var(--ln);padding-right:10px}
-.mail-item{padding:11px 13px;border-radius:13px;border:1px solid var(--ln);cursor:pointer;margin-bottom:8px;background:var(--card-2);transition:.15s}
+.mail-list{max-height:60vh;overflow-y:auto;border-right:1px solid var(--ln);padding-right:10px}
+.mail-item{padding:10px 12px;border-radius:13px;border:1px solid var(--ln);cursor:pointer;margin-bottom:8px;background:var(--card-2);transition:.15s;position:relative}
 .mail-item:hover,.mail-item.active{border-color:var(--acc);background:var(--card-3)}
 .mail-item.unread{border-left:4px solid var(--acc)}
-pre.code{
+textarea.code-editor{
   background:var(--code-bg);color:var(--code-tx);padding:14px;border-radius:14px;
-  overflow-x:auto;font:12px/1.6 'JetBrains Mono',monospace;max-height:52vh;
-  white-space:pre-wrap;border:1px solid var(--ln);
+  font:12.5px/1.6 'JetBrains Mono',monospace;min-height:42vh;width:100%;
+  border:1px solid var(--ln);resize:vertical;
 }
 .tier-card{background:var(--card-2);border:1px solid var(--ln);border-radius:15px;padding:14px}
 .approval-card{
@@ -174,7 +211,7 @@ pre.code{
 
 /* PERSONEL DÜZENLEME KÜÇÜK AÇILIR PENCERESİ */
 #card{
-  display:none;position:fixed;right:22px;bottom:84px;
+  display:none;position:fixed;right:22px;bottom:92px;
   width:min(440px,calc(100vw - 44px));max-height:80vh;overflow:auto;
   z-index:55;background:var(--card);backdrop-filter:blur(16px);
   border:1px solid var(--acc);border-radius:18px;padding:18px;
@@ -206,7 +243,7 @@ pre.code{
   <div class="top-right">
     <div id="ext-header-menu"></div>
     <div id="ext-top-right"></div>
-    <button onclick="resetCamera()" title="Kamera görünümünü ortala">🎯 Kamerayı Ortala</button>
+    <button onclick="resetCamera()" title="Kamera görünümünü ortala">🎯 Ortala</button>
     <button id="bl" class="p">Yönetici Girişi</button>
   </div>
 </header>
@@ -217,10 +254,28 @@ pre.code{
 <!-- KARAKTER ÜZERİNE GELİNCE AÇILAN BİLGİ KARTI -->
 <div id="hoverHud"></div>
 
-<!-- ALT YÜZEN GÖREV KOMUT ÇUBUĞU -->
+<!-- SAĞ ALT KAMERA YAKINLAŞTIRMA BUTONLARI -->
+<div class="cam-controls">
+  <button onclick="camZoom=Math.min(2.2,camZoom*1.15)" title="Yakınlaş">+</button>
+  <button onclick="camZoom=Math.max(0.55,camZoom*0.85)" title="Uzaklaş">−</button>
+  <button onclick="resetCamera()" title="Görünümü Sıfırla">⟲</button>
+</div>
+
+<!-- ALT YÜZEN GÖREV KOMUT ÇUBUĞU (İKİ SATIRLI PERSONEL GÖSTERİMİ İLE) -->
 <section id="cmdDock">
-  <select id="targetAgent" title="Görevi ilk teslim alacak personel"></select>
-  <input id="ti" placeholder="Ajanlara istediğiniz görevi, 2D ofis değişikliğini veya siteye eklenecek yeni özelliği özgürce yazın...">
+  <div class="staff-picker-wrap" id="staffPickerWrap">
+    <input type="hidden" id="targetAgent" value="">
+    <div class="staff-picker-btn" id="staffPickerBtn" onclick="toggleStaffPicker(event)">
+      <div class="sp-info">
+        <div class="sp-name" id="spSelectedName">Personel Seçin</div>
+        <div class="sp-role" id="spSelectedRole">Görev tanımı burada görünür</div>
+      </div>
+      <span style="color:var(--mut);font-size:12px">▲</span>
+    </div>
+    <div class="staff-picker-menu" id="staffPickerMenu"></div>
+  </div>
+
+  <input id="ti" placeholder="Ajanlara görevi, arşivdeki incelenecek dosyayı veya ofiste değiştirilecek/kaldırılacak eşyayı özgürce yazın...">
   <div class="row" style="margin:0">
     <button id="go" class="p">🚀 Görevi Başlat</button>
     <button id="stepBtn" class="ok" title="Bekleyen sıradaki görevi hemen işlet">⚡ Şimdi İşlet</button>
@@ -228,6 +283,9 @@ pre.code{
     <button id="resetProj" class="danger" title="Yazışmaları ve dosyaları sıfırla">🗑️ Sıfırla</button>
   </div>
 </section>
+
+<!-- GİZLİ DOSYA YÜKLEME INPUTU -->
+<input type="file" id="fileUploadInput" multiple style="display:none" onchange="handleLocalFileUpload(event)">
 
 <!-- AÇILIR PENCERE (MODAL) KAPSAYICISI -->
 <div class="win-backdrop" id="winBackdrop" onclick="if(event.target===this)closeWindow()">
@@ -265,21 +323,18 @@ const hhmm = () => new Date().toTimeString().slice(0, 5);
 const todayKey = () => new Date().toISOString().slice(0, 10);
 const currentHourKey = () => new Date().toISOString().slice(11, 13);
 
-// Kullanıcının AI Studio'dan Gönderdiği Tüm Modeller, RPM, TPM, Saatlik (RPH) ve Günlük (RPD) Sınırlar
 const MODELS = [
-  // Aktif Metin & Ajan Modelleri (Kotalı ve Kullanıma Hazır)
-  { n: 'Gemini 3.5 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-3.5-flash-lite', 'gemini-2.5-flash-lite'], rpm: 15,  tpm: 250000, rph: 120,  l: 500,   u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.1 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-3.1-flash-lite', 'gemini-2.5-flash-lite'], rpm: 15,  tpm: 250000, rph: 120,  l: 500,   u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemma 4 31B',           cat: 'Diğer Modeller (Açık)', apis: ['gemma-4-31b-it', 'gemma-3-27b-it', 'gemini-2.5-flash-lite'], rpm: 30, tpm: 16000, rph: 1200, l: 14400, u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemma 4 26B',           cat: 'Diğer Modeller (Açık)', apis: ['gemma-4-26b-it', 'gemma-3-27b-it', 'gemini-2.5-flash-lite'], rpm: 30, tpm: 16000, rph: 1200, l: 14400, u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Yerçekimsiz (Ajan)',    cat: 'Ajanlar',               apis: ['gemini-2.5-flash'],                               rpm: 60,  tpm: 100000, rph: 50,   l: 100,   u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.8 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-3.8-flash', 'gemini-2.5-flash'],           rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.6 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-3.6-flash', 'gemini-2.5-flash'],           rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3 Flash',        cat: 'Metin Çıkış Modelleri', apis: ['gemini-3-flash', 'gemini-2.5-flash'],             rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 2.5 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                               rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 2.5 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite'],                          rpm: 10,  tpm: 250000, rph: 15,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini Robotics ER 2',  cat: 'Diğer Modeller',        apis: ['gemini-robotics-er-2-preview', 'gemini-2.5-flash'], rpm: 5, tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  // Çok Modlu (TTS), Embedding & Canlı API Modelleri (Envanter ve İK Analizi İçin)
+  { n: 'Gemini 3.5 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite', 'gemini-2.5-flash'], rpm: 15,  tpm: 250000, rph: 120,  l: 500,   u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini 3.1 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite', 'gemini-2.5-flash'], rpm: 15,  tpm: 250000, rph: 120,  l: 500,   u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemma 4 31B',           cat: 'Diğer Modeller (Açık)', apis: ['gemma-3-27b-it', 'gemini-2.5-flash-lite'],   rpm: 30,  tpm: 16000,  rph: 1200, l: 14400, u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemma 4 26B',           cat: 'Diğer Modeller (Açık)', apis: ['gemma-3-27b-it', 'gemini-2.5-flash-lite'],   rpm: 30,  tpm: 16000,  rph: 1200, l: 14400, u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Yerçekimsiz (Ajan)',    cat: 'Ajanlar',               apis: ['gemini-2.5-flash'],                          rpm: 60,  tpm: 100000, rph: 50,   l: 100,   u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini 3.8 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini 3.6 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini 3 Flash',        cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini 2.5 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini 2.5 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite'],                     rpm: 10,  tpm: 250000, rph: 15,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
+  { n: 'Gemini Robotics ER 2',  cat: 'Diğer Modeller',        apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
   { n: 'Gemini 3.8 Flash TTS',       cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
   { n: 'Gemini 3.8 Flash Lite TTS',  cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
   { n: 'Gemini 3.1 Flash TTS',       cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
@@ -290,7 +345,6 @@ const MODELS = [
   { n: 'Gemini 2.5 Flash Ses Diyaloğu', cat: 'Canlı API',      apis: ['gemini-2.5-flash'],             rpm: 999, tpm: 1000000, rph: 9999, l: 999999, u: 0, hu: 0, tu: 0, active: false },
   { n: 'Gemini 3.8 Canlı Yayın',     cat: 'Canlı API',         apis: ['gemini-2.5-flash'],             rpm: 999, tpm: 65000,   rph: 9999, l: 999999, u: 0, hu: 0, tu: 0, active: false },
   { n: 'Gemini 3 Flash Canlı Yayın', cat: 'Canlı API',         apis: ['gemini-2.5-flash'],             rpm: 999, tpm: 65000,   rph: 9999, l: 999999, u: 0, hu: 0, tu: 0, active: false },
-  // 0 Limitli / Kapalı Modeller (İK Ajanı Bunları Atamaması Gerektiğini Bilir)
   { n: 'Gemini 2.5 Pro',             cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false },
   { n: 'Gemini 3.1 Pro',             cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false },
   { n: 'Gemini 2 Flash / Lite',      cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false },
@@ -299,6 +353,196 @@ const MODELS = [
 
 const ACTIVE_TEXT_MODELS = MODELS.filter(m => m.active && m.l > 0);
 const mdl = n => MODELS.find(m => m.n === n) || MODELS[0];
+
+/* ============================================================================
+   2. TÜM OFİS EŞYALARI KATALOĞU (FIRESTORE settings/office_mods İÇİNDE TUTULUR)
+   ============================================================================ */
+const DEFAULT_SCENE_ITEMS = [
+  {
+    id: 'duvarlar',
+    label: 'Ofis Ana Duvarları & Süpürgelikler',
+    depth: -25,
+    drawJs: `
+      poly([P(0, 0), P(0, 14), P(0, 14, 96), P(0, 0, 96)], '#171d30');
+      poly([P(0, 0), P(20, 0), P(20, 0, 96), P(0, 0, 96)], '#131829');
+      poly([P(0, 0), P(0, 14), P(0, 14, 6), P(0, 0, 6)], '#242c46');
+      poly([P(0, 0), P(20, 0), P(20, 0, 6), P(0, 0, 6)], '#1e253b');
+    `
+  },
+  {
+    id: 'pencereler',
+    label: 'Arka Duvar Pencereleri (5 Adet Panoramik Pencere)',
+    depth: -22,
+    drawJs: `
+      [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.5, 14.5], [16.5, 19.2]].forEach(w => {
+        poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#232b44');
+        poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#2d3a5e');
+        poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#3b4d7a');
+      });
+    `
+  },
+  {
+    id: 'hq_tabela',
+    label: 'Sol Duvar TONOZ AI HQ Tabelası',
+    depth: -18,
+    drawJs: `
+      const lq = P(0, 6.5, 60);
+      rr(lq[0] - 62, lq[1] - 14, 124, 26, 7, 'rgba(15,23,42,.94)', '#6366f1');
+      cx.textAlign = 'center';
+      cx.font = '800 10.5px "Space Grotesk",sans-serif';
+      cx.fillStyle = '#e0e7ff';
+      cx.fillText('⚡ TONOZ AI HQ', lq[0], lq[1] + 2);
+    `
+  },
+  {
+    id: 'ortak_halilar',
+    label: 'Ortak Alan Halı Bölgeleri (Yemekhane, Toplantı, Dinlenme)',
+    depth: -15,
+    drawJs: `
+      poly([P(0.4, 4.4), P(4.8, 4.4), P(4.8, 8.6), P(0.4, 8.6)], 'rgba(245,158,11,.07)', 'rgba(245,158,11,.2)');
+      poly([P(6.2, 4.5), P(11.8, 4.5), P(11.8, 8.5), P(6.2, 8.5)], 'rgba(59,130,246,.08)', 'rgba(59,130,246,.22)');
+      poly([P(13.2, 4.4), P(17.5, 4.4), P(17.5, 8.6), P(13.2, 8.6)], 'rgba(236,72,153,.06)', 'rgba(236,72,153,.18)');
+    `
+  },
+  {
+    id: 'odalar_koltuk',
+    label: 'Personel Odaları Çalışma Koltukları (10 Oda)',
+    depth: 8,
+    drawJs: `
+      RM.forEach(r => {
+        box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
+        box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
+      });
+    `
+  },
+  {
+    id: 'odalar_masa',
+    label: 'Personel Odaları Çalışma Masaları (10 Oda)',
+    depth: 10,
+    drawJs: `
+      RM.forEach(r => {
+        const x = r.dx, y = r.dy;
+        box(x + .06, y + .1, .12, .8, 24, 0, DK);
+        box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
+        box(x, y, 2, 1, 5, 24, WOOD);
+      });
+    `
+  },
+  {
+    id: 'odalar_bilgisayar',
+    label: 'Personel Odaları Bilgisayar Monitörleri, Klavye ve Kupalar',
+    depth: 11,
+    drawJs: `
+      RM.forEach(r => {
+        const x = r.dx, y = r.dy, a = staff.find(s => s.room === r.i);
+        box(x + .85, y + .22, .3, .25, 4, 29, DK);
+        box(x + .52, y + .2, .96, .1, 18, 33, DK, a && a.mon ? '#10b981' : '#334155');
+        box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
+        box(x + 1.6, y + .6, .2, .2, 6, 29, COR);
+      });
+    `
+  },
+  {
+    id: 'odalar_bitki',
+    label: 'Personel Odaları Köşe Saksı Bitkileri',
+    depth: 12,
+    drawJs: `
+      RM.forEach(r => {
+        const px = r.x + r.w - 1, py = r.top ? 2 : 10;
+        box(px + .28, py + .28, .44, .44, 9, 0, [20, 50, 52]);
+        const q = P(px + .5, py + .5, 13);
+        [[0, -11, 7.5], [-6, -6, 6], [6, -6, 6], [0, -17, 5]].forEach(l =>
+          disc(q[0] + l[0] + Math.sin(T * 1.5 + px) * 1.2, q[1] + l[1], l[2], hs(GRN, 8 - l[1] * .35))
+        );
+      });
+    `
+  },
+  {
+    id: 'yemekhane_masalar',
+    label: 'Yemekhane Masaları ve Sandalyeleri (Sol Meydan)',
+    depth: 14,
+    drawJs: `
+      [5, 7].forEach(y => {
+        box(1, y, 3, 1, 5, 22, WOOD);
+        [1.1, 3.7].forEach(x => box(x, y + .1, .2, .8, 22, 0, DK));
+        [1.3, 2.1, 2.9].forEach(x => {
+          box(x, y + .4, .35, .3, 1.2, 27, WT);
+          box(x + .05, y - .5, .4, .4, 7, 0, CH);
+          box(x + .05, y + 1.1, .4, .4, 7, 0, CH);
+        });
+      });
+    `
+  },
+  {
+    id: 'toplanti_masasi',
+    label: 'Toplantı Salonu Büyük Masa, Laptop ve Koltuklar (Orta Meydan)',
+    depth: 15,
+    drawJs: `
+      box(7, 6, 4, 1.1, 5, 22, WOOD);
+      [7.1, 10.7].forEach(x => box(x, 6.1, .2, .8, 22, 0, DK));
+      [7.2, 8.1, 9.0, 9.9].forEach(x => { box(x, 5.2, .5, .5, 7, 0, BLU); box(x, 7.4, .5, .5, 7, 0, BLU); });
+      box(8.6, 6.35, .6, .4, 2, 27, WT);
+    `
+  },
+  {
+    id: 'dinlenme_koltuk',
+    label: 'Dinlenme Alanı Lounge Koltuğu (Sağ Meydan)',
+    depth: 20,
+    drawJs: `
+      box(14, 7, 3, 1, 10, 0, PNK); box(14, 7.75, 3, .25, 26, 0, PNK);
+      box(14, 7, .25, 1, 17, 0, PNK); box(16.75, 7, .25, 1, 17, 0, PNK);
+    `
+  },
+  {
+    id: 'kahve_bari',
+    label: 'Kahve Barı ve Kahve Makinesi',
+    depth: 22,
+    drawJs: `
+      box(18.1, 4.1, .8, .8, 34, 0, WOOD); box(18.2, 4.2, .6, .6, 8, 34, DK);
+      const q = P(18.5, 4.5, 46);
+      for (let i = 0; i < 3; i++) {
+        const o = (T * 18 + i * 11) % 22;
+        cx.fillStyle = 'rgba(226,232,240,' + (.5 - o / 46) + ')';
+        cx.fillRect(q[0] - 2 + Math.sin(T * 3 + i) * 2, q[1] - o, 2.5, 2.5);
+      }
+    `
+  },
+  {
+    id: 'ortak_arsiv',
+    label: 'Ortak Arşiv & Veri Merkezi Dolabı (Tıklanınca Dosyaları Açar)',
+    depth: 24,
+    drawJs: `
+      box(18.05, 5.05, .9, 1.9, 48, 0, DK);
+      [12, 24, 36].forEach(z => box(18.95, 5.2, .06, .6, 2, z, BLU));
+      box(18.2, 5.3, .5, .5, 4, 48, BLU); box(18.2, 6.2, .5, .5, 4, 48, YEL);
+    `
+  },
+  {
+    id: 'cam_duvarlar',
+    label: 'Oda Cam Duvarları, Ara Bölmeler ve Kapı Tabelaları',
+    depth: 42,
+    drawJs: `
+      RM.forEach(r => {
+        const y = r.wy + .4;
+        glass(r.x + 1, y, r.w - 1, .2, 34);
+        glass(r.x, y, .12, .2, 34);
+        drawRoomPlaque(r);
+      });
+      [3, 7, 11, 15].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
+    `
+  },
+  {
+    id: 'asili_tabelalar',
+    label: 'Yemekhane, Toplantı, Dinlenme ve Ortak Arşiv 2.5D Tabelaları',
+    depth: 48,
+    drawJs: `
+      drawSignboard25D(2.5, 6.0, 56, 'YEMEKHANE', 'Sosyal & Mola', '🍴', '#f59e0b');
+      drawSignboard25D(9.0, 6.0, 56, 'TOPLANTI ODASI', 'Planlama & Kurul', '📊', '#3b82f6');
+      drawSignboard25D(15.3, 7.6, 54, 'DİNLENME ALANI', 'Kahve & Lounge', '☕', '#ec4899');
+      drawSignboard25D(18.4, 5.6, 68, 'ORTAK ARŞİV', filesCount + ' Dosya (Tıkla Aç)', '🗄️', '#10b981');
+    `
+  }
+];
 
 const store = {
   staff: [],
@@ -309,12 +553,14 @@ const store = {
   log: [],
   selectedMailId: null,
   selectedFileId: null,
+  isCreatingFile: false,
   geminiKey: '',
-  cooldownSec: 65, // Sabit güvenli mola süresi (İK ajanı analiz edip Firestore'dan güncelleyebilir)
+  cooldownSec: 65,
   maxChainDepth: 12,
   officeMods: {
     version: 1,
-    sceneMods: [],
+    initializedLayout: false,
+    sceneMods: [...DEFAULT_SCENE_ITEMS],
     uiMods: []
   },
   previewMods: null
@@ -341,11 +587,11 @@ function shortRole(role) {
 }
 
 /* ============================================================================
-   2. GENİŞLETİLMİŞ VE FERAH TAM EKRAN 2.5D İZOMETRİK OFİS MOTORU (20x14 GRID)
+   3. GENİŞLETİLMİŞ TAM EKRAN 2.5D İZOMETRİK OFİS MOTORU (20x14 GRID)
    ============================================================================ */
 const cv = $('#cv'), cx = cv.getContext('2d');
 const NX = 20, NY = 14, TW = 32, TH = 16, WL = 96;
-let camX = 0, camY = 0, camZoom = 1, isDragging = false, dragStartX = 0, dragStartY = 0;
+let camX = 0, camY = 0, camZoom = 1, isDragging = false, dragMoved = false, dragStartX = 0, dragStartY = 0;
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -362,16 +608,18 @@ function resetCamera() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Fare ile Sürükleme (Pan) ve Yakınlaştırma (Zoom)
 cv.addEventListener('mousedown', e => {
   isDragging = true;
+  dragMoved = false;
   dragStartX = e.clientX - camX;
   dragStartY = e.clientY - camY;
 });
 window.addEventListener('mousemove', e => {
   if (!isDragging) return;
-  camX = e.clientX - dragStartX;
-  camY = e.clientY - dragStartY;
+  const nx = e.clientX - dragStartX, ny = e.clientY - dragStartY;
+  if (Math.hypot(nx - camX, ny - camY) > 4) dragMoved = true;
+  camX = nx;
+  camY = ny;
 });
 window.addEventListener('mouseup', () => { isDragging = false; });
 cv.addEventListener('wheel', e => {
@@ -414,7 +662,6 @@ const rr = (x, y, w, h, r, c, s) => {
 const WOOD = [30, 52, 58], DK = [222, 28, 26], WT = [220, 30, 92], COR = [14, 78, 62],
       GRN = [145, 52, 42], BLU = [210, 75, 60], YEL = [42, 88, 62], PNK = [335, 60, 62], CH = [235, 45, 52];
 
-// 10 Geniş ve Ferah Oda (Üstte 5 Oda, Altta 5 Oda - Yeni İK ve Uzman Ajanlar İçin Hazır)
 const RM = [
   [0, 0, 3, 1],  [4, 0, 3, 1],  [8, 0, 3, 1],  [12, 0, 3, 1],  [16, 0, 4, 1],
   [0, 10, 3, 0], [4, 10, 3, 0], [8, 10, 3, 0], [12, 10, 3, 0], [16, 10, 4, 0]
@@ -487,81 +734,10 @@ function upd(dt) {
   });
 }
 
-// Sabit Ferah Ofis Mobilyaları
-const OB = [], add = (k, f) => OB.push({ k, f });
-RM.forEach(r => {
-  add(r.dx + r.dy + 1.5, () => {
-    const x = r.dx, y = r.dy, a = store.staff.find(s => s.room === r.i);
-    box(x + .06, y + .1, .12, .8, 24, 0, DK);
-    box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
-    box(x, y, 2, 1, 5, 24, WOOD);
-    box(x + .85, y + .22, .3, .25, 4, 29, DK);
-    box(x + .52, y + .2, .96, .1, 18, 33, DK, a && a.mon ? '#10b981' : '#334155');
-    box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
-    box(x + 1.6, y + .6, .2, .2, 6, 29, COR);
-  });
-  add(r.sx + r.sy + .1, () => {
-    box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
-    box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
-  });
-  const px = r.x + r.w - 1, py = r.top ? 2 : 10;
-  add(px + py + 1, () => {
-    box(px + .28, py + .28, .44, .44, 9, 0, [20, 50, 52]);
-    const q = P(px + .5, py + .5, 13);
-    [[0, -11, 7.5], [-6, -6, 6], [6, -6, 6], [0, -17, 5]].forEach(l =>
-      disc(q[0] + l[0] + Math.sin(T * 1.5 + px) * 1.2, q[1] + l[1], l[2], hs(GRN, 8 - l[1] * .35))
-    );
-  });
-});
-
-// Yemekhane (Sol Meydan)
-[5, 7].forEach(y => add(2.5 + y + .5, () => {
-  box(1, y, 3, 1, 5, 22, WOOD);
-  [1.1, 3.7].forEach(x => box(x, y + .1, .2, .8, 22, 0, DK));
-  [1.3, 2.1, 2.9].forEach(x => {
-    box(x, y + .4, .35, .3, 1.2, 27, WT);
-    box(x + .05, y - .5, .4, .4, 7, 0, CH);
-    box(x + .05, y + 1.1, .4, .4, 7, 0, CH);
-  });
-}));
-
-// Büyük Kurul & Toplantı Salonu (Orta Meydan)
-add(11, () => {
-  box(7, 6, 4, 1.1, 5, 22, WOOD);
-  [7.1, 10.7].forEach(x => box(x, 6.1, .2, .8, 22, 0, DK));
-  [7.2, 8.1, 9.0, 9.9].forEach(x => { box(x, 5.2, .5, .5, 7, 0, BLU); box(x, 7.4, .5, .5, 7, 0, BLU); });
-  box(8.6, 6.35, .6, .4, 2, 27, WT);
-});
-
-// Dinlenme & Lounge Koltukları (Sağ Meydan)
-add(21, () => {
-  box(14, 7, 3, 1, 10, 0, PNK); box(14, 7.75, 3, .25, 26, 0, PNK);
-  box(14, 7, .25, 1, 17, 0, PNK); box(16.75, 7, .25, 1, 17, 0, PNK);
-});
-
-// Kahve Barı
-add(22, () => {
-  box(18.1, 4.1, .8, .8, 34, 0, WOOD); box(18.2, 4.2, .6, .6, 8, 34, DK);
-  const q = P(18.5, 4.5, 46);
-  for (let i = 0; i < 3; i++) {
-    const o = (T * 18 + i * 11) % 22;
-    cx.fillStyle = 'rgba(226,232,240,' + (.5 - o / 46) + ')';
-    cx.fillRect(q[0] - 2 + Math.sin(T * 3 + i) * 2, q[1] - o, 2.5, 2.5);
-  }
-});
-
-// Ortak Arşiv & Veri Merkezi
-add(24, () => {
-  box(18.05, 5.05, .9, 1.9, 48, 0, DK);
-  [12, 24, 36].forEach(z => box(18.95, 5.2, .06, .6, 2, z, BLU));
-  box(18.2, 5.3, .5, .5, 4, 48, BLU); box(18.2, 6.2, .5, .5, 4, 48, YEL);
-});
-
-// 2.5D Asılı Mimari Tabelalar
 function drawSignboard25D(gx, gy, gz, title, sub, icon, accentHex) {
   const q = P(gx, gy, gz);
   const x = q[0], y = q[1];
-  const w = 108, h = 28;
+  const w = 114, h = 28;
 
   cx.strokeStyle = '#475569';
   cx.lineWidth = 2;
@@ -604,10 +780,27 @@ function drawRoomPlaque(r) {
   cx.fillText(`${num}·${dept}`, q[0], q[1] + 2.8);
 }
 
+// Tüm ofis eşyalarını (ve varsa önizleme değişikliklerini/silmelerini) birleştirir
 function getActiveSceneMods() {
-  const base = (store.officeMods && Array.isArray(store.officeMods.sceneMods)) ? store.officeMods.sceneMods : [];
-  const prev = (store.previewMods && Array.isArray(store.previewMods.sceneMods)) ? store.previewMods.sceneMods : [];
-  return [...base, ...prev];
+  const baseList = (store.officeMods && Array.isArray(store.officeMods.sceneMods))
+    ? store.officeMods.sceneMods
+    : DEFAULT_SCENE_ITEMS;
+
+  let merged = [...baseList];
+  if (store.previewMods) {
+    const remIds = Array.isArray(store.previewMods.removeSceneIds) ? store.previewMods.removeSceneIds : [];
+    if (remIds.length) {
+      merged = merged.filter(item => !remIds.includes(item.id));
+    }
+    const prevScene = Array.isArray(store.previewMods.sceneMods) ? store.previewMods.sceneMods : [];
+    prevScene.forEach(ps => {
+      if (!ps || !ps.drawJs) return;
+      const idx = merged.findIndex(x => x.id === ps.id);
+      if (idx >= 0) merged[idx] = ps;
+      else merged.push(ps);
+    });
+  }
+  return merged;
 }
 
 const compiledDrawCache = new Map();
@@ -615,22 +808,27 @@ function collectDynamicSceneObjects() {
   const mods = getActiveSceneMods();
   const dyn = [];
   mods.forEach((m, idx) => {
-    if (!m || !m.drawJs) return;
-    const depth = Number(m.depth) || 12;
+    if (!m || !m.drawJs || m.hidden) return;
+    const depth = Number(m.depth) ?? 12;
     let fn = compiledDrawCache.get(m.drawJs);
     if (!fn) {
       try {
-        fn = new Function('api', `const {box,disc,el,rr,poly,glass,P,hs,RM,T,cx,drawSignboard25D,WOOD,DK,WT,COR,GRN,BLU,YEL,PNK,CH}=api;\n` + m.drawJs);
+        fn = new Function('api', `const {box,disc,el,rr,poly,glass,P,hs,RM,T,cx,drawSignboard25D,drawRoomPlaque,staff,filesCount,WOOD,DK,WT,COR,GRN,BLU,YEL,PNK,CH}=api;\n` + m.drawJs);
         compiledDrawCache.set(m.drawJs, fn);
       } catch (e) {
         return;
       }
     }
     dyn.push({
-      k: depth + idx * 0.01,
+      k: depth + idx * 0.005,
       f: () => {
         try {
-          fn({ box, disc, el, rr, poly, glass, P, hs, RM, T, cx, drawSignboard25D, WOOD, DK, WT, COR, GRN, BLU, YEL, PNK, CH });
+          fn({
+            box, disc, el, rr, poly, glass, P, hs, RM, T, cx,
+            drawSignboard25D, drawRoomPlaque,
+            staff: store.staff, filesCount: store.files.length,
+            WOOD, DK, WT, COR, GRN, BLU, YEL, PNK, CH
+          });
         } catch (err) {}
       }
     });
@@ -642,47 +840,8 @@ function floor() {
   for (let i = 0; i < NX; i++) for (let j = 0; j < NY; j++)
     poly([P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)], (i + j) % 2 ? '#131828' : '#0f1320');
   RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',55%,22%,.36)'));
-  // Ferah Ortak Alan Halı Bölgeleri
-  poly([P(0.4, 4.4), P(4.8, 4.4), P(4.8, 8.6), P(0.4, 8.6)], 'rgba(245,158,11,.07)', 'rgba(245,158,11,.2)');
-  poly([P(6.2, 4.5), P(11.8, 4.5), P(11.8, 8.5), P(6.2, 8.5)], 'rgba(59,130,246,.08)', 'rgba(59,130,246,.22)');
-  poly([P(13.2, 4.4), P(17.5, 4.4), P(17.5, 8.6), P(13.2, 8.6)], 'rgba(236,72,153,.06)', 'rgba(236,72,153,.18)');
   poly([P(0, NY), P(NX, NY), P(NX, NY, -14), P(0, NY, -14)], '#192036');
   poly([P(NX, 0), P(NX, NY), P(NX, NY, -14), P(NX, 0, -14)], '#111626');
-}
-
-function walls() {
-  poly([P(0, 0), P(0, NY), P(0, NY, WL), P(0, 0, WL)], '#171d30');
-  poly([P(0, 0), P(NX, 0), P(NX, 0, WL), P(0, 0, WL)], '#131829');
-  poly([P(0, 0), P(0, NY), P(0, NY, 6), P(0, 0, 6)], '#242c46');
-  poly([P(0, 0), P(NX, 0), P(NX, 0, 6), P(0, 0, 6)], '#1e253b');
-
-  [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.5, 14.5], [16.5, 19.2]].forEach(w => {
-    poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#232b44');
-    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#2d3a5e');
-    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#3b4d7a');
-  });
-
-  const lq = P(0, 6.5, 60);
-  rr(lq[0] - 62, lq[1] - 14, 124, 26, 7, 'rgba(15,23,42,.94)', '#6366f1');
-  cx.textAlign = 'center';
-  cx.font = '800 10.5px "Space Grotesk",sans-serif';
-  cx.fillStyle = '#e0e7ff';
-  cx.fillText('⚡ TONOZ AI HQ', lq[0], lq[1] + 2);
-}
-
-function over() {
-  RM.forEach(r => {
-    const y = r.wy + .4;
-    glass(r.x + 1, y, r.w - 1, .2, 34);
-    glass(r.x, y, .12, .2, 34);
-    drawRoomPlaque(r);
-  });
-  [3, 7, 11, 15].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
-
-  drawSignboard25D(2.5, 6.0, 56, 'YEMEKHANE', 'Sosyal & Mola', '🍴', '#f59e0b');
-  drawSignboard25D(9.0, 6.0, 56, 'TOPLANTI ODASI', 'Planlama & Kurul', '📊', '#3b82f6');
-  drawSignboard25D(15.3, 7.6, 54, 'DİNLENME ALANI', 'Kahve & Lounge', '☕', '#ec4899');
-  drawSignboard25D(18.4, 5.6, 68, 'ORTAK ARŞİV', `${store.files.length} Dosya Kayıtlı`, '🗄️', '#10b981');
 }
 
 function dAg(a) {
@@ -747,13 +906,11 @@ function draw() {
   cx.scale(camZoom, camZoom);
 
   floor();
-  walls();
   const dynObjs = collectDynamicSceneObjects();
-  OB.concat(dynObjs)
+  dynObjs
     .concat(store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) })))
     .sort((p, q) => p.k - q.k)
     .forEach(o => o.f());
-  over();
   drawAllAgentTagsAndBubbles();
 }
 
@@ -765,7 +922,7 @@ function frame(ts) {
 requestAnimationFrame(frame);
 
 /* ============================================================================
-   3. PERSONEL YÖNETİMİ (%100 FIRESTORE ENTEGRE - HAZIR VERİ YOK)
+   4. PERSONEL YÖNETİMİ VE İKİ SATIRLI GÖREV SEÇİCİ
    ============================================================================ */
 const PAL = [
   ['#6366f1', '#312e81'], ['#ec4899', '#831843'], ['#10b981', '#064e3b'], ['#f59e0b', '#78350f'],
@@ -871,20 +1028,60 @@ function syncStaff(list) {
   updateTargetSelect();
 }
 
+function toggleStaffPicker(e) {
+  if (e) e.stopPropagation();
+  const menu = $('#staffPickerMenu');
+  if (menu) menu.classList.toggle('open');
+}
+window.addEventListener('click', e => {
+  const wrap = $('#staffPickerWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    $('#staffPickerMenu')?.classList.remove('open');
+  }
+});
+
+function selectTargetStaff(id) {
+  const inp = $('#targetAgent');
+  if (inp) inp.value = id;
+  $('#staffPickerMenu')?.classList.remove('open');
+  updateTargetSelect();
+}
+
 function updateTargetSelect() {
-  const sel = $('#targetAgent');
-  if (!sel) return;
-  const cur = sel.value;
+  const inp = $('#targetAgent');
+  const nameEl = $('#spSelectedName');
+  const roleEl = $('#spSelectedRole');
+  const menuEl = $('#staffPickerMenu');
+  if (!inp || !nameEl || !roleEl || !menuEl) return;
+
   if (!store.staff.length) {
-    sel.innerHTML = `<option value="">Önce Personel Ekleyin</option>`;
+    inp.value = '';
+    nameEl.innerHTML = 'Önce Personel Ekleyin';
+    roleEl.textContent = 'Üst menüden personel ekleyebilirsiniz';
+    menuEl.innerHTML = '<div class="note" style="padding:8px">Kayıtlı personel yok.</div>';
     return;
   }
-  sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">👤 ${esc(a.name)} (${esc(shortRole(a.role))})</option>`).join('');
-  if (cur && store.staff.some(a => a.id === cur)) sel.value = cur;
-  else {
-    const plan = store.staff.find(a => /plan|strateji|seo|ik/i.test(a.role));
-    if (plan) sel.value = plan.id;
+
+  let curId = inp.value;
+  let sel = store.staff.find(a => a.id === curId);
+  if (!sel) {
+    sel = store.staff.find(a => /plan|strateji|seo|ik/i.test(a.role)) || store.staff[0];
+    inp.value = sel.id;
   }
+
+  nameEl.innerHTML = `<span class="dot" style="background:${sel.c}"></span>${esc(sel.name)}`;
+  roleEl.textContent = `${sel.role}${sel.skills ? ' · ' + sel.skills.slice(0, 45) : ''}`;
+
+  menuEl.innerHTML = store.staff.map(a => `
+    <div class="sp-item ${a.id === sel.id ? 'active' : ''}" onclick="selectTargetStaff('${esc(a.id)}')">
+      <div class="sp-item-top">
+        <span style="display:flex;align-items:center"><span class="dot" style="background:${a.c}"></span>${esc(a.name)}</span>
+        <span class="chip">Oda 0${a.room + 1}</span>
+      </div>
+      <div class="sp-item-sub">${esc(a.role)}</div>
+      ${a.skills ? `<div class="sp-item-skills">${esc(a.skills)}</div>` : ''}
+    </div>
+  `).join('');
 }
 
 function lg(t) {
@@ -901,8 +1098,14 @@ cv.addEventListener('mousemove', e => {
     const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - wx, q[1] - 24 - wy);
     if (d < bd) { bd = d; best = a; }
   });
+
+  // Ortak Arşiv dolabı veya tabelası üzerine gelince bilgi göster
+  const archivePt = P(18.5, 5.8, 35);
+  const nearArchive = Math.hypot(archivePt[0] - wx, archivePt[1] - wy) < 62;
+
   const hud = $('#hoverHud');
   if (best) {
+    cv.style.cursor = 'pointer';
     hud.style.display = 'block';
     hud.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
@@ -914,14 +1117,32 @@ cv.addEventListener('mousemove', e => {
       <div class="note" style="margin-top:4px">🤖 Ana: <b>${esc(best.model)}</b> · Yedek: <b>${esc(best.backup)}</b></div>
       <div class="note">⚡ Durum: <b>${esc(best.st)}</b> · Bugün: ${best.used || 0} istek</div>
     `;
+  } else if (nearArchive && OWN) {
+    cv.style.cursor = 'pointer';
+    hud.style.display = 'block';
+    hud.innerHTML = `
+      <b>🗄️ ORTAK ARŞİV & KOD MERKEZİ</b>
+      <div class="note" style="color:#cbd5e1;margin-top:3px">Toplam <b>${store.files.length}</b> dosya kayıtlı.</div>
+      <div class="note" style="color:#34d399;font-weight:700;margin-top:4px">👉 Tıklayarak Ortak Klasör ve Örnek Kod Panelini açın</div>
+    `;
   } else {
+    cv.style.cursor = isDragging ? 'grabbing' : 'grab';
     hud.style.display = 'none';
   }
 });
 
 cv.addEventListener('click', e => {
-  if (!OWN) return;
+  if (!OWN || dragMoved) return;
   const [wx, wy] = screenToWorld(e.clientX, e.clientY);
+
+  // 1. Ortak Arşiv dolabına veya tabelasına tıklandıysa doğrudan Ortak Klasör penceresini aç
+  const archivePt = P(18.5, 5.8, 35);
+  if (Math.hypot(archivePt[0] - wx, archivePt[1] - wy) < 62) {
+    openWindow('files');
+    return;
+  }
+
+  // 2. Bir personele tıklandıysa düzenleme kartını aç
   let best = null, bd = 28;
   store.staff.forEach(a => {
     const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - wx, q[1] - 24 - wy);
@@ -929,9 +1150,8 @@ cv.addEventListener('click', e => {
   });
   if (best) openAgentModal(best.id);
 });
-
 /* ============================================================================
-   4. CANLI OFİS & SİTE EKLENTİ MOTORU (FIRESTORE & ORTAK KLASÖR YEDEKLİ)
+   5. CANLI OFİS EŞYALARI, ONAY KUTUSU VE ARAYÜZ YAMALARI MOTORU (FIRESTORE)
    ============================================================================ */
 let activeUIIntervals = [];
 function renderActiveUIMods() {
@@ -978,14 +1198,34 @@ function renderActiveUIMods() {
   cssSlot.textContent = combinedCSS;
 }
 
+async function saveOfficeModsToFirestore() {
+  if (!CONN || !OWN) return;
+  try {
+    await db.doc('settings/office_mods').set({
+      version: store.officeMods.version || 1,
+      initializedLayout: true,
+      sceneMods: store.officeMods.sceneMods || [],
+      uiMods: store.officeMods.uiMods || [],
+      updatedAt: FV().serverTimestamp()
+    });
+    pub();
+  } catch (e) {
+    console.error('Ofis tasarım kayıt hatası:', e);
+  }
+}
+
 async function applyApprovalToOffice(approvalId) {
   const ap = store.approvals.find(x => x.id === approvalId);
   if (!ap) return;
 
+  const remIds = Array.isArray(ap.removeSceneIds) ? ap.removeSceneIds : [];
   const newScene = Array.isArray(ap.sceneMods) ? ap.sceneMods : [];
   const newUI = Array.isArray(ap.uiMods) ? ap.uiMods : [];
 
-  const mergedScene = [...(store.officeMods.sceneMods || [])];
+  let mergedScene = [...(store.officeMods.sceneMods || DEFAULT_SCENE_ITEMS)];
+  if (remIds.length) {
+    mergedScene = mergedScene.filter(item => !remIds.includes(item.id));
+  }
   newScene.forEach(ns => {
     if (!ns || !ns.drawJs) return;
     const id = ns.id || ('sc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5));
@@ -1005,6 +1245,7 @@ async function applyApprovalToOffice(approvalId) {
 
   store.officeMods = {
     version: (store.officeMods.version || 1) + 1,
+    initializedLayout: true,
     sceneMods: mergedScene,
     uiMods: mergedUI
   };
@@ -1012,31 +1253,29 @@ async function applyApprovalToOffice(approvalId) {
   ap.status = 'approved';
 
   renderActiveUIMods();
-
-  // Hem Firestore canlı ayarlarına kaydet hem de Ortak Klasöre yedek dosya olarak yaz
-  await saveSharedFile(
-    `onaylanan-yama-v${store.officeMods.version}.json`,
-    JSON.stringify({ title: ap.title, summary: ap.summary, sceneMods: newScene, uiMods: newUI }, null, 2),
-    'json',
-    'Sistem (Onaylı Yama)'
-  );
+  await saveOfficeModsToFirestore();
 
   if (CONN && OWN) {
-    await db.doc('settings/office_mods').set({
-      ...store.officeMods,
-      updatedAt: FV().serverTimestamp()
+    await db.collection('approvals').doc(ap.id).set({
+      status: 'approved',
+      approvedAt: FV().serverTimestamp()
     }, { merge: true }).catch(() => {});
-
-    if (!String(ap.id).startsWith('ap_')) {
-      await db.collection('approvals').doc(ap.id).set({
-        status: 'approved',
-        approvedAt: FV().serverTimestamp()
-      }, { merge: true }).catch(() => {});
-    }
-    pub();
   }
 
-  lg(`✅ Onaylandı ve Firestore'a işlendi: ${ap.title}`);
+  lg(`✅ Onaylandı ve ofis tasarımı Firestore'da güncellendi: ${ap.title}`);
+  renderApprovalBanner();
+  renderAll();
+}
+
+async function deleteSingleApproval(approvalId) {
+  store.approvals = store.approvals.filter(x => x.id !== approvalId);
+  if (store.previewMods && store.previewMods._apId === approvalId) {
+    store.previewMods = null;
+    renderActiveUIMods();
+  }
+  if (CONN && OWN) {
+    await db.collection('approvals').doc(approvalId).delete().catch(() => {});
+  }
   renderApprovalBanner();
   renderAll();
 }
@@ -1049,24 +1288,66 @@ async function removeSingleMod(kind, modId) {
   }
   store.officeMods.version = (store.officeMods.version || 1) + 1;
   renderActiveUIMods();
-  if (CONN && OWN) {
-    await db.doc('settings/office_mods').set({ ...store.officeMods, updatedAt: FV().serverTimestamp() }).catch(() => {});
-    pub();
-  }
+  await saveOfficeModsToFirestore();
+  lg(`🗑️ Ofis bileşeni Firestore'dan kaldırıldı: ${modId}`);
+  renderAll();
+}
+
+async function editSceneItemCode(modId) {
+  const item = (store.officeMods.sceneMods || []).find(x => x.id === modId);
+  if (!item) return;
+  const newCode = prompt(`"${item.label || item.id}" için 2.5D JS Çizim Kodu:`, item.drawJs);
+  if (newCode === null) return;
+  item.drawJs = newCode;
+  compiledDrawCache.clear();
+  store.officeMods.version = (store.officeMods.version || 1) + 1;
+  await saveOfficeModsToFirestore();
+  renderAll();
+}
+
+async function resetOfficeToDefault() {
+  if (!confirm('Ofisteki tüm masa, bilgisayar, duvar, pencere, arşiv ve tabelalar varsayılan fabrika tasarımına döndürülsün mü?')) return;
+  store.officeMods = {
+    version: (store.officeMods.version || 1) + 1,
+    initializedLayout: true,
+    sceneMods: JSON.parse(JSON.stringify(DEFAULT_SCENE_ITEMS)),
+    uiMods: []
+  };
+  store.previewMods = null;
+  compiledDrawCache.clear();
+  renderActiveUIMods();
+  await saveOfficeModsToFirestore();
+  lg('🔄 Tüm 2.5D ofis eşyaları varsayılan tasarıma döndürüldü.');
   renderAll();
 }
 
 /* ============================================================================
-   5. GEMINI API MOTORU, SAATLİK/GÜNLÜK KOTA TAKİBİ VE İK AJANI YETKİLERİ
+   6. GEMINI ÇOKLU MODEL MOTORU, ZAMAN AŞIMI KORUMASI VE VERİTABANI GÜNCELLEYİCİ
    ============================================================================ */
 let nextAllowedCallTime = 0;
 
 function getCandidateModelsForAgent(agent) {
-  const p = mdl(agent.model);
-  const b = mdl(agent.backup || 'Gemma 4 31B');
-  const pool = [p, b, ...ACTIVE_TEXT_MODELS];
+  const list = [];
+  const primary = MODELS.find(m => m.n === agent.model);
+  const backup = MODELS.find(m => m.n === agent.backup);
+  if (primary) list.push(primary);
+  if (backup) list.push(backup);
+
+  const fallbackOrder = [
+    'Gemini 3.5 Flash Lite',
+    'Gemini 3.1 Flash Lite',
+    'Gemini 2.5 Flash Lite',
+    'Gemini 2.5 Flash',
+    'Gemma 4 31B',
+    'Gemma 4 26B'
+  ];
+  fallbackOrder.forEach(fn => {
+    const fm = MODELS.find(m => m.n === fn);
+    if (fm && !list.includes(fm)) list.push(fm);
+  });
+
   const unique = [];
-  pool.forEach(m => {
+  list.forEach(m => {
     if (m && m.active && m.u < m.l && m.hu < m.rph && !unique.some(u => u.n === m.n)) {
       unique.push(m);
     }
@@ -1099,34 +1380,28 @@ async function incrementModelQuota(modelObj, agent, tokensUsed = 1200) {
   }
 }
 
-// Akıllı Personel Bulucu: ID, tam isim, kısmi isim veya unvan/rol ("Kalite Sorumlusu" vb.) ile personeli bulur
 function findStaffSmart(query) {
   if (!query) return null;
   const tr = s => String(s || '').toLocaleLowerCase('tr-TR').trim();
   const q = tr(query);
   if (!q) return null;
 
-  // 1. Tam ID eşleşmesi
   let found = store.staff.find(s => s.id === query || tr(s.id) === q);
   if (found) return found;
 
-  // 2. Tam isim veya tam rol eşleşmesi
   found = store.staff.find(s => tr(s.name) === q || tr(s.role) === q || tr(shortName(s.name)) === q);
   if (found) return found;
 
-  // 3. Kısmi isim eşleşmesi
   if (q.length >= 2) {
     found = store.staff.find(s => tr(s.name).includes(q) || q.includes(tr(shortName(s.name))));
     if (found) return found;
   }
 
-  // 4. Kısmi unvan/rol eşleşmesi
   if (q.length >= 3) {
     found = store.staff.find(s => tr(s.role).includes(q) || q.includes(tr(s.role)));
     if (found) return found;
   }
 
-  // 5. Kelime bazlı en yüksek eşleşme (örn: "kalite sorumlusu" -> "Kalite Kontrol Uzmanı")
   const words = q.split(/\s+/).filter(w => w.length >= 3);
   if (words.length) {
     let best = null, bestScore = 0;
@@ -1144,6 +1419,28 @@ function findStaffSmart(query) {
   return null;
 }
 
+function parseJsonSafe(rawText) {
+  if (!rawText) return {};
+  let cleaned = String(rawText).trim();
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace >= 0 && lastBrace > firstBrace) {
+    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+  }
+  return JSON.parse(cleaned);
+}
+
+async function fetchWithTimeout(url, options, timeoutMs = 25000) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: ctrl.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
   const apiKey = store.geminiKey;
   if (!apiKey) throw new Error('Firestore settings/secret belgesinde apiKey bulunamadı.');
@@ -1151,7 +1448,6 @@ async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
   const candidates = getCandidateModelsForAgent(agent);
   if (!candidates.length) throw new Error(`${agent.name} için uygun saatlik/günlük model kotası kalmadı!`);
 
-  // Tüm Firestore personel tablosunu eksiksiz (tam skill metniyle) ajana veriyoruz
   const companyDirectory = store.staff.map(s =>
     `- ID: "${s.id}" | Mevcut İsim: "${s.name}" | Unvan/Rol: "${s.role}" | Oda No: ${s.room} (Oda ${s.room + 1}) | Ana Model: "${s.model}" | Yedek Model: "${s.backup}" | Bugünkü Kullanım: ${s.used || 0}\n  Mevcut Uzmanlık/Skills: "${s.skills || ''}"`
   ).join('\n');
@@ -1160,59 +1456,73 @@ async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
     `- ${m.n} (${m.cat}): Günlük ${m.u}/${m.l} RPD | Saatlik ${m.hu}/${m.rph} RPH | Dakikalık Limit: ${m.rpm} RPM | Token Limit: ${(m.tpm / 1000)}K TPM`
   ).join('\n');
 
+  const sceneInventoryText = (store.officeMods.sceneMods || []).map(item =>
+    `- Eşya ID: "${item.id}" | Açıklama: "${item.label || item.id}" | Derinlik (depth): ${item.depth}`
+  ).join('\n');
+
   const historyText = threadMails.slice(-6).map(m =>
     `[${m.f} (${m.fRole || ''}) -> ${m.t} (${m.type})]: ${m.subj}\n${m.body}`
   ).join('\n---\n');
 
-  const filesOverview = relatedFiles.slice(0, 6).map(f =>
-    `Dosya ID: "${f.id}" | Dosya Adı: ${f.path} (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, 2800)}`
+  // Mesajda adı geçen dosyaya öncelik ver ve tüm ortak klasör dosyalarını ajana sun
+  const msgLower = ((incomingMail.subj || '') + ' ' + (incomingMail.body || '')).toLocaleLowerCase('tr-TR');
+  const sortedFiles = [...relatedFiles]
+    .filter(f => !String(f.path || '').startsWith('onaylanan-yama-') && !String(f.path || '').startsWith('yama-'))
+    .sort((a, b) => {
+      const aMatch = msgLower.includes(String(a.path || '').toLocaleLowerCase('tr-TR')) ? 1 : 0;
+      const bMatch = msgLower.includes(String(b.path || '').toLocaleLowerCase('tr-TR')) ? 1 : 0;
+      return bMatch - aMatch;
+    });
+
+  const filesOverview = sortedFiles.slice(0, 8).map((f, idx) =>
+    `Dosya ID: "${f.id}" | Dosya Adı: "${f.path}" (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, idx === 0 ? 12000 : 3500)}`
   ).join('\n===\n') || 'Ortak klasör boş.';
 
   const systemInstruction = `Sen "TONOZ AI COMPANY" şirketinde çalışan "${agent.name}", unvanın "${agent.role}".
 Senin Uzmanlığın: ${agent.skills || ''}
 
-CANLI FIRESTORE VERİTABANI - ŞİRKET PERSONEL TABLOSU ("staff" koleksiyonu):
+1) CANLI FIRESTORE VERİTABANI - PERSONEL KADROSU ("staff" koleksiyonu):
 ${companyDirectory}
 - Şirket Sahibi / Yönetici ID: "owner" (Burak Bey).
 
-CANLI GEMINI API MODEL VE KOTA SINIRLARI (RPM / TPM / SAATLİK / GÜNLÜK):
-${quotaTableText}
-Mevcut Güvenli Mola Süresi ("settings/guard.cooldownSec"): ${store.cooldownSec} saniye.
+2) CANLI FIRESTORE VERİTABANI - 2.5D OFİS EŞYALARI VE MİMARİ ENVANTERİ ("settings/office_mods.sceneMods"):
+${sceneInventoryText}
 
-KURALLAR VE DOĞRUDAN FIRESTORE VERİTABANI GÜNCELLEME YETKİSİ:
+3) CANLI GEMINI API MODEL VE KOTA SINIRLARI:
+${quotaTableText}
+Mevcut Güvenli Mola Süresi: ${store.cooldownSec} saniye.
+
+KURALLAR VE YETKİLER:
 1. Kurumsal İstanbul Türkçesi (Bey/Hanım) kullan.
-2. DOĞRUDAN FIRESTORE VERİTABANI OKUMA VE GÜNCELLEME YETKİSİ ("hrUpdates"):
-   - Yukarıdaki "staff" tablosu canlı Firestore veritabanıdır. Tüm personellerin mevcut isimlerini, rollerini, modellerini ve mevcut "skills" (uzmanlık) metinlerini buradan okuyabilirsin.
-   - Burak Bey senden herhangi bir personelin adını ("name"), uzmanlık/yeteneklerini ("skills"), unvanını ("role"), ana/yedek modelini ("model"/"backup") değiştirmeyi, yeni personel eklemeyi ("action": "create"), personel silmeyi ("action": "delete") veya güvenli mola süresini ("cooldownSec") güncellemeni istediğinde:
-   - ⚠️ ÇOK ÖNEMLİ: Personel veya veritabanı güncellemelerini ASLA "fileToSave" içine ".json" dosyası olarak kaydetme! "fileToSave" alanını boş bırak ("path": "", "content": "") ve doğrudan aşağıdaki "hrUpdates.staffUpdates" dizisini doldur!
-   - Eğer bir personelin mevcut uzmanlığına (skills) ekleme yapılması istendiyse, yukarıdaki tablodan o personelin mevcut "skills" metnini oku, yeni istenen yeteneği onunla birleştirerek tam ve akıcı yeni "skills" metnini "hrUpdates.staffUpdates[].skills" alanına yaz.
-   - Eğer personelin adının da değiştirilmesi istendiyse yeni adını "hrUpdates.staffUpdates[].name" alanına yaz ("agentId" alanına ise personelin mevcut ID'sini yaz).
-3. SERBEST 2.5D OFİS ÇİZİMİ VE SİTE ÖZELLİK/MENÜ GELİŞTİRME ("officePatch"):
-   - Burak Bey 2D ofise herhangi bir eşya/dekorasyon/tasarım (örn: odalara ağaç, koridora eşya, yeni masa, tabela vb.) VEYA site arayüzüne yeni bir özellik (sağ köşeye saat, sayaç, yeni menü vb.) istediğinde:
-   - Planlama isen ilgili uzmanlara görev ata; Tasarım/Kod/Kalite isen "officePatch.hasPatch": true yap, kodu "sceneMods" (2.5D JS çizim kodu drawJs) veya "uiMods" (HTML/CSS/JS) olarak doldurup Burak Bey'in onayına sun!
+2. ORTAK ARŞİV / KOD DOSYASI ANALİZİ:
+   - Burak Bey senden Ortak Arşivdeki (Ortak Klasördeki) bir dosyaya veya örnek koda bakmanı, yorumlamanı, SEO analizini yapmanı ya da geliştirmeni istediğinde aşağıda verilen "ORTAK KLASÖR DOSYALARI" bölümündeki dosya içeriğini satır satır incele ve cevabını/kodunu buna göre üret.
+3. PERSONEL VE VERİTABANI GÜNCELLEME YETKİSİ ("hrUpdates"):
+   - Burak Bey açıkça bir personelin adını ("name"), uzmanlık/yeteneklerini ("skills"), unvanını ("role") veya modelini ("model"/"backup") güncellemeni istediğinde "hrUpdates.staffUpdates" dizisini doldur (ASLA ".json" dosyası olarak "fileToSave" içine kaydetme!).
+4. 2.5D OFİS EŞYASI KALDIRMA, DEĞİŞTİRME VEYA YENİ EŞYA/MENÜ EKLEME ("officePatch"):
+   - Tüm ofis eşyaları (masalar, bilgisayarlar, pencereler, duvarlar, yemekhane, toplantı masası, arşiv dolabı, tabelalar) Firestore'da yukarıdaki Eşya ID'leri ile kayıtlıdır.
+   - Burak Bey ofisteki mevcut bir eşyayı KALDIRMAK istediğinde: "officePatch.hasPatch": true yap ve kaldırılacak eşyanın ID'sini "officePatch.removeSceneIds" dizisine yaz (örn: ["odalar_bitki"] veya ["pencereler"]).
+   - Burak Bey mevcut bir eşyayı DEĞİŞTİRMEK istediğinde: "officePatch.hasPatch": true yap ve "officePatch.sceneMods" içine aynı Eşya ID'si ile yeni "drawJs" çizim kodunu yaz.
+   - Burak Bey YENİ bir eşya veya sağ üst/üst menü özelliği istediğinde: "officePatch.hasPatch": true yap ve "sceneMods" veya "uiMods" içine ekle.
+   - Bu tasarım değişiklikleri Burak Bey'e ONAY PAKETİ olarak sunulur; Burak Bey onayladığında Firestore'daki mevcut tasarım değişir!
    - 2.5D Sahne Çizim API'si ("sceneMods[].drawJs"):
-     * Koordinatlar: x (0..20), y (0..14), z (0..90). Odalar dizisi: RM (10 oda: r.x, r.y, r.w, r.top). Zaman: T (saniye).
-     * Fonksiyonlar: box(x,y,w,d,h,z,[H,S,L],optHex), P(x,y,z)->[px,py], disc(px,py,r,color), el(px,py,rx,ry,color), rr(px,py,w,h,rad,fill,stroke), drawSignboard25D(x,y,z,title,sub,icon,hex).
-     * Arayüz Eklenti Yuvaları ("uiMods[].slot"): "top-right" (sağ üst köşe), "header-menu" (üst menü), "floating-widget" (sol alt yüzen araç).
-4. Yanıtını SADECE aşağıdaki geçerli JSON formatında ver:
+     * Koordinatlar: x (0..20), y (0..14), z (0..90). Odalar: RM (10 oda: r.x, r.y, r.w, r.top, r.dx, r.dy, r.sx, r.sy). Zaman: T.
+     * Fonksiyonlar: box(x,y,w,d,h,z,[H,S,L],optHex), P(x,y,z)->[px,py], disc(px,py,r,color), el(px,py,rx,ry,color), rr(px,py,w,h,rad,fill,stroke), glass(x,y,w,d,h), drawSignboard25D(x,y,z,title,sub,icon,hex).
+5. SADECE aşağıdaki geçerli JSON formatında yanıt ver:
 {
-  "canvasBubble": "Kısa durum baloncuğu",
+  "canvasBubble": "Kısa durum",
   "hrUpdates": {
     "cooldownSec": 0,
     "staffUpdates": [
       {
         "action": "update | create | delete",
-        "agentId": "Güncellenecek personelin ID'si (örn: s1) veya mevcut adı/unvanı",
-        "name": "Personelin yeni adı (isim değişecekse yeni adını buraya yaz, değişmeyecekse mevcut adını yaz)",
-        "role": "Personelin yeni unvanı/departmanı (değişmeyecekse mevcut unvanını yaz)",
-        "skills": "Personelin güncellenmiş tam uzmanlık/yetenek tanımı",
-        "model": "Ana Gemini modeli",
-        "backup": "Yedek Gemini modeli",
+        "agentId": "Personel ID veya mevcut adı/unvanı",
+        "name": "Yeni adı",
+        "role": "Yeni unvanı",
+        "skills": "Güncellenmiş tam uzmanlık metni",
+        "model": "",
+        "backup": "",
         "room": -1
       }
-    ],
-    "fileUpdates": [
-      { "action": "update | delete", "path": "Ortak klasör dosya adı", "content": "Yeni içerik" }
     ]
   },
   "outgoingMails": [
@@ -1223,10 +1533,10 @@ KURALLAR VE DOĞRUDAN FIRESTORE VERİTABANI GÜNCELLEME YETKİSİ:
     "hasPatch": false,
     "title": "",
     "summary": "",
+    "removeSceneIds": [],
     "sceneMods": [ { "id": "", "label": "", "depth": 12, "drawJs": "" } ],
     "uiMods": [ { "id": "", "slot": "top-right", "title": "", "html": "", "css": "", "js": "" } ]
-  },
-  "submitFinalApproval": { "ready": false, "summary": "" }
+  }
 }`;
 
   const userPrompt = `GÖREV / MESAJ:
@@ -1237,7 +1547,7 @@ Konu: ${incomingMail.subj}
 ÖNCEKİ YAZIŞMALAR:
 ${historyText}
 
-ORTAK KLASÖR DOSYALARI ("files" koleksiyonu):
+ORTAK KLASÖR DOSYALARI ("files" koleksiyonu - Arşivdeki Kod ve Belgeler):
 ${filesOverview}`;
 
   let lastErr = null;
@@ -1245,19 +1555,27 @@ ${filesOverview}`;
     for (const apiId of modelObj.apis) {
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${apiId}:generateContent?key=${encodeURIComponent(apiKey)}`;
-        const res = await fetch(url, {
+        const isGemma = apiId.startsWith('gemma');
+        const payload = isGemma
+          ? {
+              contents: [{ role: 'user', parts: [{ text: systemInstruction + '\n\n' + userPrompt }] }],
+              generationConfig: { temperature: 0.3 }
+            }
+          : {
+              systemInstruction: { parts: [{ text: systemInstruction }] },
+              contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+              generationConfig: { temperature: 0.3, responseMimeType: 'application/json' }
+            };
+
+        const res = await fetchWithTimeout(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: systemInstruction }] },
-            contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-            generationConfig: { temperature: 0.3, responseMimeType: 'application/json' }
-          })
-        });
+          body: JSON.stringify(payload)
+        }, 25000);
 
         if (!res.ok) {
           const errTxt = await res.text();
-          lastErr = new Error(`${modelObj.n} (${apiId} - ${res.status}): ${errTxt.slice(0, 160)}`);
+          lastErr = new Error(`${modelObj.n} (${apiId} - ${res.status}): ${errTxt.slice(0, 140)}`);
           continue;
         }
 
@@ -1265,22 +1583,20 @@ ${filesOverview}`;
         const tokensUsed = data?.usageMetadata?.totalTokenCount || 1200;
         await incrementModelQuota(modelObj, agent, tokensUsed);
         const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-        return JSON.parse(rawText);
+        return parseJsonSafe(rawText);
       } catch (e) {
         lastErr = e;
       }
     }
-    lg(`🔄 ${shortName(agent.name)}: ${modelObj.n} meşgul/limitli, yedek modele geçiliyor...`);
+    lg(`🔄 ${shortName(agent.name)}: ${modelObj.n} meşgul/zaman aşımı, yedek modele geçiliyor...`);
   }
   throw lastErr || new Error('Gemini API yanıt vermedi.');
 }
 
-// Ajanın döndürdüğü tüm veritabanı/İK güncellemelerini (veya yanlışlıkla fileToSave içine yazdığı JSON'u) yakalayıp Firestore'a anlık işler
 async function applyDatabaseAndHrUpdates(decision, actingAgent) {
   const summaryLines = [];
   const hr = decision.hrUpdates || decision.dbActions || {};
 
-  // 1. Eğer model yanlışlıkla fileToSave içine personel güncelleme JSON'u koyduysa yakala ve dosyaya kaydetmeyi iptal et
   let extraStaffUpdates = [];
   if (Array.isArray(decision.staffUpdates)) extraStaffUpdates.push(...decision.staffUpdates);
   if (decision.fileToSave && decision.fileToSave.content) {
@@ -1305,7 +1621,6 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
     }
   }
 
-  // 2. Güvenli mola süresi (cooldownSec) güncellemesi
   const newCool = Number(hr.cooldownSec || decision.cooldownSec || 0);
   if (newCool >= 10 && newCool <= 3600 && newCool !== store.cooldownSec) {
     store.cooldownSec = newCool;
@@ -1317,7 +1632,6 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
     lg(`⚖️ ${msg}`);
   }
 
-  // 3. Personel (staff) güncellemeleri / ekleme / silme
   const allStaffUpdates = [
     ...(Array.isArray(hr.staffUpdates) ? hr.staffUpdates : []),
     ...extraStaffUpdates
@@ -1348,13 +1662,9 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
       continue;
     }
 
-    // Hedef personeli akıllı eşleştirme ile bul
     const lookupKey = su.agentId || su.id || su.target || su.currentName || su.oldName || su.targetRole || su.role || su.name;
     const stf = findStaffSmart(lookupKey);
-    if (!stf) {
-      lg(`⚠️ İK Güncellemesi: "${lookupKey}" ile eşleşen personel bulunamadı.`);
-      continue;
-    }
+    if (!stf) continue;
 
     if (action === 'delete' || action === 'remove') {
       const oldName = stf.name;
@@ -1368,7 +1678,6 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
       continue;
     }
 
-    // Güncelleme yapan ajan hedef personelin odasının kapısına yürüsün
     if (actingAgent && actingAgent.id !== stf.id) {
       const d = door(stf);
       actingAgent.st = `${shortName(stf.name)} kaydını güncelliyor`;
@@ -1379,18 +1688,15 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
     const oldName = stf.name;
     const changes = [];
 
-    // İsim güncellemesi
     const candidateName = su.newName || su.name;
     if (candidateName && String(candidateName).trim()) {
       const cleanName = String(candidateName).trim().slice(0, 48);
-      // Eğer lookupKey rol veya ID ise ya da yeni isim eski isimden farklıysa güncelle
       if (cleanName !== stf.name && cleanName.toLocaleLowerCase('tr-TR') !== String(stf.role).toLocaleLowerCase('tr-TR')) {
         stf.name = cleanName;
         changes.push(`Adı: "${oldName}" → "${stf.name}"`);
       }
     }
 
-    // Unvan / Rol güncellemesi
     const candidateRole = su.newRole || su.role;
     if (candidateRole && String(candidateRole).trim()) {
       const cleanRole = String(candidateRole).trim().slice(0, 75);
@@ -1400,7 +1706,6 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
       }
     }
 
-    // Uzmanlık (Skills) güncellemesi
     const candidateSkills = su.newSkills || su.skills || su.appendSkills;
     if (candidateSkills && String(candidateSkills).trim()) {
       const cleanSkills = String(candidateSkills).trim();
@@ -1414,7 +1719,6 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
       changes.push(`Uzmanlık (Skills) güncellendi`);
     }
 
-    // Ana ve Yedek Model güncellemesi
     if (su.model && ACTIVE_TEXT_MODELS.some(m => m.n === su.model) && su.model !== stf.model) {
       stf.model = su.model;
       changes.push(`Ana Model: ${stf.model}`);
@@ -1424,7 +1728,6 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
       changes.push(`Yedek Model: ${stf.backup}`);
     }
 
-    // Oda değişikliği
     if (su.room != null && Number(su.room) >= 0 && Number(su.room) < RM.length && Number(su.room) !== stf.room) {
       stf.room = Math.floor(Number(su.room));
       stf.act = true;
@@ -1442,30 +1745,25 @@ async function applyDatabaseAndHrUpdates(decision, actingAgent) {
     await sleep(900);
   }
 
-  // 4. Ortak klasör dosya güncelleme / silme (fileUpdates)
-  if (Array.isArray(hr.fileUpdates)) {
-    for (const fu of hr.fileUpdates) {
-      if (!fu || !fu.path) continue;
-      const existing = store.files.find(f => f.path === fu.path || f.id === fu.path);
-      if (String(fu.action).toLowerCase() === 'delete' && existing) {
-        store.files = store.files.filter(f => f !== existing);
-        if (CONN && OWN && !String(existing.id).startsWith('f_')) {
-          await db.collection('files').doc(existing.id).delete().catch(() => {});
-        }
-        lg(`🗑️ Dosya silindi: ${existing.path}`);
-      } else if (fu.content) {
-        await saveSharedFile(fu.path, fu.content, fu.kind || 'md', `${actingAgent.name} (${shortRole(actingAgent.role)})`);
-        lg(`📄 Dosya güncellendi: ${fu.path}`);
-      }
-    }
-  }
-
   return summaryLines;
 }
 
 async function processNextPendingMail(forceNow = false) {
+  if (forceNow) {
+    if (halt) {
+      halt = false;
+      $('#stop').textContent = '⏸ Duraklat';
+    }
+    if (busy) {
+      lg('ℹ️ Mevcut işlem zaten çalışıyor, lütfen birkaç saniye bekleyin...');
+      return;
+    }
+  }
   if (busy || halt) return;
-  if (!store.geminiKey) return;
+  if (!store.geminiKey) {
+    if (forceNow) alert('Firestore settings/secret içinde apiKey bulunamadı.');
+    return;
+  }
 
   const now = Date.now();
   if (!forceNow && now < nextAllowedCallTime) return;
@@ -1473,7 +1771,10 @@ async function processNextPendingMail(forceNow = false) {
   const pending = [...store.mails].reverse().find(m =>
     !m.processed && m.toId && m.toId !== 'owner' && (!m.notBeforeMs || m.notBeforeMs <= now || forceNow)
   );
-  if (!pending) return;
+  if (!pending) {
+    if (forceNow) lg('ℹ️ Kuyrukta bekleyen işlenmemiş görev bulunmuyor.');
+    return;
+  }
 
   const agent = findStaffSmart(pending.toId) || findStaffSmart(pending.t);
   if (!agent) { await markMailProcessed(pending.id); return; }
@@ -1498,7 +1799,6 @@ async function processNextPendingMail(forceNow = false) {
     const decision = await callGeminiAgent(agent, pending, threadMails, store.files);
     if (decision.canvasBubble) say(agent, 'type', decision.canvasBubble);
 
-    // İK / Veritabanı Güncellemelerini Anında Firestore'a Uygula
     const dbChanges = await applyDatabaseAndHrUpdates(decision, agent);
 
     if (decision.fileToSave && decision.fileToSave.path && decision.fileToSave.content) {
@@ -1513,16 +1813,15 @@ async function processNextPendingMail(forceNow = false) {
         `${agent.name} (${shortRole(agent.role)})`
       );
       lg(`📁 ${shortName(agent.name)} ortak klasöre kaydetti: ${decision.fileToSave.path}`);
-      await sleep(1100);
+      await sleep(900);
     }
 
     const outList = Array.isArray(decision.outgoingMails) ? decision.outgoingMails : [];
-    // Eğer veritabanı güncellemesi yapıldıysa ve ajan yöneticiye bilgi maili eklemediyse otomatik rapor ekle
     if (dbChanges.length && !outList.some(o => o.toAgentId === 'owner')) {
       outList.push({
         toAgentId: 'owner',
         subject: 'Firestore Veritabanı Güncelleme Raporu',
-        body: `Sayın Burak Bey,\n\nTalimatınız doğrultusunda Firestore veritabanında aşağıdaki güncellemeler anlık olarak uygulanmıştır:\n- ${dbChanges.join('\n- ')}`,
+        body: `Sayın Burak Bey,\n\nTalimatınız doğrultusunda Firestore veritabanında aşağıdaki güncellemeler uygulanmıştır:\n- ${dbChanges.join('\n- ')}`,
         type: 'rapor'
       });
     }
@@ -1557,27 +1856,24 @@ async function processNextPendingMail(forceNow = false) {
         notBeforeMs: Date.now() + delayMs
       });
       lg(`✉️ ${shortName(agent.name)} → ${shortName(target.name)}: ${out.subject}`);
-      await sleep(1100);
+      await sleep(900);
     }
 
-    const hasPatch = decision.officePatch && decision.officePatch.hasPatch;
-    const isFinal = decision.submitFinalApproval && decision.submitFinalApproval.ready;
-    if (hasPatch || isFinal) {
-      if (hasPatch) {
-        await saveSharedFile(
-          `yama-${Date.now()}.json`,
-          JSON.stringify(decision.officePatch, null, 2),
-          'json',
-          `${agent.name} (${shortRole(agent.role)})`
-        );
-      }
+    // SADECE gerçek bir 2.5D ofis veya arayüz değişikliği (officePatch) varsa onay kutusuna sun (Otomatik yama.json spam'i yapma!)
+    const op = decision.officePatch || {};
+    const hasSceneOrUiChanges = (Array.isArray(op.sceneMods) && op.sceneMods.some(s => s && s.drawJs))
+      || (Array.isArray(op.uiMods) && op.uiMods.some(u => u && (u.html || u.css || u.js)))
+      || (Array.isArray(op.removeSceneIds) && op.removeSceneIds.length > 0);
+
+    if (op.hasPatch && hasSceneOrUiChanges) {
       await createApprovalItem({
-        title: (decision.officePatch && decision.officePatch.title) || pending.subj,
-        summary: (decision.officePatch && decision.officePatch.summary) || (decision.submitFinalApproval && decision.submitFinalApproval.summary) || 'Ekip çalışmayı tamamladı ve onayınıza sunar.',
+        title: op.title || pending.subj,
+        summary: op.summary || 'Ekip istediğiniz ofis/arayüz değişikliğini hazırladı ve onayınıza sunar.',
         createdBy: `${agent.name} (${shortRole(agent.role)})`,
-        hasPatch: !!hasPatch,
-        sceneMods: (decision.officePatch && Array.isArray(decision.officePatch.sceneMods)) ? decision.officePatch.sceneMods : [],
-        uiMods: (decision.officePatch && Array.isArray(decision.officePatch.uiMods)) ? decision.officePatch.uiMods : [],
+        hasPatch: true,
+        removeSceneIds: Array.isArray(op.removeSceneIds) ? op.removeSceneIds : [],
+        sceneMods: Array.isArray(op.sceneMods) ? op.sceneMods.filter(s => s && s.drawJs) : [],
+        uiMods: Array.isArray(op.uiMods) ? op.uiMods.filter(u => u && (u.html || u.css || u.js)) : [],
         threadId: pending.threadId || pending.id
       });
     }
@@ -1593,7 +1889,7 @@ async function processNextPendingMail(forceNow = false) {
     console.error(err);
     lg(`❌ Hata (${shortName(agent.name)}): ${err.message}`);
     agent.mon = 0; agent.act = false; hush(agent);
-    nextAllowedCallTime = Date.now() + 20000;
+    nextAllowedCallTime = Date.now() + 15000;
   } finally {
     busy = false;
     renderAll();
@@ -1623,15 +1919,15 @@ function updateEngineBadges(stateText) {
 }
 
 /* ============================================================================
-   6. ÜST MENÜ VE AÇILIR PENCERE (MODAL WINDOW) YÖNETİMİ
+   7. ÜST MENÜ VE AÇILIR PENCERE (MODAL WINDOW) YÖNETİMİ
    ============================================================================ */
 let activeWin = null;
 const WINDOWS = [
   ['mail',      '✉️ İç Yazışmalar'],
   ['staff',     '👥 Personel & Kadro'],
-  ['quotas',    '📊 Model Kotaları & Analiz'],
-  ['files',     '📁 Ortak Klasör'],
-  ['approvals', '✅ Onay & Yamalar'],
+  ['quotas',    '📊 Model Kotaları'],
+  ['files',     '📁 Ortak Klasör & Kod Arşivi'],
+  ['approvals', '✅ Onay & Ofis Eşyaları'],
   ['tasks',     '📡 Görev & Kayıtlar']
 ];
 
@@ -1644,6 +1940,7 @@ function openWindow(winId) {
 
 function closeWindow() {
   activeWin = null;
+  store.isCreatingFile = false;
   $('#winBackdrop').classList.remove('open');
   renderTopMenu();
 }
@@ -1696,14 +1993,17 @@ function renderWindowContent() {
       <div class="mail-grid">
         <div class="mail-list">
           <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Yazışma Kuyruğu</b>
-            <span class="note">${store.mails.filter(m => !m.processed && m.toId !== 'owner').length} bekleyen</span>
+            <b>Yazışmalar (${store.mails.length})</b>
+            <button class="sm danger" onclick="deleteProcessedMails()">🧹 İşlenenleri Sil</button>
           </div>
           ${store.mails.length ? store.mails.map(m => `
-            <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${m.id}';renderWindowContent()">
-              <div style="display:flex;justify-content:space-between;font-size:12px">
+            <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${esc(m.id)}';renderWindowContent()">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
                 <b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b>
-                <span class="note">${esc(m.time)}</span>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span class="note">${esc(m.time)}</span>
+                  <button class="sm danger" title="Bu yazışmayı sil" onclick="deleteSingleMail('${esc(m.id)}', event)">🗑️</button>
+                </div>
               </div>
               <div style="font-weight:700;margin:4px 0">${esc(m.subj)}</div>
               <div class="note" style="display:flex;justify-content:space-between">
@@ -1720,12 +2020,15 @@ function renderWindowContent() {
                 <h3 style="margin:0">${esc(sel.subj)}</h3>
                 <div class="note">Gönderen: <b>${esc(sel.f)}</b> (${esc(sel.fRole || 'Uzman')}) → Alıcı: <b>${esc(sel.t)}</b></div>
               </div>
-              <span class="chip">${sel.processed ? 'Tamamlandı' : 'Kuyrukta'}</span>
+              <div class="row" style="margin:0">
+                <span class="chip">${sel.processed ? 'Tamamlandı' : 'Kuyrukta'}</span>
+                <button class="sm danger" onclick="deleteSingleMail('${esc(sel.id)}')">🗑️ Yazışmayı Sil</button>
+              </div>
             </div>
             <div style="white-space:pre-wrap;line-height:1.7;margin:14px 0;padding:16px;background:var(--card-2);border-radius:14px;border:1px solid var(--ln);max-height:42vh;overflow-y:auto">${esc(sel.body)}</div>
             <div class="row">
               <input id="replyTxt" style="flex:1" placeholder="Bu yazışmaya yönetici talimatı ekle...">
-              <button class="p" onclick="replyToMail('${sel.id}')">Talimat Gönder</button>
+              <button class="p" onclick="replyToMail('${esc(sel.id)}')">Talimat Gönder</button>
             </div>
           ` : '<p class="note">Detayları görmek için soldan bir yazışma seçin.</p>'}
         </div>
@@ -1743,10 +2046,15 @@ function renderWindowContent() {
           <tr>
             <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b></td>
             <td><b>${esc(s.role)}</b><br><span class="note">Oda ${String(s.room + 1).padStart(2, '0')}</span></td>
-            <td><span class="note">${esc((s.skills || '').slice(0, 95))}${(s.skills || '').length > 95 ? '...' : ''}</span></td>
+            <td><span class="note">${esc((s.skills || '').slice(0, 110))}${(s.skills || '').length > 110 ? '...' : ''}</span></td>
             <td><b>${esc(s.model)}</b><br><span class="note">Yedek: ${esc(s.backup)} · Bugün: ${s.used || 0}</span></td>
             <td><span class="chip">${esc(s.st)}</span></td>
-            <td><button onclick="openAgentModal('${s.id}')">Düzenle</button></td>
+            <td>
+              <div class="row" style="margin:0">
+                <button class="sm" onclick="openAgentModal('${esc(s.id)}')">✏️ Düzenle</button>
+                <button class="sm danger" onclick="delAgent('${esc(s.id)}')">🗑️ Sil</button>
+              </div>
+            </td>
           </tr>
         `).join('') : '<tr><td colspan="6" class="note">Firestore\'da kayıtlı personel bulunamadı. Yukarıdan yeni personel ekleyebilirsiniz.</td></tr>'}
       </table>`;
@@ -1756,7 +2064,7 @@ function renderWindowContent() {
       <div class="row" style="justify-content:space-between;margin-top:0">
         <div>
           <h3 style="margin:0">📊 AI Studio Tüm Model Limitleri, Saatlik (RPH), Dakikalık (RPM/TPM) ve Günlük (RPD) Analiz (${todayKey()})</h3>
-          <span class="note">Ekleyeceğiniz İK Ajanı bu tabloyu canlı okuyarak hangi personele hangi modelin atanacağını ve mola süresini (${store.cooldownSec} sn) otomatik optimize eder.</span>
+          <span class="note">İK Ajanı bu tabloyu canlı okuyarak hangi personele hangi modelin atanacağını ve mola süresini (${store.cooldownSec} sn) optimize eder.</span>
         </div>
       </div>
       <table>
@@ -1792,36 +2100,59 @@ function renderWindowContent() {
   }
   else if (activeWin === 'files') {
     const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
-    if (sf) store.selectedFileId = sf.id;
+    if (sf && !store.isCreatingFile) store.selectedFileId = sf.id;
+    const hasYamaSpam = store.files.some(f => String(f.path || '').startsWith('onaylanan-yama-') || String(f.path || '').startsWith('yama-'));
 
     p.innerHTML = `
       <div class="mail-grid">
         <div class="mail-list">
           <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Ortak Klasör Dosyaları</b>
-            <button onclick="newFilePrompt()">+ Yeni Dosya</button>
+            <b>Ortak Arşiv (${store.files.length})</b>
+            <div class="row" style="margin:0;gap:5px">
+              <button class="sm p" onclick="store.isCreatingFile=true;renderWindowContent()">+ Kod / Dosya Ekle</button>
+              <button class="sm ok" onclick="$('#fileUploadInput').click()">📤 Yükle</button>
+              ${hasYamaSpam ? `<button class="sm danger" onclick="cleanupYamaSpamFiles()" title="Eski yama v1..v16 dosyalarını topluca sil">🧹 Yamaları Sil</button>` : ''}
+            </div>
           </div>
           ${store.files.length ? store.files.map(f => `
-            <div class="mail-item ${f.id === store.selectedFileId ? 'active' : ''}" onclick="store.selectedFileId='${f.id}';renderWindowContent()">
-              <b>📄 ${esc(f.path)}</b>
+            <div class="mail-item ${(!store.isCreatingFile && f.id === store.selectedFileId) ? 'active' : ''}" onclick="store.isCreatingFile=false;store.selectedFileId='${esc(f.id)}';renderWindowContent()">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <b>📄 ${esc(f.path)}</b>
+                <button class="sm danger" title="Dosyayı sil" onclick="deleteSingleFile('${esc(f.id)}', event)">🗑️</button>
+              </div>
               <div class="note">Yazan: ${esc(f.owner)} · v${f.version || 1}</div>
             </div>
-          `).join('') : '<p class="note">Henüz üretilen dosya yok.</p>'}
+          `).join('') : '<p class="note">Henüz dosya yok. Yukarıdan örnek kod yapıştırabilir veya bilgisayarınızdan dosya yükleyebilirsiniz.</p>'}
         </div>
         <div>
-          ${sf ? `
+          ${store.isCreatingFile ? `
+            <div style="background:var(--card-2);padding:16px;border-radius:16px;border:1px solid var(--acc)">
+              <h3 style="margin:0 0 8px">📝 Ortak Arşive Yeni Dosya veya Örnek Kod Ekle</h3>
+              <p class="note" style="margin:0 0 12px">Buraya eklediğiniz kodları veya metinleri tüm ajanlar doğrudan okuyup analiz edebilir (Örn: SEO uzmanına "Arşivdeki ornek.html dosyasına bak" diyebilirsiniz).</p>
+              <label>Dosya Adı</label>
+              <input id="newFileName" placeholder="Örn: ornek-kod.js, anasayfa.html, seo-verileri.md">
+              <label>Dosya / Kod İçeriği</label>
+              <textarea id="newFileContent" class="code-editor" placeholder="Örnek kodunuzu veya metninizi buraya yapıştırın..."></textarea>
+              <div class="row" style="margin-top:12px;margin-bottom:0">
+                <button class="p" onclick="saveNewFileFromPanel()">💾 Arşive Kaydet</button>
+                <button onclick="store.isCreatingFile=false;renderWindowContent()">İptal</button>
+              </div>
+            </div>
+          ` : (sf ? `
             <div class="row" style="justify-content:space-between;margin-top:0">
               <div>
                 <h3 style="margin:0">${esc(sf.path)} <span class="chip">v${sf.version || 1}</span></h3>
-                <span class="note">Yazan: <b>${esc(sf.owner)}</b></span>
+                <span class="note">Yazan: <b>${esc(sf.owner)}</b> · Ajanlara <code>"${esc(sf.path)}" dosyasına bak</code> diyerek analiz ettirebilirsiniz.</span>
               </div>
               <div class="row" style="margin:0">
-                <button class="p" onclick="downloadFile('${sf.id}')">📥 İndir</button>
-                <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">📋 Kopyala</button>
+                <button class="p" onclick="saveEditedFileContent('${esc(sf.id)}')">💾 Değişiklikleri Kaydet</button>
+                <button onclick="downloadFile('${esc(sf.id)}')">📥 İndir</button>
+                <button onclick="navigator.clipboard.writeText($('#editFileArea').value);alert('Kopyalandı!')">📋 Kopyala</button>
+                <button class="danger" onclick="deleteSingleFile('${esc(sf.id)}')">🗑️ Sil</button>
               </div>
             </div>
-            <pre class="code">${esc(sf.content)}</pre>
-          ` : '<p class="note">Görüntülemek için soldan bir dosya seçin.</p>'}
+            <textarea id="editFileArea" class="code-editor" style="margin-top:10px">${esc(sf.content)}</textarea>
+          ` : '<p class="note">Görüntülemek veya düzenlemek için soldan bir dosya seçin ya da "+ Kod / Dosya Ekle" butonuna tıklayın.</p>')}
         </div>
       </div>`;
   }
@@ -1831,54 +2162,62 @@ function renderWindowContent() {
     p.innerHTML = `
       <div class="row" style="justify-content:space-between;margin-top:0">
         <div>
-          <h3 style="margin:0">✅ Yönetici Onay Kutusu & Canlı Ofis/Arayüz Yamaları</h3>
-          <span class="note">Ajanların ürettiği 2.5D ofis tasarımları ve arayüz özellikleri hem Firestore'a hem de Ortak Klasöre kaydedilir.</span>
+          <h3 style="margin:0">✅ Yönetici Onay Kutusu & Firestore 2.5D Ofis Eşyaları Envanteri</h3>
+          <span class="note">Ofisteki tüm masa, bilgisayar, pencere, duvar, arşiv ve tabelalar Firestore'da tutulur. Ajanların sunduğu değişiklikler siz onayladığınızda uygulanır.</span>
         </div>
-        ${(activeScene.length || activeUI.length) ? `<button class="danger" onclick="clearAllOfficeMods()">Tüm Eklentileri Kaldır</button>` : ''}
+        <button class="warn" onclick="resetOfficeToDefault()">🔄 Tüm Ofis Eşyalarını Varsayılana Döndür</button>
       </div>
 
-      <div class="cols" style="margin-top:12px">
+      <h3 style="margin-top:14px">📋 Onay Bekleyen & Geçmiş Sunumlar (${store.approvals.length})</h3>
+      ${store.approvals.length ? store.approvals.map(ap => `
+        <div class="approval-card" style="${ap.status === 'approved' ? 'opacity:.68;border-color:var(--ln)' : ''}">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <b>${esc(ap.title)}</b> <span class="chip">${ap.status === 'pending' ? '⏳ ONAY BEKLİYOR' : '✓ ONAYLANDI'}</span>
+              <div class="note" style="margin-top:4px">${esc(ap.summary)}</div>
+              <div class="note">Sunan: ${esc(ap.createdBy)} · ${ap.sceneMods?.length || 0} Eşya Ekleme/Değiştirme · ${ap.removeSceneIds?.length || 0} Eşya Kaldırma · ${ap.uiMods?.length || 0} Arayüz</div>
+            </div>
+            <div class="row" style="margin:0">
+              ${(ap.sceneMods?.length || ap.uiMods?.length || ap.removeSceneIds?.length) ? `<button class="warn" onclick="previewApprovalMods('${esc(ap.id)}')">👁️ Canlı Önizle</button>` : ''}
+              ${ap.status === 'pending' ? `<button class="p" onclick="applyApprovalToOffice('${esc(ap.id)}')">✅ Onayla & Uygula</button>` : ''}
+              <button onclick="askRevision('${esc(ap.id)}')">↩️ Revize İste</button>
+              <button class="danger" onclick="deleteSingleApproval('${esc(ap.id)}')">🗑️ Sil</button>
+            </div>
+          </div>
+        </div>
+      `).join('') : '<p class="note">Henüz onay bekleyen çalışma yok.</p>'}
+
+      <div class="cols" style="margin-top:18px">
         <div class="tier-card">
-          <b>🎨 Aktif 2.5D Sahne Çizimleri (${activeScene.length})</b>
-          <div style="margin-top:8px">
+          <b>🏢 Firestore'da Kayıtlı 2.5D Ofis Eşyaları & Mimari (${activeScene.length})</b>
+          <div class="note" style="margin-bottom:8px">İstediğiniz eşyayı buradan tek tıkla kaldırabilir, kodunu düzenleyebilir veya ajanlara söyleyip değiştirebilirsiniz.</div>
+          <div style="max-height:36vh;overflow-y:auto">
             ${activeScene.map(s => `
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)">
-                <span>✓ <b>${esc(s.label || s.id)}</b></span>
-                <button class="danger" style="padding:3px 9px;font-size:11px" onclick="removeSingleMod('scene','${esc(s.id)}')">Kaldır</button>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);gap:8px">
+                <div>
+                  <b>${esc(s.label || s.id)}</b>
+                  <span class="chip">${esc(s.id)}</span>
+                </div>
+                <div class="row" style="margin:0;gap:5px">
+                  <button class="sm" onclick="editSceneItemCode('${esc(s.id)}')">✏️ Kodu</button>
+                  <button class="sm danger" onclick="removeSingleMod('scene','${esc(s.id)}')">🗑️ Kaldır</button>
+                </div>
               </div>
-            `).join('') || '<p class="note">Aktif özel sahne çizimi yok.</p>'}
+            `).join('') || '<p class="note">Kayıtlı sahne eşyası yok.</p>'}
           </div>
         </div>
         <div class="tier-card">
           <b>🧩 Aktif Arayüz/Menü Özellikleri (${activeUI.length})</b>
           <div style="margin-top:8px">
             ${activeUI.map(u => `
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln)">
                 <span>✓ <b>${esc(u.title || u.id)}</b> <span class="chip">${esc(u.slot || 'top-right')}</span></span>
-                <button class="danger" style="padding:3px 9px;font-size:11px" onclick="removeSingleMod('ui','${esc(u.id)}')">Kaldır</button>
+                <button class="sm danger" onclick="removeSingleMod('ui','${esc(u.id)}')">🗑️ Kaldır</button>
               </div>
             `).join('') || '<p class="note">Aktif özel arayüz bileşeni yok.</p>'}
           </div>
         </div>
       </div>
-
-      <h3 style="margin-top:18px">📋 Onay Paketleri (${store.approvals.length})</h3>
-      ${store.approvals.length ? store.approvals.map(ap => `
-        <div class="approval-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-            <div>
-              <b>${esc(ap.title)}</b> <span class="chip">${esc(ap.status.toUpperCase())}</span>
-              <div class="note" style="margin-top:4px">${esc(ap.summary)}</div>
-              <div class="note">Sunan: ${esc(ap.createdBy)} · ${ap.sceneMods?.length || 0} Sahne Çizimi · ${ap.uiMods?.length || 0} Arayüz Özelliği</div>
-            </div>
-            <div class="row" style="margin:0">
-              ${(ap.sceneMods?.length || ap.uiMods?.length) ? `<button class="warn" onclick="previewApprovalMods('${ap.id}')">👁️ Canlı Önizle</button>` : ''}
-              <button class="p" onclick="applyApprovalToOffice('${ap.id}')">✅ Onayla & Uygula</button>
-              <button onclick="askRevision('${ap.id}')">↩️ Revize İste</button>
-            </div>
-          </div>
-        </div>
-      `).join('') : '<p class="note">Henüz onay bekleyen çalışma yok.</p>'}
     `;
   }
   else if (activeWin === 'tasks') {
@@ -1889,21 +2228,26 @@ function renderWindowContent() {
         <div>
           <h3>⏳ Sırada Bekleyen Görevler (${pendingMails.length})</h3>
           ${pendingMails.map(m => `
-            <div style="padding:11px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:var(--card-2)">
-              <b>${esc(shortName(m.t))}</b> <span class="note">← ${esc(shortName(m.f))}</span><br><span>${esc(m.subj)}</span>
+            <div style="padding:11px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:var(--card-2);display:flex;justify-content:space-between;align-items:center">
+              <div><b>${esc(shortName(m.t))}</b> <span class="note">← ${esc(shortName(m.f))}</span><br><span>${esc(m.subj)}</span></div>
+              <button class="sm danger" onclick="deleteSingleMail('${esc(m.id)}')">🗑️</button>
             </div>
           `).join('') || '<span class="note">Bekleyen görev yok.</span>'}
         </div>
         <div>
           <h3>✅ Tamamlanan Adımlar (${doneMails.length})</h3>
-          ${doneMails.slice(0, 12).map(m => `
-            <div style="padding:10px;border-bottom:1px solid var(--ln)">
-              <b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b><br><span class="note">${esc(m.subj)}</span>
+          ${doneMails.slice(0, 15).map(m => `
+            <div style="padding:9px;border-bottom:1px solid var(--ln);display:flex;justify-content:space-between;align-items:center">
+              <div><b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b><br><span class="note">${esc(m.subj)}</span></div>
+              <button class="sm danger" onclick="deleteSingleMail('${esc(m.id)}')">🗑️</button>
             </div>
           `).join('') || '<span class="note">Henüz tamamlanan adım yok.</span>'}
         </div>
         <div>
-          <h3>📡 Canlı Sistem Kayıtları</h3>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3>📡 Canlı Sistem Kayıtları</h3>
+            <button class="sm" onclick="store.log=[];renderWindowContent()">Temizle</button>
+          </div>
           <div class="note" style="max-height:48vh;overflow-y:auto;line-height:1.75;background:var(--card-2);padding:12px;border-radius:12px">
             ${store.log.map(esc).join('<br>') || 'Kayıt yok.'}
           </div>
@@ -1913,7 +2257,7 @@ function renderWindowContent() {
 }
 
 /* ============================================================================
-   7. FIRESTORE İŞLEMLERİ, CANLI SENKRONİZASYON VE TARAYICI HEARTBEAT
+   8. FIRESTORE İŞLEMLERİ, TEKİL SİLME FONKSİYONLARI VE CANLI SENKRONİZASYON
    ============================================================================ */
 let db = null, auth = null, CONN = false, vt = 0, hbTimer = 0, un = [], pt = 0;
 const FV = () => firebase.firestore.FieldValue;
@@ -1925,16 +2269,8 @@ async function createInternalMail({ fromId, fromName, fromRole, toId, toName, su
   const cleanSubj = String(subject || 'Görev').slice(0, 290);
   const cleanBody = String(body || '').slice(0, 39000);
   const cleanType = ['görev', 'rapor', 'soru', 'bilgi', 'onay'].includes(type) ? type : 'görev';
-
-  const mailObj = {
-    id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-    fromId, toId, f: fromName, fRole: fromRole || 'Uzman', t: toName,
-    subj: cleanSubj, body: cleanBody, type: cleanType,
-    threadId: threadId || ('th_' + Date.now()),
-    processed: toId === 'owner',
-    notBeforeMs: notBeforeMs || Date.now(),
-    time: hhmm()
-  };
+  const thId = threadId || ('th_' + Date.now());
+  const nbMs = notBeforeMs || Date.now();
 
   if (CONN && OWN) {
     const ts = FV().serverTimestamp();
@@ -1958,25 +2294,54 @@ async function createInternalMail({ fromId, fromName, fromRole, toId, toName, su
       body: cleanBody,
       type: cleanType,
       taskId: tid,
-      threadId: mailObj.threadId,
-      processed: mailObj.processed,
-      notBefore: firebase.firestore.Timestamp.fromMillis(mailObj.notBeforeMs),
+      threadId: thId,
+      processed: toId === 'owner',
+      notBefore: firebase.firestore.Timestamp.fromMillis(nbMs),
       createdAt: ts
     });
   } else {
-    store.mails.unshift(mailObj);
+    store.mails.unshift({
+      id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      fromId, toId, f: fromName, fRole: fromRole || 'Uzman', t: toName,
+      subj: cleanSubj, body: cleanBody, type: cleanType,
+      threadId: thId, processed: toId === 'owner', notBeforeMs: nbMs, time: hhmm()
+    });
     renderAll();
   }
 }
 
+async function deleteSingleMail(mailId, ev) {
+  if (ev) ev.stopPropagation();
+  store.mails = store.mails.filter(m => m.id !== mailId);
+  if (store.selectedMailId === mailId) {
+    store.selectedMailId = store.mails[0] ? store.mails[0].id : null;
+  }
+  if (CONN && OWN) {
+    await db.collection('mails').doc(mailId).delete().catch(() => {});
+  }
+  renderAll();
+}
+
+async function deleteProcessedMails() {
+  const toDel = store.mails.filter(m => m.processed);
+  if (!toDel.length) return;
+  store.mails = store.mails.filter(m => !m.processed);
+  if (CONN && OWN) {
+    const batch = db.batch();
+    toDel.forEach(m => batch.delete(db.collection('mails').doc(m.id)));
+    await batch.commit().catch(() => {});
+  }
+  renderAll();
+}
+
 async function createApprovalItem(item) {
-  const apObj = {
-    id: 'ap_' + Date.now(),
+  const payload = {
     title: item.title || 'Yönetici Onayı Bekleyen Çalışma',
     summary: item.summary || '',
     createdBy: item.createdBy || 'Tonoz AI Ekibi',
     status: 'pending',
     hasPatch: !!item.hasPatch,
+    removeSceneIds: item.removeSceneIds || [],
     sceneMods: item.sceneMods || [],
     uiMods: item.uiMods || [],
     time: hhmm()
@@ -1984,11 +2349,11 @@ async function createApprovalItem(item) {
 
   if (CONN && OWN) {
     await db.collection('approvals').add({
-      ...apObj,
+      ...payload,
       createdAt: FV().serverTimestamp()
     }).catch(() => {});
   } else {
-    store.approvals.unshift(apObj);
+    store.approvals.unshift({ ...payload, id: 'ap_' + Date.now() });
     renderApprovalBanner();
     renderAll();
   }
@@ -2002,6 +2367,7 @@ function previewApprovalMods(approvalId) {
   } else {
     store.previewMods = {
       _apId: approvalId,
+      removeSceneIds: ap.removeSceneIds || [],
       sceneMods: ap.sceneMods || [],
       uiMods: ap.uiMods || []
     };
@@ -2023,27 +2389,28 @@ function renderApprovalBanner() {
   const isPrev = store.previewMods && store.previewMods._apId === latest.id;
   e.style.display = 'block';
   e.innerHTML = `
-    <div class="badge live" style="margin-bottom:6px">🔔 ONAY BEKLEYEN SUNUM (${pendingList.length})</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div class="badge live">🔔 ONAY BEKLEYEN TASARIM (${pendingList.length})</div>
+      <button class="sm danger" onclick="deleteSingleApproval('${esc(latest.id)}')" title="Bu bildirimi sil">✕ Reddet / Sil</button>
+    </div>
     <h3 style="margin:0 0 4px;font:700 15px 'Space Grotesk',sans-serif">${esc(latest.title)}</h3>
     <div class="note" style="color:#e2e8f0">${esc(latest.summary)}</div>
     <div class="note" style="margin-top:4px">Sunan: <b>${esc(latest.createdBy)}</b></div>
     <div class="row" style="margin-top:10px;margin-bottom:0">
-      ${(latest.sceneMods?.length || latest.uiMods?.length) ? `
-        <button class="warn" onclick="previewApprovalMods('${latest.id}')">${isPrev ? '🙈 Önizlemeyi Kapat' : '👁️ Önizle'}</button>
-      ` : ''}
-      <button class="p" onclick="applyApprovalToOffice('${latest.id}')">✅ Onayla</button>
-      <button onclick="askRevision('${latest.id}')">↩️ Revize</button>
+      <button class="warn" onclick="previewApprovalMods('${esc(latest.id)}')">${isPrev ? '🙈 Önizlemeyi Kapat' : '👁️ Canlı Önizle'}</button>
+      <button class="p" onclick="applyApprovalToOffice('${esc(latest.id)}')">✅ Onayla & Uygula</button>
+      <button onclick="askRevision('${esc(latest.id)}')">↩️ Revize</button>
     </div>
   `;
 }
 
-function askRevision(approvalId) {
+async function askRevision(approvalId) {
   const ap = store.approvals.find(x => x.id === approvalId);
   const note = prompt('Ekibe iletilecek revize talimatınızı yazın:');
   if (!note) return;
   if (ap) ap.status = 'revised';
-  if (CONN && OWN && ap && !String(ap.id).startsWith('ap_')) {
-    db.collection('approvals').doc(ap.id).set({ status: 'revised' }, { merge: true }).catch(() => {});
+  if (CONN && OWN && ap) {
+    await db.collection('approvals').doc(ap.id).set({ status: 'revised' }, { merge: true }).catch(() => {});
   }
   store.previewMods = null;
   renderActiveUIMods();
@@ -2063,7 +2430,7 @@ async function markMailProcessed(mailId) {
 }
 
 async function saveSharedFile(path, content, kind, ownerName) {
-  const cleanPath = String(path || 'dosya.md').slice(0, 240);
+  const cleanPath = String(path || 'dosya.md').trim().slice(0, 240);
   const cleanContent = String(content || '').slice(0, 900000);
   const existing = store.files.find(f => f.path === cleanPath);
   if (CONN && OWN) {
@@ -2071,16 +2438,81 @@ async function saveSharedFile(path, content, kind, ownerName) {
     const docId = existing ? existing.id : db.collection('files').doc().id;
     const ver = existing ? (existing.version || 1) + 1 : 1;
     await db.collection('files').doc(docId).set({
-      path: cleanPath, content: cleanContent, owner: ownerName, kind: kind || 'md',
+      path: cleanPath, content: cleanContent, owner: ownerName, kind: kind || ' code',
       version: ver, createdAt: ts, updatedAt: ts
     }, { merge: true });
+    store.selectedFileId = docId;
   } else {
     if (existing) {
       existing.content = cleanContent; existing.version++; existing.owner = ownerName; existing.time = hhmm();
+      store.selectedFileId = existing.id;
     } else {
-      store.files.unshift({ id: 'f_' + Date.now(), path: cleanPath, content: cleanContent, kind, owner: ownerName, version: 1, time: hhmm() });
+      const nid = 'f_' + Date.now();
+      store.files.unshift({ id: nid, path: cleanPath, content: cleanContent, kind, owner: ownerName, version: 1, time: hhmm() });
+      store.selectedFileId = nid;
     }
   }
+}
+
+async function saveNewFileFromPanel() {
+  const name = $('#newFileName')?.value.trim();
+  const content = $('#newFileContent')?.value;
+  if (!name) return alert('Lütfen dosya adını yazın (örn: ornek-kod.js).');
+  if (!content) return alert('Lütfen dosya veya örnek kod içeriğini girin.');
+  await saveSharedFile(name, content, 'code', 'Burak Bey (Yönetici)');
+  store.isCreatingFile = false;
+  lg(`📄 Arşive yeni dosya eklendi: ${name}`);
+  renderAll();
+}
+
+async function saveEditedFileContent(fileId) {
+  const f = store.files.find(x => x.id === fileId);
+  const newContent = $('#editFileArea')?.value;
+  if (!f || newContent == null) return;
+  await saveSharedFile(f.path, newContent, f.kind || 'code', f.owner || 'Burak Bey (Yönetici)');
+  lg(`💾 Dosya güncellendi: ${f.path}`);
+  alert(`"${f.path}" başarıyla güncellendi!`);
+  renderAll();
+}
+
+async function handleLocalFileUpload(ev) {
+  const files = Array.from(ev.target.files || []);
+  for (const file of files) {
+    const text = await file.text();
+    await saveSharedFile(file.name, text, 'code', 'Burak Bey (Yüklenen Dosya)');
+    lg(`📤 Bilgisayardan dosya yüklendi: ${file.name}`);
+  }
+  ev.target.value = '';
+  store.isCreatingFile = false;
+  renderAll();
+}
+
+async function deleteSingleFile(fileId, ev) {
+  if (ev) ev.stopPropagation();
+  const f = store.files.find(x => x.id === fileId);
+  if (!f) return;
+  store.files = store.files.filter(x => x.id !== fileId);
+  if (store.selectedFileId === fileId) {
+    store.selectedFileId = store.files[0] ? store.files[0].id : null;
+  }
+  if (CONN && OWN) {
+    await db.collection('files').doc(fileId).delete().catch(() => {});
+  }
+  lg(`🗑️ Dosya silindi: ${f.path}`);
+  renderAll();
+}
+
+async function cleanupYamaSpamFiles() {
+  const spam = store.files.filter(f => String(f.path || '').startsWith('onaylanan-yama-') || String(f.path || '').startsWith('yama-'));
+  if (!spam.length) return;
+  store.files = store.files.filter(f => !spam.includes(f));
+  if (CONN && OWN) {
+    const batch = db.batch();
+    spam.forEach(f => batch.delete(db.collection('files').doc(f.id)));
+    await batch.commit().catch(() => {});
+  }
+  lg(`🧹 ${spam.length} adet eski yama yedek dosyası temizlendi.`);
+  renderAll();
 }
 
 function downloadFile(fileId) {
@@ -2092,18 +2524,6 @@ function downloadFile(fileId) {
   a.href = url; a.download = f.path;
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
-}
-
-async function clearAllOfficeMods() {
-  if (!confirm('Firestore üzerinde kayıtlı tüm sonradan eklenen ofis çizimleri ve arayüz eklentileri temizlensin mi?')) return;
-  store.officeMods = { version: (store.officeMods.version || 1) + 1, sceneMods: [], uiMods: [] };
-  store.previewMods = null;
-  renderActiveUIMods();
-  if (CONN && OWN) {
-    await db.doc('settings/office_mods').set({ ...store.officeMods, updatedAt: FV().serverTimestamp() }).catch(() => {});
-    pub();
-  }
-  renderAll();
 }
 
 async function resetProject() {
@@ -2132,7 +2552,7 @@ function replyToMail(mailId) {
   const m = store.mails.find(x => x.id === mailId);
   const txt = $('#replyTxt')?.value.trim();
   if (!m || !txt) return;
-  const target = store.staff.find(s => s.id === m.fromId || s.name === m.f) || store.staff[0];
+  const target = findStaffSmart(m.fromId) || findStaffSmart(m.f) || store.staff[0];
   if (!target) return;
   createInternalMail({
     fromId: 'owner', fromName: 'Burak Bey (Yönetici)', fromRole: 'Şirket Sahibi',
@@ -2142,15 +2562,6 @@ function replyToMail(mailId) {
   });
   lg(`Sen → ${shortName(target.name)}: ${txt}`);
   $('#replyTxt').value = '';
-}
-
-function newFilePrompt() {
-  const path = prompt('Dosya adı (örn: notlar.md):');
-  if (!path) return;
-  const content = prompt('Dosya içeriği:');
-  if (content == null) return;
-  saveSharedFile(path.trim(), content, 'md', 'Burak Bey (Yönetici)');
-  renderAll();
 }
 
 function openAgentModal(id) {
@@ -2273,7 +2684,6 @@ function stopOwnerListeners() {
   clearInterval(hbTimer);
 }
 
-// Tarayıcı açıkken Firestore'a "Ben buradayım" sinyali gönderir; sayfa kapanınca GitHub Actions devralır
 function sendBrowserHeartbeat() {
   if (!CONN || !OWN) return;
   db.doc('settings/guard').set({
@@ -2301,16 +2711,45 @@ async function startOwnerListeners() {
     }
   }));
 
-  un.push(db.doc('settings/office_mods').onSnapshot(doc => {
+  // Tüm 2.5D ofis eşyalarını Firestore settings/office_mods üzerinden canlı dinle (ilk kez açılıyorsa varsayılan eşyaları kaydet)
+  un.push(db.doc('settings/office_mods').onSnapshot(async doc => {
     if (doc.exists) {
       const d = doc.data();
-      store.officeMods = {
-        version: d.version || 1,
-        sceneMods: Array.isArray(d.sceneMods) ? d.sceneMods : [],
-        uiMods: Array.isArray(d.uiMods) ? d.uiMods : []
-      };
+      if (!d.initializedLayout) {
+        const existingCustom = Array.isArray(d.sceneMods) ? d.sceneMods : [];
+        const merged = [...DEFAULT_SCENE_ITEMS];
+        existingCustom.forEach(cs => {
+          if (!cs || !cs.drawJs) return;
+          const idx = merged.findIndex(x => x.id === cs.id);
+          if (idx >= 0) merged[idx] = cs;
+          else merged.push(cs);
+        });
+        store.officeMods = {
+          version: (d.version || 1) + 1,
+          initializedLayout: true,
+          sceneMods: merged,
+          uiMods: Array.isArray(d.uiMods) ? d.uiMods : []
+        };
+        await saveOfficeModsToFirestore();
+      } else {
+        store.officeMods = {
+          version: d.version || 1,
+          initializedLayout: true,
+          sceneMods: Array.isArray(d.sceneMods) ? d.sceneMods : [...DEFAULT_SCENE_ITEMS],
+          uiMods: Array.isArray(d.uiMods) ? d.uiMods : []
+        };
+      }
+      compiledDrawCache.clear();
       renderActiveUIMods();
       renderAll();
+    } else {
+      store.officeMods = {
+        version: 1,
+        initializedLayout: true,
+        sceneMods: [...DEFAULT_SCENE_ITEMS],
+        uiMods: []
+      };
+      await saveOfficeModsToFirestore();
     }
   }));
 
@@ -2331,7 +2770,7 @@ async function startOwnerListeners() {
   }));
 
   un.push(db.collection('staff').onSnapshot(q => {
-    syncStaff(q.docs.map(d => ({ id: d.id, ...d.data() })));
+    syncStaff(q.docs.map(d => ({ ...d.data(), id: d.id })));
     renderAll();
   }));
 
@@ -2351,12 +2790,13 @@ async function startOwnerListeners() {
   }));
 
   un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(60).onSnapshot(q => {
-    store.files = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.updatedAt) }));
+    store.files = q.docs.map(d => ({ ...d.data(), id: d.id, time: tm(d.updatedAt) }));
     renderAll();
   }));
 
+  // DİKKAT: id: d.id en sonda yazılarak belge içindeki eski 'ap_...' id alanının gerçek Firestore ID'sini ezmesi engellendi!
   un.push(db.collection('approvals').orderBy('createdAt', 'desc').limit(30).onSnapshot(q => {
-    store.approvals = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.createdAt) }));
+    store.approvals = q.docs.map(d => ({ ...d.data(), id: d.id, time: tm(d.createdAt) }));
     renderApprovalBanner();
     renderAll();
   }));
@@ -2368,6 +2808,7 @@ async function pollPublic() {
     if (o.staff && o.staff.length) syncStaff(o.staff);
     if (o.officeMods) {
       store.officeMods = o.officeMods;
+      compiledDrawCache.clear();
       renderActiveUIMods();
     }
   } catch (e) {}
