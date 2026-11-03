@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TONOZ AI COMPANY · Otonom Multi-Agent Şirket & Ofis Sistemi</title>
+<title>TONOZ AI COMPANY · Otonom Multi-Agent Şirket Sistemi</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -37,7 +37,7 @@ body{
 }
 .wrap{max-width:1440px;margin:0 auto;padding:16px 20px 36px}
 
-/* Üst Kurumsal Bar (Header) */
+/* Üst Kurumsal Bar */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:12px 18px;margin-bottom:16px;flex-wrap:wrap;
@@ -59,15 +59,9 @@ body{
 .brand-title span{font-size:11.5px;color:var(--mut);font-weight:600;letter-spacing:.3px}
 .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 
-/* Sağ Üst Canlı Saat & Eklenti Yuvası */
-.clock-pill{
-  display:flex;align-items:center;gap:8px;
-  padding:6px 13px;border-radius:12px;
-  background:var(--card-2);border:1px solid var(--ln);
-  font:600 13px 'JetBrains Mono',monospace;color:var(--tx);
-}
-.clock-pill i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+/* Ajanların Özgürce UI Bileşeni Ekleyebileceği Güvenli Yuvalar */
 #ext-header-menu,#ext-top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#ext-floating-widget{position:fixed;left:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;gap:8px}
 
 .badge{
   font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;
@@ -98,8 +92,7 @@ label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:10px 
 
 /* Sahne & Canvas Alanı */
 .stage-wrap{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--ln);background:#0d101b;box-shadow:0 18px 50px rgba(0,0,0,.45)}
-canvas{width:100%;height:auto;display:block;cursor:grab}
-canvas:active{cursor:grabbing}
+canvas{width:100%;height:auto;display:block;cursor:pointer}
 .stage-hud{
   position:absolute;top:14px;left:14px;right:14px;
   display:flex;justify-content:space-between;align-items:flex-start;
@@ -125,19 +118,11 @@ canvas:active{cursor:grabbing}
 #panel,#ap{display:none}
 #panel.on{display:block}
 
-/* Komut Çubuğu & Hızlı Senaryolar */
+/* Sade ve Özgür Komut Çubuğu */
 .cmd-bar{
-  display:grid;grid-template-columns:220px 210px 1fr auto;gap:10px;align-items:center;
+  display:grid;grid-template-columns:240px 1fr auto;gap:10px;align-items:center;
 }
-@media(max-width:1024px){.cmd-bar{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.cmd-bar{grid-template-columns:1fr}}
-.quick-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
-.qchip{
-  font-size:12px;padding:5px 11px;border-radius:999px;
-  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);
-  color:#c7d2fe;cursor:pointer;transition:.15s;
-}
-.qchip:hover{background:rgba(99,102,241,.22);border-color:var(--acc)}
+@media(max-width:960px){.cmd-bar{grid-template-columns:1fr}}
 
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc);box-shadow:0 4px 12px var(--acc-glow)}
@@ -163,19 +148,16 @@ pre.code{
   overflow-x:auto;font:12.5px/1.65 'JetBrains Mono',monospace;max-height:480px;
   white-space:pre-wrap;border:1px solid var(--ln);
 }
-.tier-card{
-  background:var(--card-2);border:1px solid var(--ln);border-radius:16px;padding:14px;
-}
+.tier-card{background:var(--card-2);border:1px solid var(--ln);border-radius:16px;padding:14px}
 .approval-card{
   background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(16,185,129,.08));
   border:1px solid rgba(99,102,241,.4);border-radius:16px;padding:16px;margin-bottom:12px;
 }
 #card{
   display:none;position:fixed;right:20px;bottom:20px;
-  width:min(480px,calc(100vw - 40px));max-height:88vh;overflow:auto;
+  width:min(460px,calc(100vw - 40px));max-height:88vh;overflow:auto;
   z-index:60;box-shadow:0 20px 60px rgba(0,0,0,.75);border:1px solid var(--acc);
 }
-#ext-floating-widget{position:fixed;left:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;gap:8px}
 footer{text-align:center;font-size:12px;color:var(--mut);margin:28px 0 8px}
 </style>
 <style id="ext-custom-css"></style>
@@ -188,23 +170,17 @@ footer{text-align:center;font-size:12px;color:var(--mut);margin:28px 0 8px}
       <div class="logo-mark">T</div>
       <div class="brand-title">
         <h1>TONOZ AI COMPANY</h1>
-        <span>Otonom Multi-Agent Şirket & Canlı Ofis Sistemi</span>
+        <span>Otonom Multi-Agent Şirket & Firestore Canlı Ofis Sistemi</span>
       </div>
       <span id="engBadge" class="badge">Ziyaretçi Vitrini</span>
       <span id="coolBadge" class="badge" style="display:none"></span>
     </div>
 
     <div class="top-right">
-      <!-- Dinamik Üst Menü Eklenti Yuvası -->
+      <!-- Ajanların Üst Menüye veya Sağ Köşeye Özgürce Özellik Ekleyebileceği Yuvalar -->
       <div id="ext-header-menu"></div>
-      <!-- Dinamik Sağ Köşe Eklenti Yuvası -->
       <div id="ext-top-right"></div>
-      <!-- Canlı Dijital Saat & Tarih -->
-      <div class="clock-pill" title="Tonoz AI Şirket Saati (Canlı)">
-        <i></i>
-        <span id="liveClock">00:00:00</span>
-      </div>
-      <button id="settingsBtn" style="display:none" onclick="openSettingsModal()">⚙️ API & GitHub Ayarları</button>
+      <button id="settingsBtn" style="display:none" onclick="openSettingsModal()">⚙️ API & Mola Ayarları</button>
       <button id="bl" class="p">Yönetici Girişi</button>
     </div>
   </header>
@@ -221,51 +197,36 @@ footer{text-align:center;font-size:12px;color:var(--mut);margin:28px 0 8px}
     <div id="hoverHud"></div>
   </div>
 
-  <!-- CANLI ONAY & GITHUB BİLDİRİM KUTUSU -->
+  <!-- CANLI ONAY KUTUSU (Ajanlar bir çalışma veya ofis/site yaması bitirdiğinde çıkar) -->
   <div id="ap" class="box"></div>
 
   <!-- YÖNETİCİ KONTROL MERKEZİ -->
   <section id="panel">
     <div class="box">
       <div class="cmd-bar">
-        <select id="targetAgent" title="Görevi ilk teslim alacak departman"></select>
-        <select id="taskMode" title="Görev Türü">
-          <option value="auto">🤖 Otomatik Algıla (Tüm Görevler)</option>
-          <option value="project">📄 Standart Proje / Makale / Kod</option>
-          <option value="scene">🌳 2D Ofis Dekorasyonu & Eşya Ekle</option>
-          <option value="ui">🧩 Siteye Menü / Saat / Özellik Ekle</option>
-        </select>
-        <input id="ti" placeholder="Örn: Odalara ağaç istiyorum VEYA Sağ üst köşeye döviz/hava durumu widget'ı ekleyin VEYA ITRF makalesi yazın...">
+        <select id="targetAgent" title="Görevi ilk teslim alacak personel"></select>
+        <input id="ti" placeholder="Ajanlara istediğiniz görevi, 2D ofis değişikliğini veya siteye eklenecek yeni özelliği özgürce yazın...">
         <div class="row" style="margin:0">
           <button id="go" class="p">🚀 Görevi Başlat</button>
-          <button id="stepBtn" class="ok" title="Bekleyen sıradaki görevi mola beklemeden hemen çalıştır">⚡ Şimdi İşlet</button>
+          <button id="stepBtn" class="ok" title="Bekleyen sıradaki görevi hemen işlet">⚡ Şimdi İşlet</button>
           <button id="stop" class="warn">⏸ Duraklat</button>
           <button id="resetProj" class="danger" title="Yazışmaları ve dosyaları temizle">🗑️ Sıfırla</button>
         </div>
       </div>
-
-      <div class="quick-chips">
-        <span class="note" style="font-weight:700">⚡ Hızlı Emirler:</span>
-        <span class="qchip" onclick="setQuickTask('scene','Tüm personel odalarına ve koridora dekoratif yeşil ofis ağaçları ekleyin, aranızda planlayıp onay kutusuna sunun.')">🌳 Odalara Ağaç İste</span>
-        <span class="qchip" onclick="setQuickTask('scene','Toplantı alanına sunum tahtası, dinlenme alanına akvaryum ve kitaplık ekleyin.')">🐠 Akvaryum & Kitaplık Ekle</span>
-        <span class="qchip" onclick="setQuickTask('ui','Sağ üst köşeye ve üst menüye mevcut kodu bozmadan canlı performans sayacı, dünya saati ve hızlı durum menüsü ekleyin.')">🕒 Sağ Köşeye Saat & Menü Ekle</span>
-        <span class="qchip" onclick="setQuickTask('project','Haritacılıkta ITRF96 ve ED50 koordinat dönüşümleri hakkında örnek JS kodlu kapsamlı teknik rehber hazırlayın.')">📐 CBS / Harita Projesi</span>
-      </div>
-
       <div class="tabs" id="tabs"></div>
     </div>
     <div id="pn" class="box"></div>
   </section>
 
-  <!-- MODAL & FLOATING WIDGET YUVASI -->
+  <!-- MODAL & YÜZEN WIDGET YUVASI -->
   <aside id="card" class="box" aria-live="polite"></aside>
   <div id="ext-floating-widget"></div>
-  <footer>TONOZ AI COMPANY · Firestore Gerçek Zamanlı Multi-Agent İşletim Sistemi & GitHub Otomasyonu</footer>
+  <footer>TONOZ AI COMPANY · %100 Firestore Gerçek Zamanlı Multi-Agent Şirket Mimarisi</footer>
 </div>
 
 <script>
 /* ============================================================================
-   1. FİRESTORE YAPILANDIRMASI VE AKILLI MODEL / KOTA HAVUZU (YOL PLANI)
+   1. FIRESTORE YAPILANDIRMASI VE AKILLI MODEL / KOTA HAVUZU (YOL PLANI)
    ============================================================================ */
 const FB = {
   apiKey: 'AIzaSyAoPd-gsCIEzXJ8_TOeZBvcSICNvHvW29Q',
@@ -283,23 +244,16 @@ const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 const hhmm = () => new Date().toTimeString().slice(0, 5);
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
-// Canlı Saat Güncelleyici
-setInterval(() => {
-  const el = $('#liveClock');
-  if (el) el.textContent = new Date().toLocaleTimeString('tr-TR', { hour12: false });
-}, 1000);
-
 // Gerçek Gemini API Modelleri + Katmanlı Kota Yol Planı (Tier 1 -> Tier 4)
 const MODELS = [
   { n: 'Gemini 2.5 Pro',        api: 'gemini-2.5-pro',        l: 25,    rpm: 5,  u: 0, tier: 'Seviye 1 · Stratejik Mimari', desc: 'Karmaşık mimari, derin analiz ve kritik kararlar (5 RPM, 25 RPD)' },
   { n: 'Gemini 2.5 Flash',      api: 'gemini-2.5-flash',      l: 250,   rpm: 10, u: 0, tier: 'Seviye 2 · Planlama & Denetim', desc: 'SEO stratejisi, iş dağılımı ve kalite kontrol (10 RPM, 250 RPD)' },
   { n: 'Gemini 2.0 Flash',      api: 'gemini-2.0-flash',      l: 500,   rpm: 15, u: 0, tier: 'Seviye 2 · Koordinasyon', desc: 'Hızlı departmanlar arası koordinasyon ve kod üretimi (15 RPM, 500 RPD)' },
-  { n: 'Gemini 2.5 Flash Lite', api: 'gemini-2.5-flash-lite', l: 1000,  rpm: 15, u: 0, tier: 'Seviye 3 · Ana Üretim Motoru', desc: 'Kodlama, UI/UX tasarım ve teknik içerik üretimi (15 RPM, 1000 RPD)' },
+  { n: 'Gemini 2.5 Flash Lite', api: 'gemini-2.5-flash-lite', l: 1000,  rpm: 15, u: 0, tier: 'Seviye 3 · Ana Üretim Motoru', desc: 'Kodlama, 2.5D çizim, UI/UX tasarım ve teknik içerik (15 RPM, 1000 RPD)' },
   { n: 'Gemini 2.0 Flash Lite', api: 'gemini-2.0-flash-lite', l: 1500,  rpm: 30, u: 0, tier: 'Seviye 3 · Seri Üretim', desc: 'Yüksek hızlı metin, dokümantasyon ve revizyon (30 RPM, 1500 RPD)' },
   { n: 'Gemma 3 27B',           api: 'gemma-3-27b-it',        l: 14400, rpm: 30, u: 0, tier: 'Seviye 4 · Geniş Yedek Havuz', desc: 'Kesintisiz 7/24 yedek kapasite havuzu (30 RPM, 14.400 RPD)' }
 ];
 
-// Firestore'daki eski model isimlerini yeni geçerli API modellerine bağlayan uyumluluk haritası
 const LEGACY_MODEL_ALIASES = {
   'Gemini 3.8 Flash':      'Gemini 2.5 Flash',
   'Gemini 3.6 Flash':      'Gemini 2.5 Flash',
@@ -327,20 +281,16 @@ const store = {
   selectedMailId: null,
   selectedFileId: null,
   geminiKey: '',
-  githubToken: '',
-  githubRepo: '',
-  githubBranch: 'main',
-  cooldownSec: 18, // Model bazlı akıllı RPM koruması ile dengeli varsayılan bekleme
+  cooldownSec: 18,
   maxChainDepth: 12,
   officeMods: {
     version: 1,
     sceneMods: [],
     uiMods: []
   },
-  previewMods: null // Yönetici "Canlı Önizle" dediğinde geçici gösterilen yamalar
+  previewMods: null
 };
 
-// Personel ismini sahnede kısaltan yardımcı ("Selin Hanım" -> "Selin")
 function shortName(fullName) {
   if (!fullName) return 'Ajan';
   return String(fullName)
@@ -349,7 +299,7 @@ function shortName(fullName) {
     .split(/\s+/)[0] || fullName;
 }
 function shortRole(role) {
-  if (!role) return 'Uzman';
+  if (!role) return 'UZMAN';
   const r = role.toLowerCase();
   if (r.includes('seo') || r.includes('strateji')) return 'STRATEJİ';
   if (r.includes('plan')) return 'PLANLAMA';
@@ -361,7 +311,7 @@ function shortRole(role) {
 }
 
 /* ============================================================================
-   2. 2.5D İZOMETRİK OFİS MOTORU (2D TABELALAR, KISA ETİKETLER & CANLI YAMALAR)
+   2. 2.5D İZOMETRİK OFİS MOTORU (ASILI TABELALAR & SERBEST AJAN ÇİZİM MOTORU)
    ============================================================================ */
 const cv = $('#cv'), cx = cv.getContext('2d');
 cx.scale(2, 2);
@@ -469,29 +419,6 @@ function upd(dt) {
   });
 }
 
-// 2.5D Ağaç Çizim Fonksiyonu (Standart Bitki ve "Odalara Ağaç" Yaması İçin)
-function drawTree3D(x, y, scale = 1, variant = 0) {
-  // Ahşap/Seramik Saksı
-  box(x - .22 * scale, y - .22 * scale, .44 * scale, .44 * scale, 11 * scale, 0, [24, 52, 48]);
-  box(x - .18 * scale, y - .18 * scale, .36 * scale, .36 * scale, 2 * scale, 11 * scale, [110, 35, 25]);
-  // Gövde
-  box(x - .05 * scale, y - .05 * scale, .10 * scale, .10 * scale, 14 * scale, 12 * scale, [28, 45, 32]);
-  const q = P(x, y, (24 * scale));
-  const sway = Math.sin(T * 1.8 + x * 2 + y) * 1.6;
-  const hueBase = variant % 2 === 0 ? [142, 54, 42] : [158, 58, 38];
-  // Katmanlı Yaprak Küreleri
-  [
-    [0, -10 * scale, 11 * scale, 2],
-    [-8 * scale, -5 * scale, 8.5 * scale, -4],
-    [8 * scale, -5 * scale, 8.5 * scale, -6],
-    [-4 * scale, -16 * scale, 8 * scale, 6],
-    [5 * scale, -15 * scale, 7.5 * scale, 4],
-    [0, -22 * scale, 7 * scale, 11]
-  ].forEach(l => {
-    disc(q[0] + l[0] + sway, q[1] + l[1], l[2], hs(hueBase, l[3]));
-  });
-}
-
 // Sabit Ofis Mobilyaları
 const OB = [], add = (k, f) => OB.push({ k, f });
 RM.forEach(r => {
@@ -501,7 +428,6 @@ RM.forEach(r => {
     box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
     box(x, y, 2, 1, 5, 24, WOOD);
     box(x + .85, y + .22, .3, .25, 4, 29, DK);
-    // Aktif çalışırken parlayan monitör
     box(x + .52, y + .2, .96, .1, 18, 33, DK, a && a.mon ? '#10b981' : '#334155');
     box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
     box(x + 1.6, y + .6, .2, .2, 6, 29, COR);
@@ -510,7 +436,6 @@ RM.forEach(r => {
     box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
     box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
   });
-  // Oda köşesi standart küçük bitki
   const px = r.x + r.w - 1, py = r.top ? 2 : 10;
   add(px + py + 1, () => {
     box(px + .28, py + .28, .44, .44, 9, 0, [20, 50, 52]);
@@ -521,7 +446,6 @@ RM.forEach(r => {
   });
 });
 
-// Yemekhane Masaları
 [5, 7].forEach(y => add(2.5 + y + .5, () => {
   box(1, y, 3, 1, 5, 22, WOOD);
   [1.1, 3.7].forEach(x => box(x, y + .1, .2, .8, 22, 0, DK));
@@ -532,22 +456,18 @@ RM.forEach(r => {
   });
 }));
 
-// Toplantı & Planlama Masası
 add(10, () => {
   box(6, 6, 3, 1, 5, 22, WOOD);
   [6.1, 8.7].forEach(x => box(x, 6.1, .2, .8, 22, 0, DK));
   [6.2, 7.1, 8.0].forEach(x => { box(x, 5.2, .5, .5, 7, 0, BLU); box(x, 7.3, .5, .5, 7, 0, BLU); });
-  // Masa üstü dizüstü/projeksiyon cihazı
   box(7.2, 6.3, .5, .4, 2, 27, WT);
 });
 
-// Dinlenme Alanı Koltuğu
 add(19, () => {
   box(11, 7, 2, 1, 10, 0, PNK); box(11, 7.75, 2, .25, 26, 0, PNK);
   box(11, 7, .25, 1, 17, 0, PNK); box(12.75, 7, .25, 1, 17, 0, PNK);
 });
 
-// Kahve İstasyonu (Buharlı)
 add(17.5, () => {
   box(13.1, 4.1, .8, .8, 34, 0, WOOD); box(13.2, 4.2, .6, .6, 8, 34, DK);
   const q = P(13.5, 4.5, 46);
@@ -558,91 +478,18 @@ add(17.5, () => {
   }
 });
 
-// Ortak Klasör / Sunucu & Arşiv Dolabı
 add(19, () => {
   box(13.05, 5.05, .9, 1.9, 46, 0, DK);
   [12, 24, 36].forEach(z => box(13.95, 5.2, .06, .6, 2, z, BLU));
   box(13.2, 5.3, .5, .5, 4, 46, BLU); box(13.2, 6.2, .5, .5, 4, 46, YEL);
 });
 
-// Onay Sonrası Ekstra Kutlama Masası
-add(13, () => {
-  if (!tbOn) return;
-  box(9, 4, 2, 1, 4, 22, WOOD);
-  [9.1, 10.7].forEach(x => box(x, 4.1, .2, .7, 22, 0, DK));
-  [9.3, 10.2].forEach(x => box(x, 4.35, .3, .3, 1, 26, WT));
-  box(9.9, 4.4, .1, .1, 7, 26, YEL);
-});
-
-// DİNAMİK SAHNE YAMALARI ÇİZİCİSİ (Odalara Ağaç, Akvaryum, Kitaplık vb.)
-function getActiveSceneMods() {
-  const base = (store.officeMods && Array.isArray(store.officeMods.sceneMods)) ? store.officeMods.sceneMods : [];
-  const prev = (store.previewMods && Array.isArray(store.previewMods.sceneMods)) ? store.previewMods.sceneMods : [];
-  return [...base, ...prev];
-}
-
-function collectDynamicSceneObjects() {
-  const mods = getActiveSceneMods();
-  const dyn = [];
-  mods.forEach((m, idx) => {
-    const type = String(m.type || 'tree').toLowerCase();
-    const target = String(m.target || 'all_rooms').toLowerCase();
-    const sc = Number(m.scale) || 1.15;
-
-    if (type.includes('tree') || type.includes('agac') || type.includes('ağaç') || type.includes('bonsai')) {
-      if (target === 'all_rooms' || target === 'rooms' || target === 'oda') {
-        RM.forEach((r, ri) => {
-          const tx = r.x + 0.42;
-          const ty = r.top ? 2.35 : 10.35;
-          dyn.push({ k: tx + ty + 0.8, f: () => drawTree3D(tx, ty, sc, ri) });
-        });
-        // Koridor köşelerine de 2 büyük saksı ağacı
-        dyn.push({ k: 0.5 + 4.3, f: () => drawTree3D(0.5, 4.3, sc * 1.1, 1) });
-        dyn.push({ k: 10.5 + 4.3, f: () => drawTree3D(10.5, 4.3, sc * 1.1, 2) });
-      } else if (target.startsWith('room_')) {
-        const ri = parseInt(target.split('_')[1], 10) || 0;
-        const r = RM[ri] || RM[0];
-        const tx = r.x + 0.42, ty = r.top ? 2.35 : 10.35;
-        dyn.push({ k: tx + ty + 0.8, f: () => drawTree3D(tx, ty, sc, ri) });
-      } else {
-        const tx = Number(m.x) || 5.2, ty = Number(m.y) || 4.5;
-        dyn.push({ k: tx + ty + 0.8, f: () => drawTree3D(tx, ty, sc, idx) });
-      }
-    }
-    else if (type.includes('aqua') || type.includes('akvaryum')) {
-      const ax = Number(m.x) || 9.2, ay = Number(m.y) || 8.1;
-      dyn.push({
-        k: ax + ay + 1.2,
-        f: () => {
-          box(ax, ay, 1.4, .55, 16, 0, DK);
-          box(ax + .05, ay + .05, 1.3, .45, 14, 16, [195, 85, 55], 'rgba(6,182,212,.55)');
-          const q = P(ax + .7, ay + .25, 23);
-          disc(q[0] + Math.sin(T * 2.5) * 9, q[1], 3, '#f97316');
-          disc(q[0] - Math.cos(T * 2.1) * 7, q[1] - 3, 2.5, '#fde047');
-        }
-      });
-    }
-    else if (type.includes('book') || type.includes('kitap') || type.includes('whiteboard') || type.includes('tahta')) {
-      const bx = Number(m.x) || 5.2, by = Number(m.y) || 4.1;
-      dyn.push({
-        k: bx + by + 1,
-        f: () => {
-          box(bx, by, 1.3, .35, 36, 0, WOOD);
-          [10, 20, 28].forEach((z, zi) => box(bx + .1, by + .05, 1.1, .28, 4, z, [zi * 90 + 20, 70, 58]));
-        }
-      });
-    }
-  });
-  return dyn;
-}
-
-// 2D/2.5D FİZİKSEL ASILI OFİS TABELALARI (Yazılar birbirine girmez, mimari tabela görünümü)
+// 2D/2.5D FİZİKSEL ASILI OFİS TABELALARI
 function drawSignboard25D(gx, gy, gz, title, sub, icon, accentHex) {
   const q = P(gx, gy, gz);
   const x = q[0], y = q[1];
   const w = 104, h = 28;
 
-  // 1) Tavandan / Земinden Asma Demir Çubukları (Bracket)
   cx.strokeStyle = '#475569';
   cx.lineWidth = 2;
   cx.beginPath();
@@ -652,18 +499,15 @@ function drawSignboard25D(gx, gy, gz, title, sub, icon, accentHex) {
   disc(x - 28, y - h - 9, 2.5, '#94a3b8');
   disc(x + 28, y - h - 9, 2.5, '#94a3b8');
 
-  // 2) 3D Tabela Gövdesi (Gölge + Derinlik + Ön Yüz)
   rr(x - w / 2 + 2, y - h + 3, w, h, 6, 'rgba(0,0,0,.55)');
   rr(x - w / 2, y - h, w, h, 6, '#131826', accentHex);
 
-  // Sol Renkli İkon Şeridi
   rr(x - w / 2 + 3, y - h + 3, 22, h - 6, 4, accentHex);
   cx.font = '12px sans-serif';
   cx.textAlign = 'center';
   cx.fillStyle = '#fff';
   cx.fillText(icon, x - w / 2 + 14, y - h / 2 + 4);
 
-  // Tabela Başlığı & Alt Bilgi
   cx.textAlign = 'left';
   cx.font = '800 9.5px "Space Grotesk",sans-serif';
   cx.fillStyle = '#f8fafc';
@@ -674,7 +518,6 @@ function drawSignboard25D(gx, gy, gz, title, sub, icon, accentHex) {
   cx.fillText(sub, x - w / 2 + 30, y - h + 22);
 }
 
-// Oda Cam Üstü Mini Numara & Departman Plakaları
 function drawRoomPlaque(r) {
   const occupant = store.staff.find(s => s.room === r.i);
   const dept = occupant ? shortRole(occupant.role) : ('ODA 0' + (r.i + 1));
@@ -688,15 +531,49 @@ function drawRoomPlaque(r) {
   cx.fillText(`${num}·${dept}`, q[0], q[1] + 2.8);
 }
 
+// SERBEST 2.5D AJAN ÇİZİM MOTORU (Ajanların yazdığı drawJs kodunu sahnede canlı çalıştırır)
+function getActiveSceneMods() {
+  const base = (store.officeMods && Array.isArray(store.officeMods.sceneMods)) ? store.officeMods.sceneMods : [];
+  const prev = (store.previewMods && Array.isArray(store.previewMods.sceneMods)) ? store.previewMods.sceneMods : [];
+  return [...base, ...prev];
+}
+
+const compiledDrawCache = new Map();
+function collectDynamicSceneObjects() {
+  const mods = getActiveSceneMods();
+  const dyn = [];
+  mods.forEach((m, idx) => {
+    if (!m || !m.drawJs) return;
+    const depth = Number(m.depth) || 12;
+    let fn = compiledDrawCache.get(m.drawJs);
+    if (!fn) {
+      try {
+        fn = new Function('api', `const {box,disc,el,rr,poly,glass,P,hs,RM,T,cx,drawSignboard25D,WOOD,DK,WT,COR,GRN,BLU,YEL,PNK,CH}=api;\n` + m.drawJs);
+        compiledDrawCache.set(m.drawJs, fn);
+      } catch (e) {
+        console.warn('Sahne çizim derleme hatası:', e);
+        return;
+      }
+    }
+    dyn.push({
+      k: depth + idx * 0.01,
+      f: () => {
+        try {
+          fn({ box, disc, el, rr, poly, glass, P, hs, RM, T, cx, drawSignboard25D, WOOD, DK, WT, COR, GRN, BLU, YEL, PNK, CH });
+        } catch (err) {}
+      }
+    });
+  });
+  return dyn;
+}
+
 function floor() {
   for (let i = 0; i < N; i++) for (let j = 0; j < N; j++)
     poly([P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)], (i + j) % 2 ? '#131726' : '#0f1320');
   RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',55%,22%,.35)'));
-  // Ortak alan zemin halı bölgeleri
   poly([P(0.4, 4.4), P(4.6, 4.4), P(4.6, 8.6), P(0.4, 8.6)], 'rgba(245,158,11,.07)', 'rgba(245,158,11,.18)');
   poly([P(5.3, 4.6), P(8.8, 4.6), P(8.8, 8.5), P(5.3, 8.5)], 'rgba(59,130,246,.08)', 'rgba(59,130,246,.22)');
   poly([P(9.4, 4.4), P(13.6, 4.4), P(13.6, 8.6), P(9.4, 8.6)], 'rgba(236,72,153,.06)', 'rgba(236,72,153,.16)');
-  // Platform kalınlığı
   poly([P(0, N), P(N, N), P(N, N, -12), P(0, N, -12)], '#192036');
   poly([P(N, 0), P(N, N), P(N, N, -12), P(N, 0, -12)], '#111626');
 }
@@ -707,14 +584,12 @@ function walls() {
   poly([P(0, 0), P(0, N), P(0, N, 6), P(0, 0, 6)], '#242c46');
   poly([P(0, 0), P(N, 0), P(N, 0, 6), P(0, 0, 6)], '#1e253b');
 
-  // Duvar Pencereleri
   [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.2, 13.8]].forEach(w => {
     poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#232b44');
     poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#2d3a5e');
     poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#3b4d7a');
   });
 
-  // Sol Duvar Kurumsal TONOZ AI Duvar Tabelası
   const lq = P(0, 6.5, 58);
   rr(lq[0] - 58, lq[1] - 14, 116, 26, 7, 'rgba(15,23,42,.92)', '#6366f1');
   cx.textAlign = 'center';
@@ -732,14 +607,12 @@ function over() {
   });
   [3, 7, 11].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
 
-  // Ortak Alan 2.5D Asılı Mimari Tabelalar (Yüksekte asılı, karakterlerle çakışmaz)
   drawSignboard25D(2.3, 6.0, 54, 'YEMEKHANE', 'Sosyal & Mola', '🍴', '#f59e0b');
   drawSignboard25D(7.3, 6.0, 54, 'TOPLANTI ODASI', 'Planlama & Kurul', '📊', '#3b82f6');
   drawSignboard25D(11.8, 7.6, 52, 'DİNLENME ALANI', 'Kahve & Lounge', '☕', '#ec4899');
   drawSignboard25D(13.4, 5.6, 66, 'ORTAK ARŞİV', `${store.files.length} Dosya Kayıtlı`, '🗄️', '#10b981');
 }
 
-// Karakter Çizimi
 function dAg(a) {
   const q = P(a.ax, a.ay, 0), sit = !a.mv && Math.hypot(a.ax - seat(a)[0] - .5, a.ay - seat(a)[1] - .5) < .06,
         b = a.mv ? Math.abs(Math.sin(T * 12 + a.ph)) * 2.5 : 0, x = q[0], y = q[1] + (sit ? -5 : 0) - b;
@@ -751,17 +624,13 @@ function dAg(a) {
   el(x - 4, y - 33, 1.7, bl, '#0f172a'); el(x + 4, y - 33, 1.7, bl, '#0f172a');
 }
 
-// Çakışma Önlemeli Kısa İsim Etiketi ("Selin", "Arda" vb. - Uzun unvanlar üst üste binmez)
 function drawAllAgentTagsAndBubbles() {
   const placed = [];
   store.staff.forEach(a => {
     const q = P(a.ax, a.ay, 0);
     let tx = q[0], ty = q[1] - 56;
-    // Yakın duran ajanların etiketlerini dikey ayrıştır
     placed.forEach(p => {
-      if (Math.abs(tx - p.x) < 48 && Math.abs(ty - p.y) < 18) {
-        ty = p.y - 19;
-      }
+      if (Math.abs(tx - p.x) < 48 && Math.abs(ty - p.y) < 18) ty = p.y - 19;
     });
     placed.push({ x: tx, y: ty });
 
@@ -777,7 +646,6 @@ function drawAllAgentTagsAndBubbles() {
     cx.fillStyle = '#f8fafc';
     cx.fillText(sName, tx - w / 2 + 14, ty + 1);
 
-    // Konuşma/Durum Balonu varsa etiketin hemen üstünde göster
     if (a.on && a.bt) {
       const bt = a.bt.slice(0, 28);
       cx.font = '700 9.5px "Plus Jakarta Sans",sans-serif';
@@ -891,11 +759,11 @@ async function life(a) {
 
 const DEF_STAFF = [
   { name: 'Selin Hanım', role: 'SEO & Strateji Uzmanı', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.5 Flash Lite', skills: 'Projeleri SEO, kullanıcı deneyimi ve kurumsal strateji açısından analiz eder; gereksinimleri çıkarıp Planlama Yöneticisine aktarır.' },
-  { name: 'Arda Bey',    role: 'Planlama Yöneticisi', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.0 Flash', skills: 'Talepleri (proje, 2D ofis dekorasyonu veya site yeni özellik/menü talebi) analiz eder, Tasarım ve Kod uzmanlarına net görev dağılımı yapar.' },
-  { name: 'Ahmet Bey',   role: 'Kod & Sistem Uzmanı', model: 'Gemini 2.5 Flash Lite', backup: 'Gemini 2.0 Flash Lite', skills: 'Temiz HTML/CSS/JS, CBS/Harita kodları ve mevcut sistemi bozmayan canlı ofis/UI yamaları (sceneMods & uiMods) üretir.' },
-  { name: 'Elif Hanım',  role: 'Görsel Tasarım Uzmanı', model: 'Gemini 2.5 Flash Lite', backup: 'Gemma 3 27B', skills: '2.5D ofis dekorasyon yerleşimlerini, modern UI bileşenlerini ve SVG diyagramları tasarlar.' },
+  { name: 'Arda Bey',    role: 'Planlama Yöneticisi', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.0 Flash', skills: 'Gelen her türlü talebi analiz eder, Tasarım, Kod ve İçerik uzmanlarına görev dağılımı yapar.' },
+  { name: 'Ahmet Bey',   role: 'Kod & Sistem Uzmanı', model: 'Gemini 2.5 Flash Lite', backup: 'Gemini 2.0 Flash Lite', skills: 'Temiz HTML/CSS/JS kodları, 2.5D izometrik canvas çizim kodları (drawJs) ve mevcut sistemi bozmayan canlı UI bileşenleri (uiMods) yazar.' },
+  { name: 'Elif Hanım',  role: 'Görsel Tasarım Uzmanı', model: 'Gemini 2.5 Flash Lite', backup: 'Gemma 3 27B', skills: '2.5D ofis objelerini, renk paletlerini, modern UI bileşenlerini ve SVG tasarımları kurgular.' },
   { name: 'Mert Bey',    role: 'Teknik İçerik Yazarı', model: 'Gemini 2.0 Flash Lite', backup: 'Gemma 3 27B', skills: 'SEO uyumlu, teknik derinliği yüksek kurumsal makaleler ve dokümantasyon yazar.' },
-  { name: 'Deniz Bey',   role: 'Kalite & GitHub Denetçisi', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.5 Flash Lite', skills: 'Üretilen dosyaları, 2D ofis eşyalarını ve UI yamalarını denetler, mevcut yapıyı bozmadığını doğrulayıp Burak Beyin onayına sunar.' }
+  { name: 'Deniz Bey',   role: 'Kalite Kontrol Uzmanı', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.5 Flash Lite', skills: 'Üretilen dosyaları, 2.5D çizimleri ve UI yamalarını denetler, mevcut yapıyı bozmadığını doğrulayıp Burak Beyin onayına sunar.' }
 ];
 
 function seedDefaultStaff() {
@@ -950,16 +818,6 @@ function updateTargetSelect() {
   }
 }
 
-function setQuickTask(mode, text) {
-  if ($('#taskMode')) $('#taskMode').value = mode;
-  if ($('#ti')) { $('#ti').value = text; $('#ti').focus(); }
-  // Eğer sahne veya UI yaması ise Planlama veya Kod uzmanını otomatik seç
-  if (mode === 'scene' || mode === 'ui') {
-    const devOrPlan = store.staff.find(a => /plan|kod|yazılım/i.test(a.role));
-    if (devOrPlan && $('#targetAgent')) $('#targetAgent').value = devOrPlan.id;
-  }
-}
-
 function lg(t) {
   store.log.unshift(hhmm() + ' · ' + t);
   if (store.log.length > 80) store.log.length = 80;
@@ -968,7 +826,6 @@ function lg(t) {
   if (tab === 'tasks') render();
 }
 
-// Sahne Üzerinde Fare Gezdirildiğinde Detaylı Kart Gösterimi (Hover HUD)
 cv.addEventListener('mousemove', e => {
   const r = cv.getBoundingClientRect();
   const x = (e.clientX - r.left) / r.width * 800;
@@ -1008,9 +865,13 @@ cv.addEventListener('click', e => {
 });
 
 /* ============================================================================
-   4. CANLI OFİS & SİTE EKLENTİ MOTORU (MEVCUT KODU BOZMADAN GÜNCELLEME & GITHUB)
+   4. CANLI OFİS & SİTE EKLENTİ MOTORU (%100 FIRESTORE TABANLI & ÖZGÜR)
    ============================================================================ */
+let activeUIIntervals = [];
 function renderActiveUIMods() {
+  activeUIIntervals.forEach(id => clearInterval(id));
+  activeUIIntervals = [];
+
   const topSlot = $('#ext-top-right');
   const menuSlot = $('#ext-header-menu');
   const floatSlot = $('#ext-floating-widget');
@@ -1042,8 +903,9 @@ function renderActiveUIMods() {
 
     if (mod.js) {
       try {
-        const fn = new Function(mod.js);
-        fn();
+        const registerInterval = (fn, ms) => { const id = setInterval(fn, ms); activeUIIntervals.push(id); return id; };
+        const fn = new Function('setInterval', mod.js);
+        fn(registerInterval);
       } catch (err) {
         console.warn('UI Eklenti JS uyarısı:', err);
       }
@@ -1056,29 +918,13 @@ function renderActiveUIMods() {
   if (b) {
     if (totalMods > 0) {
       b.style.display = 'block';
-      b.innerHTML = `✨ <b>${totalMods} Canlı Eklenti Aktif</b>${store.previewMods ? ' <span style="color:#fbbf24">(Önizleme Modu)</span>' : ''}`;
+      b.innerHTML = `✨ <b>${totalMods} Canlı Güncelleme Aktif</b>${store.previewMods ? ' <span style="color:#fbbf24">(Önizleme Modu)</span>' : ''}`;
     } else {
       b.style.display = 'none';
     }
   }
 }
 
-async function loadRepoOfficeMods() {
-  try {
-    const res = await fetch('./office-mods.json?t=' + Date.now());
-    if (!res.ok) return;
-    const data = await res.json();
-    if ((!store.officeMods.sceneMods || !store.officeMods.sceneMods.length) && Array.isArray(data.sceneMods)) {
-      store.officeMods.sceneMods = data.sceneMods;
-    }
-    if ((!store.officeMods.uiMods || !store.officeMods.uiMods.length) && Array.isArray(data.uiMods)) {
-      store.officeMods.uiMods = data.uiMods;
-    }
-    renderActiveUIMods();
-  } catch (e) {}
-}
-
-// Onaylanan Yamayı Firestore'a Kaydetme (Anlık Senkronizasyon)
 async function applyApprovalToOffice(approvalId) {
   const ap = store.approvals.find(x => x.id === approvalId);
   if (!ap) return;
@@ -1086,19 +932,22 @@ async function applyApprovalToOffice(approvalId) {
   const newScene = Array.isArray(ap.sceneMods) ? ap.sceneMods : [];
   const newUI = Array.isArray(ap.uiMods) ? ap.uiMods : [];
 
-  // Mevcut yamalarla birleştir (aynı id varsa güncelle)
   const mergedScene = [...(store.officeMods.sceneMods || [])];
   newScene.forEach(ns => {
-    const idx = mergedScene.findIndex(x => x.id && x.id === ns.id);
-    if (idx >= 0) mergedScene[idx] = ns;
-    else mergedScene.push({ ...ns, id: ns.id || ('sc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5)) });
+    if (!ns || !ns.drawJs) return;
+    const id = ns.id || ('sc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5));
+    const idx = mergedScene.findIndex(x => x.id === id);
+    if (idx >= 0) mergedScene[idx] = { ...ns, id };
+    else mergedScene.push({ ...ns, id });
   });
 
   const mergedUI = [...(store.officeMods.uiMods || [])];
   newUI.forEach(nu => {
-    const idx = mergedUI.findIndex(x => x.id && x.id === nu.id);
-    if (idx >= 0) mergedUI[idx] = nu;
-    else mergedUI.push({ ...nu, id: nu.id || ('ui_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5)) });
+    if (!nu || (!nu.html && !nu.css && !nu.js)) return;
+    const id = nu.id || ('ui_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5));
+    const idx = mergedUI.findIndex(x => x.id === id);
+    if (idx >= 0) mergedUI[idx] = { ...nu, id };
+    else mergedUI.push({ ...nu, id });
   });
 
   store.officeMods = {
@@ -1108,7 +957,6 @@ async function applyApprovalToOffice(approvalId) {
   };
   store.previewMods = null;
   ap.status = 'approved';
-  tbOn = true;
 
   renderActiveUIMods();
 
@@ -1127,81 +975,24 @@ async function applyApprovalToOffice(approvalId) {
     pub();
   }
 
-  lg(`✅ Onaylandı ve canlı ofise uygulandı: ${ap.title}`);
+  lg(`✅ Onaylandı ve Firestore'a kaydedildi: ${ap.title}`);
   renderApprovalBanner();
   render();
 }
 
-// GitHub REST API ile Doğrudan Repo'ya Commit & Push (veya GitHub Actions Kuyruğuna Ekleme)
-async function pushModsToGitHub(approvalId) {
-  if (approvalId) {
-    const ap = store.approvals.find(x => x.id === approvalId);
-    if (ap && ap.status !== 'approved') {
-      await applyApprovalToOffice(approvalId);
-    }
+async function removeSingleMod(kind, modId) {
+  if (kind === 'scene') {
+    store.officeMods.sceneMods = (store.officeMods.sceneMods || []).filter(x => x.id !== modId);
+  } else {
+    store.officeMods.uiMods = (store.officeMods.uiMods || []).filter(x => x.id !== modId);
   }
-
-  const payloadStr = JSON.stringify({
-    version: store.officeMods.version || 1,
-    updatedAt: new Date().toISOString(),
-    sceneMods: store.officeMods.sceneMods || [],
-    uiMods: store.officeMods.uiMods || []
-  }, null, 2);
-
-  // Ortak klasöre de güncel office-mods.json olarak kaydet
-  await saveSharedFile('office-mods.json', payloadStr, 'json', 'Burak Bey (GitHub Senkronizasyonu)');
-
-  if (!store.githubToken || !store.githubRepo) {
-    if (CONN && OWN && approvalId && !String(approvalId).startsWith('ap_')) {
-      await db.collection('approvals').doc(approvalId).set({ status: 'github_queued' }, { merge: true }).catch(() => {});
-    }
-    alert('Onayınız Firestore\'a ve GitHub Actions kuyruğuna kaydedildi! (Tarayıcıdan anında GitHub push yapmak isterseniz sağ üstteki "⚙️ API & GitHub Ayarları" menüsünden GitHub Repo ve Token girebilirsiniz.)');
-    return;
+  store.officeMods.version = (store.officeMods.version || 1) + 1;
+  renderActiveUIMods();
+  if (CONN && OWN) {
+    await db.doc('settings/office_mods').set({ ...store.officeMods, updatedAt: FV().serverTimestamp() }).catch(() => {});
+    pub();
   }
-
-  try {
-    const branch = store.githubBranch || 'main';
-    const apiUrl = `https://api.github.com/repos/${store.githubRepo.trim()}/contents/office-mods.json`;
-    const headers = {
-      'Authorization': `Bearer ${store.githubToken.trim()}`,
-      'Accept': 'application/vnd.github+json',
-      'Content-Type': 'application/json'
-    };
-
-    // Mevcut dosyanın SHA değerini al (varsa)
-    let sha = undefined;
-    const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers });
-    if (getRes.ok) {
-      const getJson = await getRes.json();
-      sha = getJson.sha;
-    }
-
-    const base64Content = btoa(unescape(encodeURIComponent(payloadStr)));
-    const putRes = await fetch(apiUrl, {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify({
-        message: `🤖 Tonoz AI: Canlı ofis ve UI güncellemesi (v${store.officeMods.version || 1})`,
-        content: base64Content,
-        branch,
-        ...(sha ? { sha } : {})
-      })
-    });
-
-    if (!putRes.ok) {
-      const errTxt = await putRes.text();
-      throw new Error(`GitHub API (${putRes.status}): ${errTxt.slice(0, 200)}`);
-    }
-
-    if (CONN && OWN && approvalId && !String(approvalId).startsWith('ap_')) {
-      await db.collection('approvals').doc(approvalId).set({ status: 'github_pushed' }, { merge: true }).catch(() => {});
-    }
-    lg(`🐙 GitHub reposuna (${store.githubRepo}) başarıyla commit & push yapıldı!`);
-    alert(`Başarılı! Güncellemeler GitHub (${store.githubRepo}) reposuna mevcut kodu bozmadan eklendi.`);
-    render();
-  } catch (err) {
-    alert('GitHub Push Hatası: ' + err.message);
-  }
+  render();
 }
 
 /* ============================================================================
@@ -1234,7 +1025,7 @@ async function incrementModelQuota(modelObj, agent) {
 
 async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
   const apiKey = store.geminiKey;
-  if (!apiKey) throw new Error('Gemini API Anahtarı tanımlı değil! Sağ üstteki "⚙️ API & GitHub Ayarları" butonundan anahtarınızı kaydedin.');
+  if (!apiKey) throw new Error('Gemini API Anahtarı tanımlı değil! Sağ üstteki "⚙️ API & Mola Ayarları" butonundan anahtarınızı kaydedin.');
 
   const candidates = getCandidateModelsForAgent(agent);
   if (!candidates.length) throw new Error(`${agent.name} için tüm günlük model kotaları doldu!`);
@@ -1256,20 +1047,31 @@ Uzmanlığın: ${agent.skills || ''}
 
 ŞİRKET VE İŞLEYİŞ KURALLARI:
 1. Kurumsal İstanbul Türkçesi (Bey/Hanım) kullan.
-2. Görev atarken SADECE aşağıdaki personel listesindeki ID'leri ("toAgentId") kullan:
+2. İş bölümü yaparken SADECE aşağıdaki personel listesindeki ID'leri ("toAgentId") kullan:
 ${companyDirectory}
-- Şirket Sahibi ID: "owner" (Burak Bey). Sadece çalışma/yama tamamlandığında veya son kontrolde "owner"a rapor/onay gönder.
-3. ÖZEL YETENEK (CANLI 2D OFİS DEKORASYONU VE SİTE ÖZELLİK/MENÜ YAMASI):
-   - Eğer Burak Bey odalara ağaç, bitki, akvaryum, kitaplık, sunum tahtası gibi bir 2D ofis objesi istediyse VEYA siteye sağ üst köşeye saat, sayaç, yeni menü, widget gibi mevcut kodu bozmadan eklenecek bir özellik istediyse:
-   - Planlama Yöneticisi isen: Tasarım ve Kod uzmanlarına görev ata.
-   - Kod, Tasarım veya Kalite Uzmanı isen: İşi yap, "officePatch.hasPatch": true olarak işaretle ve "sceneMods" (2D ofis eşyası için) veya "uiMods" (HTML/CSS/JS menü/saat/widget için) dizisini doldurup Burak Bey'e ("owner") sun!
-   - Desteklenen sceneMods tipleri: "tree" (ağaç), "aquarium" (akvaryum), "bookshelf" (kitaplık), "whiteboard" (tahta). Hedef ("target"): "all_rooms" (tüm odalar), "corridor", "room_0".."room_7".
-   - Desteklenen uiMods yuvaları ("slot"): "top-right" (sağ üst köşe), "header-menu" (üst menü), "floating-widget" (sol alt yüzen araç).
+- Şirket Sahibi ID: "owner" (Burak Bey). Sadece çalışma veya yama tamamlandığında "owner"a rapor/onay gönder.
+3. SERBEST 2.5D OFİS TASARIMI VE SİTE ÖZELLİK/MENÜ GELİŞTİRME YETENEĞİ (MEVCUT KODU BOZMADAN):
+   - Burak Bey 2.5D ofise herhangi bir şey eklenmesini/değiştirilmesini (örn: odalara ağaç, koridora kedi, toplantı odasına ekran, araba, heykel, halı, yeni eşya vb.) VEYA site arayüzüne yeni bir özellik (örn: sağ üst köşeye saat, sayaç, döviz, yeni menü, hesaplama aracı vb.) istediğinde:
+   - Planlama Yöneticisi isen: İşi Tasarım ve Kod uzmanlarına devret.
+   - Kod, Tasarım veya Kalite Uzmanı isen: İşi tamamla, "officePatch.hasPatch": true yap ve Burak Bey'e ("owner") sun!
+   - 2.5D Sahne Çizim API'si ("sceneMods[].drawJs" içinde doğrudan kullanabileceğin fonksiyonlar):
+     * Koordinat sistemi: x (0..14), y (0..14), z (yükseklik: 0..90). Odalar dizisi: RM (her oda r için r.x, r.y, r.w, r.top). Zaman (animasyon için): T (saniye).
+     * box(x, y, w, d, h, z, [Hue, Sat, Light], optFrontHex): 3 boyutlu izometrik prizma/kutu çizer.
+     * P(x, y, z): İzometrik (x,y,z) noktasını 2D ekran koordinatı [px, py] olarak döndürür.
+     * disc(px, py, r, colorStr): Ekran koordinatında daire/küre çizer.
+     * el(px, py, rx, ry, colorStr): Elips çizer.
+     * rr(px, py, w, h, radius, fillStr, strokeStr): Yuvarlatılmış kutu çizer.
+     * drawSignboard25D(x, y, z, title, sub, icon, accentHex): Asılı 2.5D tabela çizer.
+     * Örnek drawJs (tüm odalara sallanan ağaç çizimi):
+       "RM.forEach((r,i)=>{ const x=r.x+0.4, y=r.top?2.3:10.3; box(x-0.2,y-0.2,0.4,0.4,10,0,[25,55,45]); box(x-0.05,y-0.05,0.1,0.1,14,10,[30,45,30]); const q=P(x,y,26), sw=Math.sin(T*2+i)*1.5; disc(q[0]+sw,q[1]-8,11,'#10b981'); disc(q[0]-6+sw,q[1]-3,8,'#059669'); disc(q[0]+6+sw,q[1]-3,8,'#047857'); });"
+   - Site Arayüzü Eklenti API'si ("uiMods"):
+     * "slot": "top-right" (sağ üst köşe), "header-menu" (üst menü), "floating-widget" (sol alt yüzen araç).
+     * "html": Eklenecek HTML kodu, "css": Ek CSS kuralları, "js": Çalışacak JS kodu (periyodik işlemler için setInterval(fn, ms) kullanabilirsin).
 4. Yanıtını SADECE aşağıdaki geçerli JSON formatında ver:
 {
-  "canvasBubble": "Kısa eylem (Örn: Oda ağaçlarını modelliyor)",
+  "canvasBubble": "Kısa eylem (Örn: Tasarımı kodluyor)",
   "fileToSave": {
-    "path": "Dosya adı (Örn: ofis-agac-plani.md veya saat-widget.js) - yoksa ''",
+    "path": "Dosya adı - yoksa ''",
     "kind": "md | code | svg | json",
     "content": "Dosya içeriği"
   },
@@ -1283,13 +1085,13 @@ ${companyDirectory}
   ],
   "officePatch": {
     "hasPatch": false,
-    "title": "Yama başlığı (Örn: Tüm Odalara Dekoratif Ağaç Eklentisi)",
-    "summary": "Burak Bey için yapılan değişikliğin özeti",
+    "title": "Güncelleme Başlığı",
+    "summary": "Burak Bey için özet",
     "sceneMods": [
-      { "id": "mod_trees", "type": "tree", "target": "all_rooms", "scale": 1.15, "label": "Oda Ağaçları" }
+      { "id": "benzersiz_id", "label": "Kısa İsim", "depth": 12, "drawJs": "// 2.5D JS çizim kodu" }
     ],
     "uiMods": [
-      { "id": "mod_widget", "slot": "top-right", "title": "Ekstra Widget", "html": "<div class='badge live'>...</div>", "css": "", "js": "" }
+      { "id": "benzersiz_ui_id", "slot": "top-right", "title": "Özellik Adı", "html": "", "css": "", "js": "" }
     ]
   },
   "submitFinalApproval": {
@@ -1326,8 +1128,8 @@ ${filesOverview}`;
 
       if (!res.ok) {
         const errTxt = await res.text();
-        lastErr = new Error(`${modelObj.n} (${ res.status }): ${errTxt.slice(0, 180)}`);
-        lg(`🔄 ${agent.name}: ${modelObj.n} meşgul/limitli (${res.status}), yedek modele geçiliyor...`);
+        lastErr = new Error(`${modelObj.n} (${res.status}): ${errTxt.slice(0, 180)}`);
+        lg(`🔄 ${shortName(agent.name)}: ${modelObj.n} kotası dolu/meşgul (${res.status}), yedek modele geçiliyor...`);
         continue;
       }
 
@@ -1426,7 +1228,6 @@ async function processNextPendingMail(forceNow = false) {
       await sleep(1100);
     }
 
-    // Ofis/UI Yaması veya Son Onay Kutusu Oluşturma
     const hasPatch = decision.officePatch && decision.officePatch.hasPatch;
     const isFinal = decision.submitFinalApproval && decision.submitFinalApproval.ready;
     if (hasPatch || isFinal) {
@@ -1596,17 +1397,16 @@ function renderApprovalBanner() {
   e.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
       <div>
-        <div class="badge live" style="margin-bottom:6px">🔔 YÖNETİCİ ONAY & GITHUB KUTUSU (${pendingList.length} Bekleyen)</div>
+        <div class="badge live" style="margin-bottom:6px">🔔 YÖNETİCİ ONAY KUTUSU (${pendingList.length} Bekleyen Sunum)</div>
         <h3 style="margin:0 0 6px;font:700 17px 'Space Grotesk',sans-serif">${esc(latest.title)}</h3>
         <div class="note" style="color:#e2e8f0">${esc(latest.summary)}</div>
-        <div class="note" style="margin-top:4px">Hazırlayan: <b>${esc(latest.createdBy)}</b> · ${latest.sceneMods?.length || 0} Ofis Eşyası · ${latest.uiMods?.length || 0} UI Eklentisi</div>
+        <div class="note" style="margin-top:4px">Hazırlayan: <b>${esc(latest.createdBy)}</b> · ${latest.sceneMods?.length || 0} Sahne Çizimi · ${latest.uiMods?.length || 0} Arayüz Özelliği</div>
       </div>
       <div class="row" style="margin:0">
         ${(latest.sceneMods?.length || latest.uiMods?.length) ? `
           <button class="warn" onclick="previewApprovalMods('${latest.id}')">${isPrev ? '🙈 Önizlemeyi Kapat' : '👁️ Canlı Önizle (Test Et)'}</button>
         ` : ''}
-        <button class="ok" onclick="applyApprovalToOffice('${latest.id}')">✅ Onayla & Ofise Uygula</button>
-        <button class="p" onclick="pushModsToGitHub('${latest.id}')">🐙 GitHub'a Ekle (Commit & Push)</button>
+        <button class="p" onclick="applyApprovalToOffice('${latest.id}')">✅ Onayla & Firestore'a Kaydet</button>
         <button onclick="askRevision('${latest.id}')">↩️ Revize İste</button>
       </div>
     </div>
@@ -1671,7 +1471,7 @@ function downloadFile(fileId) {
 }
 
 async function clearAllOfficeMods() {
-  if (!confirm('Ofise sonradan eklenen tüm dekorasyon ve UI eklentileri kaldırılsın mı?')) return;
+  if (!confirm('Firestore üzerinde kayıtlı tüm sonradan eklenen ofis çizimleri ve arayüz eklentileri temizlensin mi?')) return;
   store.officeMods = { version: (store.officeMods.version || 1) + 1, sceneMods: [], uiMods: [] };
   store.previewMods = null;
   renderActiveUIMods();
@@ -1707,7 +1507,7 @@ async function resetProject() {
 let tab = 'mail';
 const TABS = [
   ['mail',      '✉️ İç Yazışmalar'],
-  ['approvals', '🚀 Onay & GitHub Merkezi'],
+  ['approvals', '✅ Onay Kutusu & Canlı Yamalar'],
   ['staff',     '👥 Personel & Kadro'],
   ['roadmap',   '🗺️ Model & Kota Yol Planı'],
   ['files',     '📁 Ortak Klasör'],
@@ -1758,7 +1558,7 @@ function render() {
                 <span>${m.processed ? '✓ İşlendi' : '⏳ Sırada'}</span>
               </div>
             </div>
-          `).join('') : '<p class="note">Henüz yazışma yok. Yukarıdan yeni bir görev başlatın.</p>'}
+          `).join('') : '<p class="note">Henüz yazışma yok. Yukarıdaki kutudan istediğiniz görevi yazıp başlatın.</p>'}
         </div>
         <div>
           ${sel ? `
@@ -1784,55 +1584,55 @@ function render() {
     p.innerHTML = `
       <div class="row" style="justify-content:space-between;margin-top:0">
         <div>
-          <h3 style="margin:0">🚀 Canlı Ofis Yamaları, Onay Kutusu & GitHub Entegrasyonu</h3>
-          <span class="note">Ajanların tasarladığı 2D ofis objelerini (ağaç, akvaryum vb.) ve site özelliklerini (saat, menü vb.) mevcut kodu bozmadan burada önizleyip GitHub'a ekleyebilirsiniz.</span>
+          <h3 style="margin:0">✅ Yönetici Onay Kutusu & Firestore Canlı Yamalar</h3>
+          <span class="note">Ajanlardan istediğiniz her türlü 2D ofis çizimi ve site arayüz özelliği burada onayınıza sunulur. Onayladığınız anda doğrudan Firestore'a yazılır.</span>
         </div>
-        <div class="row" style="margin:0">
-          <button class="p" onclick="pushModsToGitHub()">🐙 Mevcut Durumu GitHub'a Push Et</button>
-          <button class="danger" onclick="clearAllOfficeMods()">Eklentileri Temizle</button>
-        </div>
+        ${(activeScene.length || activeUI.length) ? `<button class="danger" onclick="clearAllOfficeMods()">Tüm Eklentileri Sıfırla</button>` : ''}
       </div>
 
       <div class="cols" style="margin-top:14px">
         <div class="tier-card">
-          <b>🌳 Aktif 2.5D Ofis Eşyaları (${activeScene.length})</b>
-          <div class="note" style="margin:6px 0">Hızlı eklemek için tıklayın veya ajanlardan isteyin:</div>
-          <div class="row">
-            <button onclick="quickApplySceneMod('tree','all_rooms','Oda Ağaçları')">+ 🌳 Odalara Ağaç</button>
-            <button onclick="quickApplySceneMod('aquarium','mola','Dinlenme Akvaryumu')">+ 🐠 Akvaryum</button>
-            <button onclick="quickApplySceneMod('bookshelf','toplanti','Toplantı Kitaplığı')">+ 📚 Kitaplık</button>
+          <b>🎨 Firestore'da Aktif 2.5D Sahne Çizimleri (${activeScene.length})</b>
+          <div style="margin-top:8px">
+            ${activeScene.map(s => `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)">
+                <span>✓ <b>${esc(s.label || s.id)}</b></span>
+                <button class="danger" style="padding:3px 9px;font-size:11px" onclick="removeSingleMod('scene','${esc(s.id)}')">Kaldır</button>
+              </div>
+            `).join('') || '<p class="note">Henüz eklenmiş özel sahne çizimi yok.</p>'}
           </div>
-          ${activeScene.map(s => `<div class="chip" style="display:inline-block;margin:4px 4px 0 0">✓ ${esc(s.label || s.type)} (${esc(s.target)})</div>`).join('') || '<p class="note">Henüz ek sahne objesi yok.</p>'}
         </div>
 
         <div class="tier-card">
-          <b>🧩 Aktif UI & Menü Eklentileri (${activeUI.length})</b>
-          <div class="note" style="margin:6px 0">Mevcut kodu bozmadan çalışan canlı bileşenler:</div>
-          <div class="row">
-            <button onclick="quickApplyUIMod('world-clock')">+ 🌍 Dünya Saatleri & Kur</button>
-            <button onclick="quickApplyUIMod('quick-status')">+ 📊 Performans Sayacı</button>
+          <b>🧩 Firestore'da Aktif Arayüz/Menü Özellikleri (${activeUI.length})</b>
+          <div style="margin-top:8px">
+            ${activeUI.map(u => `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)">
+                <span>✓ <b>${esc(u.title || u.id)}</b> <span class="chip">${esc(u.slot || 'top-right')}</span></span>
+                <button class="danger" style="padding:3px 9px;font-size:11px" onclick="removeSingleMod('ui','${esc(u.id)}')">Kaldır</button>
+              </div>
+            `).join('') || '<p class="note">Henüz eklenmiş özel arayüz bileşeni yok.</p>'}
           </div>
-          ${activeUI.map(u => `<div class="chip" style="display:inline-block;margin:4px 4px 0 0">✓ ${esc(u.title || u.id)} (${esc(u.slot)})</div>`).join('') || '<p class="note">Sağ üstteki ana dijital saat aktif.</p>'}
         </div>
       </div>
 
-      <h3 style="margin-top:20px">📋 Ajanların Sunduğu Onay Paketleri (${store.approvals.length})</h3>
+      <h3 style="margin-top:20px">📋 Ajanların Onayınıza Sunduğu Paketler (${store.approvals.length})</h3>
       ${store.approvals.length ? store.approvals.map(ap => `
         <div class="approval-card">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
             <div>
               <b>${esc(ap.title)}</b> <span class="chip">${esc(ap.status.toUpperCase())}</span>
               <div class="note" style="margin-top:4px">${esc(ap.summary)}</div>
-              <div class="note">Sunan: ${esc(ap.createdBy)} · ${ap.sceneMods?.length || 0} Sahne Yaması · ${ap.uiMods?.length || 0} UI Yaması</div>
+              <div class="note">Sunan: ${esc(ap.createdBy)} · ${ap.sceneMods?.length || 0} Sahne Çizimi · ${ap.uiMods?.length || 0} Arayüz Özelliği</div>
             </div>
             <div class="row" style="margin:0">
-              ${(ap.sceneMods?.length || ap.uiMods?.length) ? `<button class="warn" onclick="previewApprovalMods('${ap.id}')">👁️ Önizle</button>` : ''}
-              <button class="ok" onclick="applyApprovalToOffice('${ap.id}')">✅ Onayla & Uygula</button>
-              <button class="p" onclick="pushModsToGitHub('${ap.id}')">🐙 GitHub'a Ekle</button>
+              ${(ap.sceneMods?.length || ap.uiMods?.length) ? `<button class="warn" onclick="previewApprovalMods('${ap.id}')">👁️ Canlı Önizle</button>` : ''}
+              <button class="p" onclick="applyApprovalToOffice('${ap.id}')">✅ Onayla & Firestore'a Kaydet</button>
+              <button onclick="askRevision('${ap.id}')">↩️ Revize İste</button>
             </div>
           </div>
         </div>
-      `).join('') : '<p class="note">Henüz onay bekleyen çalışma yok. Yukarıdan "🌳 Odalara Ağaç İste" veya "🕒 Sağ Köşeye Saat & Menü Ekle" butonuna basarak ajanları çalıştırabilirsiniz.</p>'}
+      `).join('') : '<p class="note">Henüz onay bekleyen çalışma yok. Yukarıdaki görev çubuğundan ajanlara istediğiniz her şeyi özgürce yazabilirsiniz.</p>'}
     `;
   }
   else if (tab === 'staff') {
@@ -1842,10 +1642,10 @@ function render() {
           <button class="p" onclick="openAgentModal()">+ Yeni Ajan Ekle</button>
           ${store.staff.length ? '' : '<button onclick="seedDefaultStaff()">Varsayılan Kadroyu Kur</button>'}
         </div>
-        <span class="note">💡 İpucu: 2.5D ofisteki herhangi bir karaktere tıklayarak da düzenleyebilirsiniz.</span>
+        <span class="note">💡 2.5D ofisteki herhangi bir karaktere tıklayarak da düzenleyebilirsiniz.</span>
       </div>
       <table>
-        <tr><th>Personel & Kısa Etiket</th><th>Departman / Unvan</th><th>Ana & Yedek Model</th><th>Durum</th><th>İşlem</th></tr>
+        <tr><th>Personel & Sahne Etiketi</th><th>Departman / Unvan</th><th>Ana & Yedek Model</th><th>Durum</th><th>İşlem</th></tr>
         ${store.staff.map(s => `
           <tr>
             <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b> <span class="chip">${esc(shortName(s.name))}</span></td>
@@ -1862,7 +1662,7 @@ function render() {
       <div class="row" style="justify-content:space-between;margin-top:0">
         <div>
           <h3 style="margin:0">🗺️ Gemini API Çoklu Model & Akıllı Kota Yol Planı (${todayKey()})</h3>
-          <span class="note">Her modelin dakikalık (RPM) ve günlük (RPD) sınırı farklıdır. Sistem bir model kotaya takıldığında (429) otomatik olarak bir alt katmandaki yedek modele geçer.</span>
+          <span class="note">Her modelin dakikalık (RPM) ve günlük (RPD) sınırı farklıdır. Bir model kotaya takıldığında (429) otomatik olarak yedek modele geçilir.</span>
         </div>
       </div>
       <div class="cols" style="margin:14px 0">
@@ -1872,7 +1672,7 @@ function render() {
         </div>
         <div class="tier-card">
           <b>2️⃣ Yoğun Üretim Katmanı (Kod & Tasarım)</b>
-          <p class="note">Ahmet Bey, Elif Hanım ve Mert Bey çok sayıda kod/içerik üretir. Yüksek kotalı (1000-1500 RPD) <b>Gemini 2.5 / 2.0 Flash Lite</b> kullanır.</p>
+          <p class="note">Ahmet Bey, Elif Hanım ve Mert Bey çok sayıda kod, 2.5D çizim ve içerik üretir. Yüksek kotalı (1000-1500 RPD) <b>Gemini 2.5 / 2.0 Flash Lite</b> kullanır.</p>
         </div>
         <div class="tier-card">
           <b>3️⃣ Kesintisiz Yedek Havuz (Failover)</b>
@@ -1962,53 +1762,6 @@ function render() {
   }
 }
 
-// Hızlı Sahne ve UI Eklenti Butonları (Tek Tıkla Test & Uygulama)
-async function quickApplySceneMod(type, target, label) {
-  await createApprovalItem({
-    title: `${label} (2.5D Ofis Güncellemesi)`,
-    summary: `${label} tüm ilgili alanlara (${target}) yerleştirildi. Onaylayıp GitHub'a ekleyebilirsiniz.`,
-    createdBy: 'Ahmet Bey & Elif Hanım',
-    hasPatch: true,
-    sceneMods: [{ id: 'mod_' + type, type, target, scale: 1.15, label }],
-    uiMods: []
-  });
-  const latest = store.approvals[0];
-  if (latest) await applyApprovalToOffice(latest.id);
-}
-
-async function quickApplyUIMod(preset) {
-  let mod = null;
-  if (preset === 'world-clock') {
-    mod = {
-      id: 'ui_world_clock',
-      slot: 'header-menu',
-      title: 'Küresel Saat & Durum Menüsü',
-      html: `<div class="badge live" style="gap:10px"><span>🌍 UTC: <b id="utcClk">--:--</b></span><span>⚡ Sistem: <b>%100</b></span></div>`,
-      css: ``,
-      js: `setInterval(()=>{const e=document.getElementById('utcClk');if(e)e.textContent=new Date().toISOString().slice(11,16);},1000);`
-    };
-  } else {
-    mod = {
-      id: 'ui_perf_counter',
-      slot: 'top-right',
-      title: 'Aktif Ajan & Dosya Sayacı',
-      html: `<div class="badge" style="border-color:#06b6d4;color:#67e8f9">📊 ${store.staff.length} Ajan · ${store.files.length} Çıktı</div>`,
-      css: ``,
-      js: ``
-    };
-  }
-  await createApprovalItem({
-    title: mod.title,
-    summary: 'Mevcut kodu bozmadan üst bar eklenti yuvasına (slot) entegre edildi.',
-    createdBy: 'Ahmet Bey (YAZILIM)',
-    hasPatch: true,
-    sceneMods: [],
-    uiMods: [mod]
-  });
-  const latest = store.approvals[0];
-  if (latest) await applyApprovalToOffice(latest.id);
-}
-
 function replyToMail(mailId) {
   const m = store.mails.find(x => x.id === mailId);
   const txt = $('#replyTxt')?.value.trim();
@@ -2038,18 +1791,12 @@ function openSettingsModal() {
   const c = $('#card');
   c.style.display = 'block';
   c.innerHTML = `
-    <h3>⚙️ Gemini API, Kota & GitHub Ayarları</h3>
-    <p class="note">Bu bilgiler sadece yöneticinin okuyabildiği Firestore <code>settings/secret</code> ve <code>settings/guard</code> belgelerinde güvenle saklanır.</p>
+    <h3>⚙️ Gemini API & Mola Ayarları</h3>
+    <p class="note">Bu bilgiler sadece yöneticinin okuyabildiği Firestore <code>settings/secret</code> ve <code>settings/guard</code> belgelerinde saklanır.</p>
     <label>Gemini API Anahtarı (AI Studio)</label>
     <input id="setGeminiKey" type="password" value="${esc(store.geminiKey)}" placeholder="AIzaSy...">
     <label>İstekler Arası Güvenli Mola Süresi (Saniye)</label>
     <input id="setCooldown" type="number" min="5" max="180" value="${store.cooldownSec}">
-    <label>GitHub Repo (kullaniciadi/repo-adi)</label>
-    <input id="setGhRepo" value="${esc(store.githubRepo)}" placeholder="buraktonoz/ofis">
-    <label>GitHub Personal Access Token (Onayları Tek Tıkla GitHub'a Eklemek İçin)</label>
-    <input id="setGhToken" type="password" value="${esc(store.githubToken)}" placeholder="ghp_... veya github_pat_...">
-    <label>GitHub Dalı (Branch)</label>
-    <input id="setGhBranch" value="${esc(store.githubBranch || 'main')}" placeholder="main">
     <div class="row" style="margin-top:14px">
       <button class="p" onclick="saveSettingsModal()">💾 Firestore'a Kaydet</button>
       <button onclick="$('#card').style.display='none'">Kapat</button>
@@ -2060,16 +1807,10 @@ function openSettingsModal() {
 async function saveSettingsModal() {
   store.geminiKey = $('#setGeminiKey').value.trim();
   store.cooldownSec = Math.max(5, parseInt($('#setCooldown').value, 10) || 18);
-  store.githubRepo = $('#setGhRepo').value.trim();
-  store.githubToken = $('#setGhToken').value.trim();
-  store.githubBranch = $('#setGhBranch').value.trim() || 'main';
 
   if (CONN && OWN) {
     await db.doc('settings/secret').set({
       apiKey: store.geminiKey,
-      githubRepo: store.githubRepo,
-      githubToken: store.githubToken,
-      githubBranch: store.githubBranch,
       updatedAt: FV().serverTimestamp()
     }, { merge: true }).catch(e => alert('Kayıt hatası: ' + e.message));
 
@@ -2080,7 +1821,7 @@ async function saveSettingsModal() {
     }, { merge: true }).catch(() => {});
   }
   $('#card').style.display = 'none';
-  lg('⚙️ API ve GitHub entegrasyon ayarları güncellendi.');
+  lg('⚙️ API ve mola ayarları Firestore\'a kaydedildi.');
   render();
 }
 
@@ -2182,7 +1923,6 @@ function pub() {
   pt = setTimeout(() => db.doc('public/office').set({
     updatedAt: FV().serverTimestamp(),
     paused: halt,
-    items: tbOn ? ['yemek-masasi'] : [],
     officeMods: store.officeMods,
     staff: store.staff.map(a => ({ id: a.id, name: a.name, role: a.role, room: a.room, color: a.c, hair: a.h, state: 'work' }))
   }, { merge: true }).catch(() => {}), 1000);
@@ -2195,13 +1935,9 @@ async function startOwnerListeners() {
 
   try {
     const secretDoc = await db.doc('settings/secret').get();
-    if (secretDoc.exists) {
-      const sd = secretDoc.data();
-      if (sd.apiKey) store.geminiKey = sd.apiKey;
-      if (sd.githubRepo) store.githubRepo = sd.githubRepo;
-      if (sd.githubToken) store.githubToken = sd.githubToken;
-      if (sd.githubBranch) store.githubBranch = sd.githubBranch;
-      lg('🔐 API ve GitHub anahtarları Firestore gizli kasasından yüklendi.');
+    if (secretDoc.exists && secretDoc.data().apiKey) {
+      store.geminiKey = secretDoc.data().apiKey;
+      lg('🔐 Gemini API anahtarı Firestore kasasından yüklendi.');
     }
   } catch (e) {}
 
@@ -2212,7 +1948,6 @@ async function startOwnerListeners() {
     }
   } catch (e) {}
 
-  // Canlı Ofis & UI Yamalarını Dinle
   un.push(db.doc('settings/office_mods').onSnapshot(doc => {
     if (doc.exists) {
       const d = doc.data();
@@ -2226,7 +1961,6 @@ async function startOwnerListeners() {
     }
   }));
 
-  // Günlük Model Kotalarını Dinle
   un.push(db.collection('usage').doc(todayKey()).onSnapshot(doc => {
     if (doc.exists && doc.data().pools) {
       const pools = doc.data().pools;
@@ -2238,14 +1972,12 @@ async function startOwnerListeners() {
     }
   }));
 
-  // Personel Koleksiyonunu Dinle
   un.push(db.collection('staff').onSnapshot(q => {
     if (q.empty && store.staff.length === 0) { seedDefaultStaff(); return; }
     syncStaff(q.docs.map(d => ({ id: d.id, ...d.data() })));
     render();
   }));
 
-  // Yazışmaları Dinle
   un.push(db.collection('mails').orderBy('createdAt', 'desc').limit(80).onSnapshot(q => {
     store.mails = q.docs.map(d => {
       const m = d.data();
@@ -2261,13 +1993,11 @@ async function startOwnerListeners() {
     render();
   }));
 
-  // Ortak Dosyaları Dinle
   un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(60).onSnapshot(q => {
     store.files = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.updatedAt) }));
     render();
   }));
 
-  // Onay Kutusunu Dinle
   un.push(db.collection('approvals').orderBy('createdAt', 'desc').limit(30).onSnapshot(q => {
     store.approvals = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.createdAt) }));
     renderApprovalBanner();
@@ -2309,23 +2039,17 @@ $('#bl').onclick = () => {
 $('#go').onclick = async () => {
   const rawTxt = $('#ti').value.trim();
   if (!rawTxt) return alert('Lütfen yapılacak görevi veya eklemek istediğiniz özelliği yazın.');
-  const mode = $('#taskMode') ? $('#taskMode').value : 'auto';
   const targetId = $('#targetAgent').value;
   const target = store.staff.find(s => s.id === targetId) || store.staff[0];
   if (!target) return alert('Önce personel ekleyin.');
 
-  let modePrefix = '';
-  if (mode === 'scene') modePrefix = '[2D OFİS DEKORASYON TALEBİ - Lütfen officePatch.sceneMods üretip onaya sunun]: ';
-  else if (mode === 'ui') modePrefix = '[CANLI SİTE ÖZELLİK/MENÜ TALEBİ - Mevcut kodu bozmadan officePatch.uiMods üretip onaya sunun]: ';
-
-  const fullBody = modePrefix + rawTxt;
   $('#ti').value = '';
   const subj = rawTxt.length > 56 ? rawTxt.slice(0, 56) + '...' : rawTxt;
 
   await createInternalMail({
     fromId: 'owner', fromName: 'Burak Bey (Yönetici)', fromRole: 'Şirket Sahibi',
     toId: target.id, toName: target.name,
-    subject: subj, body: fullBody,
+    subject: subj, body: rawTxt,
     type: 'görev', threadId: 'th_' + Date.now(), notBeforeMs: Date.now()
   });
   lg(`🚀 Görev başlatıldı → ${shortName(target.name)}: ${subj}`);
@@ -2343,7 +2067,6 @@ $('#stop').onclick = () => {
 };
 
 async function fbLoad() {
-  await loadRepoOfficeMods();
   try {
     for (const u of ['app', 'auth', 'firestore']) {
       await new Promise((r, j) => {
