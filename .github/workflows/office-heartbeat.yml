@@ -1,20 +1,46 @@
-name: Tonoz AI Ofisi 7-24 Otonom Mesai
+name: Tonoz AI Ofisi 7-24 Otonom Mesai & GitHub Senkronizasyonu
 
 on:
   schedule:
     - cron: '*/10 * * * *' # Her 10 dakikada bir uyanır (Kota dostu)
   workflow_dispatch:       # İstersen GitHub'dan tek tıkla da tetikleyebilirsin
 
+permissions:
+  contents: write          # Onaylanan ofis/kod yamalarını GitHub reposuna otomatik işlemek için
+
 jobs:
   run-office-agents:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Repo Kodlarını Çek
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node.js Kurulumu
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install firebase-admin
-      - run: node agent-worker.js
+
+      - name: Bağımlılıkları Yükle
+        run: npm install firebase-admin
+
+      - name: Otonom Ajan Motorunu Çalıştır
+        run: node agent-worker.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Onaylanan Ofis Yamalarını GitHub'a Commit & Push Et
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "Tonoz AI Otonom Bot"
+            git config user.email "bot@tonoz.ai"
+            git add office-mods.json
+            git commit -m "🤖 Tonoz AI: Yönetici onaylı ofis/kod güncellemesi" || true
+            git push origin HEAD || true
+          else
+            echo "GitHub'a eklenecek yeni dosya değişikliği yok."
+          fi
