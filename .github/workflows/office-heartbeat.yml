@@ -1,0 +1,20 @@
+name: Tonoz AI Ofisi 7-24 Otonom Mesai
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Her 10 dakikada bir uyanır (Kota dostu)
+  workflow_dispatch:       # İstersen GitHub'dan tek tıkla da tetikleyebilirsin
+
+jobs:
+  run-office-agents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install firebase-admin
+      - run: node agent-worker.js
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
