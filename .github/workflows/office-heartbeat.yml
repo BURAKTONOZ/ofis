@@ -1,20 +1,42 @@
-name: Tonoz AI Ofisi 7-24 Otonom Mesai
+name: Tonoz AI Ofisi 7-24 Otonom Mesai & Senkronizasyon
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Her 10 dakikada bir uyanır (Kota dostu)
-  workflow_dispatch:       # İstersen tek tıkla da tetikleyebilirsin
+    - cron: '*/10 * * * *' # Sayfa kapalıyken her 10 dakikada bir nöbeti devralır
+  workflow_dispatch:       # GitHub Actions sekmesinden tek tıkla manuel de tetiklenebilir
+
+permissions:
+  contents: write          # Ajanların ürettiği onaylı güncellemeleri repoya işleyebilmesi için
 
 jobs:
   run-office-agents:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Repo Kodlarını Çek
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node.js Kurulumu
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install firebase-admin
-      - run: node agent-worker.js
+
+      - name: Firebase Admin Kurulumu
+        run: npm install firebase-admin
+
+      - name: Otonom Ajan Motorunu Çalıştır
+        run: node agent-worker.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Onaylanan Güncellemeleri GitHub Reposuna İşle
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "Tonoz AI Otonom Motor"
+            git config user.email "bot@tonoz.ai"
+            git add -A
+            git commit -m "🤖 Tonoz AI: Otonom sistem senkronizasyonu" || true
+            git push origin HEAD || true
+          fi
