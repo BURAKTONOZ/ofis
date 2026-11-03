@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tonoz AI Ofisi · Otonom Multi-Agent Şirketi</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F0FF;--card:#ffffff;--tx:#2c2247;--mut:#756a94;--ln:#dfd7f7;
+  --acc:#6C4CE6;--acc-h:#5838d1;--on:#ffffff;--ok:#22996e;--warn:#d9822b;--err:#d93848;
+  --code-bg:#1e1b2e;--code-tx:#e2ddff;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#151221;--card:#211d33;--tx:#f2eeff;--mut:#a39ac2;--ln:#362f52;
+    --acc:#9b82ff;--acc-h:#b09cff;--on:#151221;--ok:#4fd1a5;--warn:#f5a65b;--err:#ff6b7b;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14.5px/1.55 'Nunito',system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+h1{font:600 22px 'Fredoka',sans-serif;margin:0}
+h3{font:500 16px 'Fredoka',sans-serif;margin:0 0 8px}
+.badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--card);border:1.5px solid var(--ln);color:var(--mut)}
+.badge.live{border-color:var(--ok);color:var(--ok)}
+.badge.wait{border-color:var(--warn);color:var(--warn)}
+button,select,input,textarea{font:inherit;color:var(--tx)}
+button{font-weight:700;border:1.5px solid var(--ln);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--acc)}
+button.p{background:var(--acc);border-color:var(--acc);color:var(--on)}
+button.p:hover{background:var(--acc-h)}
+button.danger{border-color:var(--err);color:var(--err)}
+input,select,textarea{border:1.5px solid var(--ln);border-radius:12px;padding:7px 11px;background:var(--bg);width:100%}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--mut);margin:8px 0 3px}
+canvas{width:100%;height:auto;display:block;border-radius:18px;border:1.5px solid var(--ln);background:var(--card)}
+.box{background:var(--card);border:1.5px solid var(--ln);border-radius:18px;padding:15px;margin-top:12px}
+#panel,#ap{display:none}
+#panel.on{display:block}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tabs button.on{background:var(--acc);color:var(--on);border-color:var(--acc)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{text-align:left;padding:8px;border-bottom:1px solid var(--ln);vertical-align:top}
+th{color:var(--mut);font-weight:700;font-size:12.5px;text-transform:uppercase}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.bar{height:8px;border-radius:9px;background:var(--bg);margin:3px 0 9px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:var(--acc);transition:width .3s}
+.chip{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--bg);color:var(--mut);margin-left:6px;display:inline-block}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.mail-grid{display:grid;grid-template-columns:320px 1fr;gap:14px}
+@media(max-width:760px){.mail-grid{grid-template-columns:1fr}}
+.mail-list{max-height:480px;overflow-y:auto;border-right:1px solid var(--ln);padding-right:8px}
+.mail-item{padding:9px 10px;border-radius:12px;border:1px solid transparent;cursor:pointer;margin-bottom:6px;background:var(--bg)}
+.mail-item:hover,.mail-item.active{border-color:var(--acc);background:var(--card)}
+.mail-item.unread{border-left:4px solid var(--acc)}
+.note{font-size:12.5px;color:var(--mut)}
+.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}
+pre.code{background:var(--code-bg);color:var(--code-tx);padding:12px;border-radius:12px;overflow-x:auto;font:12.5px/1.5 'JetBrains Mono',monospace;max-height:420px;white-space:pre-wrap}
+#card{display:none;position:fixed;right:14px;bottom:14px;width:min(410px,calc(100vw - 28px));max-height:85vh;overflow:auto;z-index:30;box-shadow:0 12px 38px rgba(20,10,50,.32)}
+footer{text-align:center;font-size:12px;color:var(--mut);margin:18px 0 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Tonoz AI Ofisi</h1>
+      <span id="engBadge" class="badge">Ziyaretçi Modu</span>
+      <span id="coolBadge" class="badge" style="display:none"></span>
+    </div>
+    <div class="row" style="margin:0">
+      <button id="bl" class="p">Yönetici Girişi</button>
+    </div>
+  </header>
+
+  <canvas id="cv" width="1600" height="1060" role="img" aria-label="Tonoz AI Ofisi İzometrik Simülasyonu"></canvas>
+
+  <div id="ap" class="box"></div>
+
+  <section id="panel">
+    <div class="box">
+      <div class="row" style="margin-top:0">
+        <select id="targetAgent" style="max-width:230px" title="Görevi ilk teslim alacak departman"></select>
+        <input id="ti" style="flex:1;min-width:240px" placeholder="Örn: Haritacılık ve CBS sistemleri hakkında SEO uyumlu makale ve interaktif koordinat aracı hazırlayın">
+        <button id="go" class="p">Görevi Başlat (Mail At)</button>
+        <button id="stepBtn" title="Sıradaki bekleyen mesajı beklemeden hemen işle">⚡ Şimdi İşlet</button>
+        <button id="stop">Acil Durdur</button>
+      </div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <div id="pn" class="box"></div>
+  </section>
+
+  <aside id="card" class="box" aria-live="polite"></aside>
+  <footer>Created by Tonoz · Otonom Multi-Agent Şirket Mimarisi</footer>
+</div>
+
+<script>
+/* ============================================================================
+   1. FIREBASE & MODEL HAVUZU AYARLARI
+   ============================================================================ */
+const FB = {
+  apiKey: 'AIzaSyAoPd-gsCIEzXJ8_TOeZBvcSICNvHvW29Q',
+  authDomain: 'ofis-29534.firebaseapp.com',
+  projectId: 'ofis-29534',
+  storageBucket: 'ofis-29534.firebasestorage.app',
+  messagingSenderId: '180162023869',
+  appId: '1:180162023869:web:572660067d56af023442d4'
+};
+
+const $ = s => document.querySelector(s);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rnd = (a, b) => a + Math.random() * (b - a);
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hhmm = () => new Date().toTimeString().slice(0, 5);
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+// Görsel Model İsimleri -> Gerçek Gemini API Model Eşleşmeleri ve Günlük Limitler
+const MODELS = [
+  { n: 'Gemini 3.8 Flash',      api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'Stratejik / Yönetici Havuzu' },
+  { n: 'Gemini 3.6 Flash',      api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'Kıdemli Uzman Havuzu' },
+  { n: 'Gemini 3 Flash',        api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'Denetim & Analiz Havuzu' },
+  { n: 'Gemini 2.5 Flash',      api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'İK & Koordinasyon Havuzu' },
+  { n: 'Gemini 3.5 Flash Lite', api: 'gemini-2.5-flash-lite', l: 500,   u: 0, desc: 'Hızlı Üretim Havuzu (500/gün)' },
+  { n: 'Gemini 3.1 Flash Lite', api: 'gemini-2.5-flash-lite', l: 500,   u: 0, desc: 'Genel Üretim Havuzu (500/gün)' },
+  { n: 'Gemma 4 31B',           api: 'gemini-2.5-flash-lite', l: 14400, u: 0, desc: 'Geniş Yedek Havuz (14.400/gün)' }
+];
+const mdl = n => MODELS.find(m => m.n === n) || MODELS[5];
+
+const store = {
+  staff: [],
+  mails: [],
+  tasks: [],
+  files: [],
+  approvals: [],
+  log: [],
+  selectedMailId: null,
+  selectedFileId: null,
+  geminiKey: localStorage.getItem('tonoz_gemini_key') || '',
+  cooldownSec: Number(localStorage.getItem('tonoz_cooldown_sec') || 25), // Çağrılar arası varsayılan mola (sn)
+  maxChainDepth: 10
+};
+
+/* ============================================================================
+   2. İZOMETRİK 2.5D OFİS MOTORU (CANVAS)
+   ============================================================================ */
+const cv = $('#cv'), cx = cv.getContext('2d');
+cx.scale(2, 2);
+const TW = 28, TH = 14, OX = 400, OY = 118, N = 14, WL = 90;
+const P = (x, y, z = 0) => [OX + (x - y) * TW, OY + (x + y) * TH - z];
+const hs = (c, d) => 'hsl(' + c[0] + ' ' + c[1] + '% ' + Math.max(4, Math.min(97, c[2] + d)) + '%)';
+
+function poly(p, f, s) {
+  cx.beginPath();
+  p.forEach((q, i) => i ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]));
+  cx.closePath();
+  cx.fillStyle = f;
+  cx.fill();
+  if (s) { cx.strokeStyle = s; cx.lineWidth = 1; cx.stroke(); }
+}
+function box(x, y, w, d, h, z, c, g) {
+  const t = z + h;
+  poly([P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x, y + d, t)], g || hs(c, -8));
+  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], hs(c, -17));
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], hs(c, 7));
+}
+function glass(x, y, w, d, h) {
+  const t = h;
+  poly([P(x, y + d, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.30)', 'rgba(160,140,220,.7)');
+  poly([P(x + w, y, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x + w, y, t)], 'rgba(200,190,240,.38)', 'rgba(160,140,220,.7)');
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.55)');
+}
+const disc = (x, y, r, c) => { cx.beginPath(); cx.arc(x, y, r, 0, 7); cx.fillStyle = c; cx.fill(); };
+const el = (x, y, a, b, c) => { cx.beginPath(); cx.ellipse(x, y, a, b, 0, 0, 7); cx.fillStyle = c; cx.fill(); };
+const rr = (x, y, w, h, r, c) => { cx.beginPath(); cx.roundRect(x, y, w, h, r); cx.fillStyle = c; cx.fill(); };
+
+const WOOD = [32, 62, 72], DK = [28, 30, 38], WT = [260, 40, 96], COR = [12, 80, 72],
+      GRN = [140, 45, 48], BLU = [205, 70, 72], YEL = [45, 85, 70], PNK = [340, 55, 72], CH = [255, 40, 62];
+
+const RM = [
+  [0, 0, 3, 1], [4, 0, 3, 1], [8, 0, 3, 1],
+  [0, 10, 3, 0], [4, 10, 3, 0], [8, 10, 3, 0],
+  [12, 0, 2, 1], [12, 10, 2, 0]
+].map((r, i) => ({
+  i, x: r[0], y: r[1], w: r[2], top: r[3], wy: r[3] ? 3 : 9,
+  hue: [265, 330, 200, 150, 45, 15, 285, 100][i],
+  dx: r[2] == 3 ? r[0] + 1 : r[0], dy: r[3] ? 0 : 12,
+  sx: r[2] == 3 ? r[0] + 1 : r[0], sy: r[3] ? 1 : 11
+}));
+
+const BL = Array.from({ length: N }, () => Array(N).fill(0));
+const blk = (x, y, w = 1, d = 1) => { for (let i = 0; i < w; i++) for (let j = 0; j < d; j++) BL[y + j][x + i] = 1; };
+RM.forEach(r => {
+  blk(r.dx, r.dy, 2, 1);
+  for (let x = r.x + 1; x < r.x + r.w; x++) blk(x, r.wy);
+  blk(r.x + r.w - 1, r.top ? 2 : 10);
+});
+[3, 7, 11].forEach(x => { blk(x, 0, 1, 4); blk(x, 9, 1, 5); });
+blk(1, 5, 3, 1); blk(1, 7, 3, 1); blk(6, 6, 3, 1); blk(11, 7, 2, 1); blk(13, 4); blk(13, 5, 1, 2);
+
+const SP = {
+  yemek: [[4, 6], [0, 6], [1, 6]],
+  mola: [[10, 7], [12, 8], [10, 5]],
+  toplanti: [[7, 5], [6, 7], [8, 7]],
+  arsiv: [[12, 5], [12, 6]]
+};
+
+let busy = false, halt = false, OWN = false, T = 0, tbOn = false;
+
+function bfs(s, t) {
+  const q = [s], pr = {}; pr[s] = 1;
+  while (q.length) {
+    const c = q.shift();
+    if (c[0] == t[0] && c[1] == t[1]) break;
+    for (const d of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const x = c[0] + d[0], y = c[1] + d[1];
+      if (x < 0 || y < 0 || x >= N || y >= N || BL[y][x] || pr[[x, y]]) continue;
+      pr[[x, y]] = c; q.push([x, y]);
+    }
+  }
+  const p = []; if (!pr[t]) return p;
+  let c = t;
+  while (!(c[0] == s[0] && c[1] == s[1])) { p.unshift([c[0] + .5, c[1] + .5]); c = pr[c]; }
+  return p;
+}
+function walk(a, x, y) {
+  a.path = bfs([Math.floor(a.ax), Math.floor(a.ay)], [x, y]);
+  return new Promise(r => { a.res = r; if (!a.path.length) r(); });
+}
+const door = a => { const r = RM[a.room]; return [r.x, r.top ? 4 : 8]; };
+const seat = a => { const r = RM[a.room]; return [r.sx, r.sy]; };
+const goHome = a => walk(a, ...seat(a));
+const say = (a, i, t) => { a.bi = i; a.bt = t; a.on = 1; };
+const hush = a => { a.on = 0; };
+
+function upd(dt) {
+  store.staff.forEach(a => {
+    a.mv = 0;
+    if (a.path.length) {
+      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.5 * dt;
+      a.mv = 1;
+      if (d <= s) {
+        a.ax = p[0]; a.ay = p[1]; a.path.shift();
+        if (!a.path.length && a.res) { const r = a.res; a.res = 0; r(); }
+      } else { a.ax += dx / d * s; a.ay += dy / d * s; }
+    }
+  });
+}
+
+const OB = [], add = (k, f) => OB.push({ k, f });
+RM.forEach(r => {
+  add(r.dx + r.dy + 1.5, () => {
+    const x = r.dx, y = r.dy, a = store.staff.find(s => s.room === r.i);
+    box(x + .06, y + .1, .12, .8, 24, 0, DK);
+    box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
+    box(x, y, 2, 1, 5, 24, WOOD);
+    box(x + .85, y + .22, .3, .25, 4, 29, DK);
+    box(x + .55, y + .2, .9, .1, 17, 33, DK, a && a.mon ? '#6ef7c8' : '#4b4470');
+    box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
+    box(x + 1.6, y + .6, .2, .2, 6, 29, COR);
+  });
+  add(r.sx + r.sy + .1, () => {
+    box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
+    box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
+  });
+  const px = r.x + r.w - 1, py = r.top ? 2 : 10;
+  add(px + py + 1, () => {
+    box(px + .25, py + .25, .5, .5, 10, 0, [18, 55, 60]);
+    const q = P(px + .5, py + .5, 14);
+    [[0, -14, 9], [-8, -8, 7], [8, -8, 7], [0, -22, 6]].forEach(l =>
+      disc(q[0] + l[0] + Math.sin(T * 1.5 + px) * 1.5, q[1] + l[1], l[2], hs(GRN, 8 - l[1] * .4))
+    );
+  });
+});
+[5, 7].forEach(y => add(2.5 + y + .5, () => {
+  box(1, y, 3, 1, 5, 22, WOOD);
+  [1.1, 3.7].forEach(x => box(x, y + .1, .2, .8, 22, 0, DK));
+  [1.3, 2.1, 2.9].forEach(x => {
+    box(x, y + .4, .35, .3, 1, 27, WT);
+    box(x + .05, y - .5, .4, .4, 7, 0, CH);
+    box(x + .05, y + 1.1, .4, .4, 7, 0, CH);
+  });
+}));
+add(10, () => {
+  box(6, 6, 3, 1, 5, 22, WOOD);
+  [6.1, 8.7].forEach(x => box(x, 6.1, .2, .8, 22, 0, DK));
+  [6.2, 7.1, 8.0].forEach(x => { box(x, 5.2, .5, .5, 7, 0, BLU); box(x, 7.3, .5, .5, 7, 0, BLU); });
+});
+add(19, () => {
+  box(11, 7, 2, 1, 10, 0, PNK); box(11, 7.75, 2, .25, 26, 0, PNK);
+  box(11, 7, .25, 1, 17, 0, PNK); box(12.75, 7, .25, 1, 17, 0, PNK);
+});
+add(17.5, () => {
+  box(13.1, 4.1, .8, .8, 34, 0, PNK); box(13.2, 4.2, .6, .6, 6, 34, DK);
+  const q = P(13.5, 4.5, 44);
+  for (let i = 0; i < 3; i++) {
+    const o = (T * 20 + i * 12) % 24;
+    cx.fillStyle = 'rgba(255,255,255,' + (.55 - o / 50) + ')';
+    cx.fillRect(q[0] - 2 + Math.sin(T * 3 + i) * 2, q[1] - o, 3, 3);
+  }
+});
+add(19, () => {
+  box(13.05, 5.05, .9, 1.9, 44, 0, WOOD);
+  [12, 24, 36].forEach(z => box(13.95, 5.2, .05, .6, 2, z, DK));
+  box(13.2, 5.3, .5, .5, 4, 44, BLU); box(13.2, 6.2, .5, .5, 4, 44, YEL);
+});
+add(13, () => {
+  if (!tbOn) return;
+  box(9, 4, 2, 1, 4, 22, WOOD);
+  [9.1, 10.7].forEach(x => box(x, 4.1, .2, .7, 22, 0, DK));
+  [9.3, 10.2].forEach(x => box(x, 4.35, .3, .3, 1, 26, WT));
+  box(9.9, 4.4, .1, .1, 7, 26, YEL);
+});
+
+const SIGNS = [['Yemekhane', 2.5, 6, 34], ['Toplantı & Planlama', 7.5, 6, 34], ['Mola & Kota Dinlenme', 12, 7.9, 40], ['Ortak Klasör (' + 0 + ')', 13.5, 5.5, 52]];
+
+function floor() {
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++)
+    poly([P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)], (i + j) % 2 ? '#EFE9F9' : '#E6DEF4');
+  RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',60%,78%,.55)'));
+  poly([P(0, 4), P(5, 4), P(5, 9), P(0, 9)], 'rgba(255,200,150,.30)');
+  poly([P(5, 4), P(9, 4), P(9, 9), P(5, 9)], 'rgba(150,190,255,.25)');
+  poly([P(9, 4), P(14, 4), P(14, 9), P(9, 9)], 'rgba(255,170,200,.25)');
+  poly([P(0, N), P(N, N), P(N, N, -12), P(0, N, -12)], '#a99bd6');
+  poly([P(N, 0), P(N, N), P(N, N, -12), P(N, 0, -12)], '#8c7dc0');
+}
+function walls() {
+  poly([P(0, 0), P(0, N), P(0, N, WL), P(0, 0, WL)], '#E6DEFB');
+  poly([P(0, 0), P(N, 0), P(N, 0, WL), P(0, 0, WL)], '#DCD2F7');
+  poly([P(0, 0), P(0, N), P(0, N, 6), P(0, 0, 6)], '#cdbff0');
+  poly([P(0, 0), P(N, 0), P(N, 0, 6), P(0, 0, 6)], '#c3b4ec');
+  [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.2, 13.8]].forEach(w => {
+    poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#EBC58F');
+    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#BFE6FA');
+    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#D7F0FC');
+  });
+}
+function over() {
+  RM.forEach(r => { const y = r.wy + .4; glass(r.x + 1, y, r.w - 1, .2, 34); glass(r.x, y, .12, .2, 34); });
+  [3, 7, 11].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
+  cx.textAlign = 'center'; cx.font = '700 10px Nunito,sans-serif';
+  RM.forEach(r => {
+    const a = store.staff.find(s => s.room === r.i), t = a ? a.role + ' · ' + a.name : 'Boş Oda ' + (r.i + 1), q = P(r.x + 1.6, r.wy + .7, 24), w = cx.measureText(t).width + 14;
+    rr(q[0] - w / 2, q[1] - 9, w, 16, 8, a ? '#fff' : '#ece6fa');
+    cx.fillStyle = a ? '#33294d' : '#8a80a8'; cx.fillText(t, q[0], q[1] + 3);
+  });
+  cx.font = '700 11px Nunito,sans-serif';
+  SIGNS[3][0] = 'Ortak Klasör (' + store.files.length + ')';
+  SIGNS.forEach(s => {
+    const q = P(s[1], s[2], s[3]), w = cx.measureText(s[0]).width + 16;
+    rr(q[0] - w / 2, q[1] - 10, w, 18, 9, 'rgba(108,76,230,.9)');
+    cx.fillStyle = '#fff'; cx.fillText(s[0], q[0], q[1] + 3);
+  });
+}
+function dAg(a) {
+  const q = P(a.ax, a.ay, 0), sit = !a.mv && Math.hypot(a.ax - seat(a)[0] - .5, a.ay - seat(a)[1] - .5) < .06,
+        b = a.mv ? Math.abs(Math.sin(T * 12 + a.ph)) * 2.5 : 0, x = q[0], y = q[1] + (sit ? -5 : 0) - b;
+  el(q[0], q[1] + 1, 11, 5, 'rgba(60,40,90,.2)');
+  if (!sit) { cx.fillStyle = '#4a3f66'; cx.fillRect(x - 6, y - 9, 4, 9); cx.fillRect(x + 2, y - 9, 4, 9); }
+  rr(x - 8, y - 26, 16, 19, 6, a.c); rr(x - 11, y - 24, 4, 12, 2, a.c); rr(x + 7, y - 24, 4, 12, 2, a.c);
+  disc(x, y - 34, 10.5, '#FFDDBF'); cx.fillStyle = a.h; cx.beginPath(); cx.arc(x, y - 35, 11, Math.PI, 0); cx.fill();
+  const bl = (T + a.ph) % 4 < .12 ? .5 : 2.4;
+  el(x - 4, y - 33, 1.8, bl, '#3a2f2a'); el(x + 4, y - 33, 1.8, bl, '#3a2f2a');
+  cx.strokeStyle = '#3a2f2a'; cx.lineWidth = 1.2; cx.beginPath(); cx.arc(x, y - 31, 2.5, .2, Math.PI - .2); cx.stroke();
+}
+function tag(a) {
+  const q = P(a.ax, a.ay, 0); cx.font = '700 10px Nunito,sans-serif'; cx.textAlign = 'center';
+  const w = cx.measureText(a.name).width + 10;
+  rr(q[0] - w / 2, q[1] - 62, w, 14, 7, 'rgba(51,41,77,.85)');
+  cx.fillStyle = '#fff'; cx.fillText(a.name, q[0], q[1] - 52);
+}
+function ic(t, x, y) {
+  cx.strokeStyle = cx.fillStyle = '#5a4a8a'; cx.lineWidth = 1.5; cx.beginPath();
+  if (t == 'mail') { cx.rect(x - 6, y - 4, 12, 8); cx.moveTo(x - 6, y - 4); cx.lineTo(x, y + 1); cx.lineTo(x + 6, y - 4); cx.stroke(); }
+  else if (t == 'cup') { cx.rect(x - 5, y - 3, 8, 7); cx.moveTo(x + 3, y - 1); cx.arc(x + 4, y + 1, 2, -1.6, 1.6); cx.stroke(); }
+  else if (t == 'doc') { cx.rect(x - 4, y - 5, 8, 10); cx.moveTo(x - 2, y - 1); cx.lineTo(x + 2, y - 1); cx.moveTo(x - 2, y + 2); cx.lineTo(x + 2, y + 2); cx.stroke(); }
+  else for (let i = -1; i < 2; i++) { cx.beginPath(); cx.arc(x + i * 5, y, 1.6 + (Math.sin(T * 6 + i) > .5 ? .8 : 0), 0, 7); cx.fill(); }
+}
+function dBub(a) {
+  if (!a.on) return;
+  const q = P(a.ax, a.ay, 0), t = a.bt ? a.bt.slice(0, 38) : '';
+  cx.font = '700 10.5px Nunito,system-ui,sans-serif'; cx.textAlign = 'left';
+  const w = (t ? cx.measureText(t).width + 10 : 0) + 24, x = Math.max(w / 2 + 4, Math.min(796 - w / 2, q[0])), y = q[1] - 78;
+  cx.fillStyle = '#fff'; cx.strokeStyle = '#6C4CE6'; cx.lineWidth = 1.5;
+  cx.beginPath(); cx.roundRect(x - w / 2, y - 10, w, 20, 10); cx.fill(); cx.stroke();
+  ic(a.bi, x - w / 2 + 13, y);
+  if (t) { cx.fillStyle = '#2c2247'; cx.fillText(t, x - w / 2 + 23, y + 4); }
+}
+function draw() {
+  cx.clearRect(0, 0, 800, 530);
+  floor(); walls();
+  OB.concat(store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) }))).sort((p, q) => p.k - q.k).forEach(o => o.f());
+  over(); store.staff.forEach(tag); store.staff.forEach(dBub);
+}
+let lt = 0;
+function frame(ts) {
+  const dt = Math.min(.05, (ts - lt) / 1000 || 0); lt = ts; T = ts / 1000;
+  upd(dt); draw(); requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ============================================================================
+   3. PERSONEL YÖNETİMİ & BOŞ ZAMAN ANİMASYONLARI
+   ============================================================================ */
+const PAL = [
+  ['#9B8CF0', '#5b4a8a'], ['#F2A0C0', '#7a3a52'], ['#6FCDB0', '#2f2a26'], ['#F5A084', '#8a4a2e'],
+  ['#80B6EE', '#4a3a2c'], ['#F2D26B', '#3f3a35'], ['#B9A8F5', '#7a5c3e'], ['#8FD694', '#2f3a2a']
+];
+let sid = 0;
+
+function mkAgent(o) {
+  const p = PAL[(sid++) % 8], r = RM[o.room] || RM[0];
+  const a = {
+    id: o.id || ('s' + sid), name: o.name, role: o.role, room: o.room || 0,
+    model: o.model || 'Gemini 3.1 Flash Lite', backup: o.backup || 'Gemma 4 31B',
+    skills: o.skills || '', tasks: [], used: o.usedToday || 0,
+    c: o.color || p[0], h: o.hair || p[1],
+    ax: r.sx + .5, ay: r.sy + .5, path: [], mon: 0, act: false,
+    bt: '', bi: '', on: 0, st: o.status || 'Odasında', ph: Math.random() * 6,
+    alive: true, by: o.createdBy || 'owner', saved: false
+  };
+  store.staff.push(a);
+  life(a);
+  return a;
+}
+
+// Ajanlara iş yokken ofiste doğal dolaşma / kahve molası hareketi
+async function life(a) {
+  await sleep(rnd(800, 3500));
+  while (a.alive) {
+    if (busy || halt || a.act) { await sleep(600); continue; }
+    a.act = true;
+    const r = Math.random();
+    if (r < .58) {
+      a.st = 'Masasında'; a.mon = 1; say(a, 'type', 'İnceleme yapıyor');
+      await sleep(rnd(6000, 11000)); a.mon = 0;
+    } else if (r < .82) {
+      const k = ['yemek', 'mola', 'toplanti'][Math.floor(Math.random() * 3)];
+      const sp = SP[k][Math.floor(Math.random() * 3)];
+      a.st = k == 'yemek' ? 'Yemekhanede' : k == 'mola' ? 'Kahve Molasında' : 'Toplantı Alanında';
+      hush(a); await walk(a, sp[0], sp[1]);
+      say(a, k == 'toplanti' ? 'type' : 'cup', a.st);
+      await sleep(rnd(5000, 9000)); hush(a);
+    } else {
+      a.st = 'Ortak Klasörde'; hush(a);
+      const sp = SP.arsiv[Math.floor(Math.random() * 2)];
+      await walk(a, sp[0], sp[1]); say(a, 'doc', 'Arşivi kontrol ediyor');
+      await sleep(3000);
+    }
+    hush(a); a.st = 'Odasına dönüyor'; await goHome(a); a.st = 'Odasında'; a.act = false;
+    await sleep(rnd(3000, 6000));
+  }
+}
+
+const DEF_STAFF = [
+  { name: 'Selin Hanım', role: 'SEO & Strateji Uzmanı', model: 'Gemini 3.8 Flash', backup: 'Gemini 3.1 Flash Lite', skills: 'Gelen konuyu SEO ve içerik stratejisi açısından analiz eder, anahtar kelimeleri ve makale/proje çerçevesini çıkarır, görev dağılımı için Planlama Yöneticisine iletir. İş bittiğinde tüm çıktıları derleyip Şirket Sahibine (Burak Bey) resmi bir özetle sunar.' },
+  { name: 'Arda Bey',    role: 'Planlama & Proje Yöneticisi', model: 'Gemini 3.8 Flash', backup: 'Gemini 3.5 Flash Lite', skills: 'Şirkette çalışan tüm personellerin uzmanlıklarını inceler. Gelen talebi alt görevlere böler ve Tasarım, Kod, Metin gibi ilgili uzmanlara resmi dille görev olarak atar.' },
+  { name: 'Ahmet Bey',   role: 'Kod & Yazılım Uzmanı', model: 'Gemini 3.5 Flash Lite', backup: 'Gemma 4 31B', skills: 'Detaylı, temiz, hatasız HTML, CSS, JavaScript ve CBS/Harita hesaplama kodları yazar. Kodlarını Ortak Klasöre (.html veya .js olarak) kaydeder ve Planlama/Kontrol departmanına bildirir.' },
+  { name: 'Elif Hanım',  role: 'Görsel Tasarım Uzmanı', model: 'Gemini 3.5 Flash Lite', backup: 'Gemma 4 31B', skills: 'Makale ve projeler için modern SVG diyagramlar, izometrik çizim kodları ve UI renk/tasarım şemaları üretir. Çıktılarını Ortak Klasöre (.svg veya .md) kaydeder.' },
+  { name: 'Mert Bey',    role: 'Metin & İçerik Yazarı', model: 'Gemini 3.1 Flash Lite', backup: 'Gemma 4 31B', skills: 'SEO kriterlerine uygun, teknik derinliği yüksek, akıcı ve kurumsal makaleler yazar. Makaleyi Markdown (.md) formatında Ortak Klasöre kaydeder.' },
+  { name: 'Deniz Bey',   role: 'Kalite Kontrol & Denetim', model: 'Gemini 3 Flash', backup: 'Gemini 3.1 Flash Lite', skills: 'Ortak klasöre yüklenen makale, tasarım ve kodları inceler. Eksik varsa ilgili uzmana düzeltme görevi açar; her şey kusursuzsa son sunum için SEO/Yönetici departmanına onay verir.' }
+];
+
+function seedDefaultStaff() {
+  DEF_STAFF.forEach((d, idx) => addStaff({ ...d, room: idx }));
+  lg('Varsayılan kurumsal departman kadrosu oluşturuldu.');
+}
+
+function addStaff(o) {
+  const room = o.room != null ? o.room : RM.findIndex(r => !store.staff.some(s => s.room === r.i));
+  if (room < 0) { alert('Ofiste boş oda kalmadı (Maksimum 8 oda).'); return null; }
+  const a = mkAgent({ ...o, room, id: (CONN && OWN) ? db.collection('staff').doc().id : undefined });
+  fbSaveStaff(a);
+  updateTargetSelect();
+  return a;
+}
+
+function syncStaff(list) {
+  const ids = new Set(list.map(x => x.id));
+  store.staff.filter(a => !ids.has(a.id)).forEach(a => { a.alive = false; });
+  store.staff = store.staff.filter(a => ids.has(a.id));
+  list.forEach(x => {
+    const room = x.room != null && x.room >= 0 && x.room < RM.length ? x.room : 0;
+    let a = store.staff.find(s => s.id === x.id);
+    if (!a) a = mkAgent({ ...x, room });
+    else {
+      const rc = a.room !== room;
+      Object.assign(a, {
+        name: x.name, role: x.role, model: x.model || a.model,
+        backup: x.backup || a.backup, skills: x.skills || '',
+        used: x.usedToday || a.used, room
+      });
+      if (rc) { a.act = true; goHome(a).then(() => a.act = false); }
+    }
+    a.saved = true;
+  });
+  updateTargetSelect();
+}
+
+function updateTargetSelect() {
+  const sel = $('#targetAgent');
+  if (!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">Alıcı: ${esc(a.name)} (${esc(a.role)})</option>`).join('');
+  if (cur && store.staff.some(a => a.id === cur)) sel.value = cur;
+  else {
+    const seo = store.staff.find(a => /seo|plan|yönet/i.test(a.role));
+    if (seo) sel.value = seo.id;
+  }
+}
+
+function lg(t) {
+  store.log.unshift(hhmm() + ' · ' + t);
+  store.log.length = Math.min(store.log.length, 60);
+  if (tab === 'tasks') render();
+}
+
+/* ============================================================================
+   4. GERÇEK GEMINI MULTI-AGENT & KOTA/DİNLENME MOTORU (DISPATCHER)
+   ============================================================================ */
+let nextAllowedCallTime = 0;
+
+// Kota kontrolü ve otomatik Yedek Model (Fallback) seçimi (Sıfır Token Harcar)
+function selectAvailableModel(agent) {
+  const primary = mdl(agent.model);
+  if (primary.u < primary.l) return primary;
+  const backup = mdl(agent.backup || 'Gemma 4 31B');
+  if (backup.u < backup.l) {
+    lg(`⚠️ ${agent.name} ana model kotasını (${primary.n}: ${primary.u}/${primary.l}) doldurdu. Yedek modele (${backup.n}) geçildi.`);
+    return backup;
+  }
+  return null;
+}
+
+async function incrementModelQuota(modelObj, agent) {
+  modelObj.u++;
+  agent.used = (agent.used || 0) + 1;
+  if (CONN && OWN) {
+    const dayRef = db.collection('usage').doc(todayKey());
+    const poolsUpdate = {};
+    MODELS.forEach(m => { poolsUpdate[m.n] = m.u; });
+    await dayRef.set({ updatedAt: FV().serverTimestamp(), pools: poolsUpdate }, { merge: true }).catch(() => {});
+    await db.collection('staff').doc(agent.id).set({ usedToday: agent.used, lastActionAt: FV().serverTimestamp() }, { merge: true }).catch(() => {});
+  }
+}
+
+// Gemini REST API Çağrısı (JSON Şema Zorunlu - Token Dostu)
+async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
+  const apiKey = store.geminiKey;
+  if (!apiKey) throw new Error('Gemini API Anahtarı girilmemiş! "Onay & Ayarlar" sekmesinden API anahtarınızı kaydedin.');
+
+  const chosenModel = selectAvailableModel(agent);
+  if (!chosenModel) throw new Error(`${agent.name} için hem ana hem yedek model kotaları doldu!`);
+
+  // Şirketteki güncel personel rehberini dinamik oluştur
+  const companyDirectory = store.staff.map(s =>
+    `- ID: "${s.id}" | İsim: ${s.name} | Departman/Rol: ${s.role} | Uzmanlık (Skill): ${s.skills || 'Genel uzman'}`
+  ).join('\n');
+
+  // Aynı konudaki son 4 mesaj (Bağlam budama ile token tasarrufu)
+  const historyText = threadMails.slice(-4).map(m =>
+    `[${m.f} -> ${m.t} (${m.type})]: ${m.subj}\n${m.body}`
+  ).join('\n---\n');
+
+  // Ortak klasördeki ilgili dosyalar
+  const filesOverview = relatedFiles.slice(0, 4).map(f =>
+    `Dosya Yolu: ${f.path} (Sahibi: ${f.owner})\nİçerik Özeti/Kodu:\n${f.content.slice(0, 3500)}`
+  ).join('\n===\n') || 'Henüz ortak klasörde dosya yok.';
+
+  const systemInstruction = `Sen "Tonoz AI Ofisi" şirketinde çalışan bir yapay zeka personelsin.
+Senin Kimliğin:
+- ID: ${agent.id}
+- İsim: ${agent.name}
+- Görev/Departman: ${agent.role}
+- Özel Yetenek ve Talimatların (Skills): ${agent.skills || 'Görevleri eksiksiz ve profesyonelce yerine getirir.'}
+
+ŞİRKET KURALLARI VE İLETİŞİM PROTOKOLÜ:
+1. Resmi, kurumsal ve saygılı bir İstanbul Türkçesi kullan (mesai arkadaşlarına "Ahmet Bey", "Elif Hanım", "Arda Bey" şeklinde hitap et).
+2. Şirkette şu an aktif çalışan tüm personellerin listesi aşağıdadır. Görev devrederken veya iş bölümü yaparken SADECE bu listedeki personellerin ID'sini ("toAgentId") kullan:
+${companyDirectory}
+- Şirket Sahibi / Genel Müdür ID'si: "owner" (Burak Bey). Sadece tüm işler tamamlandığında veya son onay gerektiğinde "owner"a rapor gönder.
+3. TOKEN TASARRUFU KURALI: Asla sadece "Teşekkürler", "Aldım, başlıyorum" demek için mesaj atma! Kendi uzmanlık işini HEMEN BU ADIMDA yap, gerekiyorsa Ortak Klasöre dosyanı ("fileToSave") üret ve bir sonraki sorumlu departmana işin çıktısını/görevini ilet.
+4. EĞER PLANLAMA VEYA YÖNETİCİ İSEN: Gelen talebi analiz et, şirketteki uygun uzmanlara (Tasarım, Kod, Metin, Kontrol vb.) net görev mesajları gönder.
+5. EĞER UZMAN İSEN (Kod, Tasarım, Metin, SEO): İstenen makaleyi, SVG görseli veya çalışan HTML/JS kodunu eksiksiz üretip "fileToSave" alanına yaz ve Planlama veya Kalite Kontrol departmanına bilgi ver.
+6. Yanıtını SADECE aşağıdaki JSON formatında döndür:
+{
+  "canvasBubble": "Kanvasta başının üstünde görünecek 3-4 kelimelik kısa durum (Örn: Makale planını çıkarıyor)",
+  "fileToSave": {
+    "path": "Dosya adı (Örn: haritacilik-makale.md veya cicek-tasarim.svg veya arac.html) - dosya üretmiyorsan boş bırak ''",
+    "kind": "md | code | svg | json",
+    "content": "Dosyanın tam içeriği veya kodu"
+  },
+  "outgoingMails": [
+    {
+      "toAgentId": "Alıcı personelin ID'si (veya bitiş raporuysa 'owner')",
+      "subject": "Kurumsal mesaj başlığı",
+      "body": "Kurumsal dille yazılmış detaylı görev talimatı veya teslim raporu",
+      "type": "görev | rapor | onay"
+    }
+  ],
+  "submitFinalApproval": {
+    "ready": false,
+    "summary": "Eğer tüm departmanların işi bitti ve Burak Bey'in onayına sunulacaksa true yap ve özeti yaz"
+  }
+}`;
+
+  const userPrompt = `SANA GELEN YENİ MESAJ / GÖREV:
+Gönderen: ${incomingMail.f} (ID: ${incomingMail.fromId})
+Konu: ${incomingMail.subj}
+Mesaj İçeriği:
+${incomingMail.body}
+
+BU GÖREV ZİNCİRİNDEKİ ÖNCEKİ YAZIŞMALAR:
+${historyText}
+
+ORTAK KLASÖRDEKİ MEVCUT DOSYALAR:
+${filesOverview}`;
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel.api}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: systemInstruction }] },
+      contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+      generationConfig: {
+        temperature: 0.4,
+        responseMimeType: 'application/json'
+      }
+    })
+  });
+
+  if (!res.ok) {
+    const errTxt = await res.text();
+    throw new Error(`Gemini API Hatası (${res.status}): ${errTxt.slice(0, 200)}`);
+  }
+
+  await incrementModelQuota(chosenModel, agent);
+  const data = await res.json();
+  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  return JSON.parse(rawText);
+}
+
+// Kuyruktaki tek bir mesajı işleyen ana fonksiyon
+async function processNextPendingMail(forceNow = false) {
+  if (busy || halt) return;
+  if (!store.geminiKey) return;
+
+  const now = Date.now();
+  if (!forceNow && now < nextAllowedCallTime) return;
+
+  // İşlenmemiş ve alıcısı bir ajan olan en eski mesajı bul
+  const pending = [...store.mails].reverse().find(m =>
+    !m.processed && m.toId && m.toId !== 'owner' && (!m.notBeforeMs || m.notBeforeMs <= now || forceNow)
+  );
+  if (!pending) return;
+
+  const agent = store.staff.find(s => s.id === pending.toId || s.name === pending.t);
+  if (!agent) {
+    await markMailProcessed(pending.id);
+    return;
+  }
+
+  // Sonsuz döngü koruması (Max Chain Depth)
+  const threadMails = store.mails.filter(m => m.threadId === pending.threadId);
+  if (threadMails.length >= store.maxChainDepth) {
+    lg(`🛑 Görev zinciri maksimum adım sınırına (${store.maxChainDepth}) ulaştı. Otomatik durduruldu.`);
+    await markMailProcessed(pending.id);
+    return;
+  }
+
+  busy = true;
+  updateEngineBadges('Çalışıyor: ' + agent.name);
+
+  try {
+    // 1. Ajanı odasına/bilgisayar başına geçir
+    agent.act = true;
+    await goHome(agent);
+    agent.mon = 1;
+    agent.st = 'Görev üzerinde çalışıyor';
+    say(agent, 'think', 'Mesajı analiz ediyor...');
+    render();
+
+    // 2. Gemini API ile ajanın kararını ve üretimini al
+    const decision = await callGeminiAgent(agent, pending, threadMails, store.files);
+
+    if (decision.canvasBubble) {
+      say(agent, 'type', decision.canvasBubble);
+    }
+
+    // 3. Ajan bir dosya ürettiyse Ortak Klasöre yürüsün ve kaydettirsin
+    if (decision.fileToSave && decision.fileToSave.path && decision.fileToSave.content) {
+      const sp = SP.arsiv[0];
+      agent.st = 'Ortak Klasöre dosya yüklüyor';
+      await walk(agent, sp[0], sp[1]);
+      say(agent, 'doc', decision.fileToSave.path + ' kaydedildi');
+      await saveSharedFile(decision.fileToSave.path, decision.fileToSave.content, decision.fileToSave.kind || 'md', agent.name);
+      lg(`📁 ${agent.name} ortak klasöre dosya bıraktı: ${decision.fileToSave.path}`);
+      await sleep(1600);
+    }
+
+    // 4. Gönderilecek mailleri sırayla ilgili ajanların odasına yürüyerek teslim et
+    const outList = Array.isArray(decision.outgoingMails) ? decision.outgoingMails : [];
+    for (let i = 0; i < outList.length; i++) {
+      const out = outList[i];
+      if (!out.toAgentId || !out.body) continue;
+
+      const target = out.toAgentId === 'owner'
+        ? { id: 'owner', name: 'Sen (Burak Bey)' }
+        : (store.staff.find(s => s.id === out.toAgentId || s.name === out.toAgentId) || null);
+
+      if (!target) continue;
+
+      if (target.id !== 'owner') {
+        const d = door(target);
+        agent.st = target.name + ' odasına gidiyor';
+        await walk(agent, d[0], d[1]);
+        say(agent, 'mail', target.name + ' ile görüşüyor');
+      } else {
+        say(agent, 'doc', 'Yöneticiye rapor sunuyor');
+      }
+
+      // Kota koruması için bir sonraki mesaja dinlenme zamanı (notBefore) ekle
+      const delayMs = (i + 1) * (store.cooldownSec * 1000);
+      await createInternalMail({
+        fromId: agent.id,
+        fromName: agent.name,
+        toId: target.id,
+        toName: target.name,
+        subject: out.subject || ('Görev: ' + pending.subj),
+        body: out.body,
+        type: ['görev', 'rapor', 'soru', 'bilgi', 'onay'].includes(out.type) ? out.type : 'görev',
+        threadId: pending.threadId || pending.id,
+        notBeforeMs: Date.now() + delayMs
+      });
+
+      lg(`✉️ ${agent.name} → ${target.name}: ${out.subject}`);
+      await sleep(1800);
+    }
+
+    // 5. Son onay kutusuna sunulduysa
+    if (decision.submitFinalApproval && decision.submitFinalApproval.ready) {
+      showApprovalBox(pending.subj, decision.submitFinalApproval.summary || 'Tüm departmanlar çalışmayı tamamladı.');
+    }
+
+    // 6. Mevcut maili işlendi olarak işaretle ve odaya dön
+    await markMailProcessed(pending.id);
+    agent.mon = 0;
+    hush(agent);
+    await goHome(agent);
+    agent.st = 'Odasında (Dinleniyor)';
+    agent.act = false;
+
+    // Bir sonraki API çağrısı için dinlenme (cooldown) sayacını başlat
+    nextAllowedCallTime = Date.now() + (store.cooldownSec * 1000);
+  } catch (err) {
+    console.error(err);
+    lg(`❌ Hata (${agent.name}): ${err.message}`);
+    agent.mon = 0; agent.act = false; hush(agent);
+    nextAllowedCallTime = Date.now() + 15000;
+  } finally {
+    busy = false;
+    render();
+  }
+}
+
+// Arka plan kalp atışı (Her 3 saniyede bir kontrol eder, mola süresini ekranda gösterir)
+setInterval(() => {
+  const coolEl = $('#coolBadge');
+  const rem = Math.ceil((nextAllowedCallTime - Date.now()) / 1000);
+  if (rem > 0 && !busy) {
+    coolEl.style.display = 'inline-block';
+    coolEl.className = 'badge wait';
+    coolEl.textContent = `☕ Kota Dinleniyor (${rem} sn)`;
+  } else {
+    coolEl.style.display = 'none';
+  }
+  if (!busy && !halt && OWN) {
+    processNextPendingMail(false);
+  }
+}, 2500);
+
+function updateEngineBadges(stateText) {
+  const b = $('#engBadge');
+  if (!OWN) { b.className = 'badge'; b.textContent = 'Ziyaretçi Vitrin Modu'; return; }
+  b.className = 'badge live';
+  b.textContent = stateText || (halt ? '⏸ Duraklatıldı' : '🟢 Otonom Motor Aktif');
+}
+
+/* ============================================================================
+   5. FIRESTORE VERİTABANI İŞLEMLERİ (SENKRONİZASYON)
+   ============================================================================ */
+let db = null, auth = null, CONN = false, vt = 0, un = [], pt = 0;
+const FV = () => firebase.firestore.FieldValue;
+
+const nm = id => id === 'owner' ? 'Sen (Burak Bey)' : (store.staff.find(s => s.id === id) || { name: id }).name;
+const tm = t => t && t.toDate ? t.toDate().toTimeString().slice(0, 5) : hhmm();
+
+async function createInternalMail({ fromId, fromName, toId, toName, subject, body, type, threadId, notBeforeMs }) {
+  const mailObj = {
+    id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    fromId, toId, f: fromName, t: toName,
+    subj: subject, body, type: type || 'görev',
+    threadId: threadId || ('th_' + Date.now()),
+    processed: toId === 'owner',
+    notBeforeMs: notBeforeMs || Date.now(),
+    time: hhmm()
+  };
+
+  if (CONN && OWN) {
+    const ts = FV().serverTimestamp();
+    const tid = db.collection('tasks').doc().id;
+    if (toId !== 'owner') {
+      await db.collection('tasks').doc(tid).set({
+        title: subject, description: body.slice(0, 1500),
+        owner: toId, createdBy: fromId, status: 'bekliyor',
+        priority: 1, createdAt: ts, updatedAt: ts
+      }).catch(e => lg('Görev yazılamadı: ' + e.code));
+    }
+    await db.collection('mails').add({
+      from: fromId, to: toId, subject, body, type: mailObj.type,
+      taskId: tid, threadId: mailObj.threadId,
+      processed: mailObj.processed,
+      notBefore: firebase.firestore.Timestamp.fromMillis(mailObj.notBeforeMs),
+      createdAt: ts
+    });
+  } else {
+    store.mails.unshift(mailObj);
+    if (toId !== 'owner') {
+      const ag = store.staff.find(s => s.id === toId);
+      if (ag) ag.tasks.unshift({ t: subject, s: 'bekliyor', by: fromName });
+    }
+    render();
+  }
+}
+
+async function markMailProcessed(mailId) {
+  const m = store.mails.find(x => x.id === mailId);
+  if (m) m.processed = true;
+  if (CONN && OWN && !String(mailId).startsWith('m_')) {
+    await db.collection('mails').doc(mailId).update({
+      processed: true,
+      readAt: FV().serverTimestamp()
+    }).catch(() => {});
+  }
+}
+
+async function saveSharedFile(path, content, kind, ownerName) {
+  const existing = store.files.find(f => f.path === path);
+  if (CONN && OWN) {
+    const ts = FV().serverTimestamp();
+    const docId = existing ? existing.id : db.collection('files').doc().id;
+    const ver = existing ? (existing.version || 1) + 1 : 1;
+    await db.collection('files').doc(docId).set({
+      path, content, owner: ownerName, kind: kind || 'md',
+      version: ver, createdAt: ts, updatedAt: ts
+    }, { merge: true });
+  } else {
+    if (existing) {
+      existing.content = content; existing.version++; existing.owner = ownerName; existing.time = hhmm();
+    } else {
+      store.files.unshift({ id: 'f_' + Date.now(), path, content, kind, owner: ownerName, version: 1, time: hhmm() });
+    }
+  }
+}
+
+function showApprovalBox(title, summary) {
+  const e = $('#ap');
+  e.style.display = 'block';
+  e.innerHTML = `
+    <h3>✅ Yönetici Onay Kutusu (Son Sunum)</h3>
+    <p style="margin:0 0 10px"><b>Konu:</b> ${esc(title)}<br><span class="note">${esc(summary)}</span></p>
+    <div class="row">
+      <button class="p" id="okBtn">Onayla & Yayına Al</button>
+      <button id="revBtn">Revize İste</button>
+    </div>`;
+  $('#okBtn').onclick = () => {
+    tbOn = true; blk(9, 4, 2, 1);
+    e.innerHTML = '<p class="note" style="margin:0;color:var(--ok)"><b>Onaylandı!</b> Tüm çıktılar Ortak Klasöre arşivlendi ve ofis vitrini güncellendi.</p>';
+    lg('Burak Bey: Sunulan çalışmayı onayladı.');
+    pub();
+  };
+  $('#revBtn').onclick = () => {
+    const note = prompt('Hangi departmanın neyi düzeltmesini istiyorsunuz?');
+    if (note) {
+      $('#ti').value = 'REVİZE TALEBİ: ' + note;
+      $('#go').click();
+    }
+    e.style.display = 'none';
+  };
+}
+
+/* ============================================================================
+   6. ARAYÜZ SEKMELERİ (PERSONEL, YAZIŞMA/MAIL, GÖREVLER, ORTAK KLASÖR, AYARLAR)
+   ============================================================================ */
+let tab = 'mail';
+const TABS = [
+  ['mail',  '✉️ Kurum İçi Yazışma & Mail'],
+  ['staff', '👥 Personel & Kota Havuzu'],
+  ['tasks', '📋 Görev Panosu'],
+  ['files', '📁 Ortak Klasör'],
+  ['cfg',   '⚙️ API & Mola Ayarları']
+];
+
+function tabsUI() {
+  const unread = store.mails.filter(m => !m.processed && m.toId !== 'owner').length;
+  $('#tabs').innerHTML = TABS.map(t =>
+    `<button class="${tab == t[0] ? 'on' : ''}" onclick="tab='${t[0]}';tabsUI();render()">${t[1]}${
+      t[0] == 'mail' ? `<span class="chip">${store.mails.length}${unread ? ' · ' + unread + ' sırada' : ''}</span>` :
+      t[0] == 'files' ? `<span class="chip">${store.files.length}</span>` : ''
+    }</button>`
+  ).join('');
+}
+
+const poolOf = n => store.staff.filter(s => s.model === n);
+
+function render() {
+  if (!OWN) return;
+  tabsUI();
+  updateEngineBadges();
+  const p = $('#pn');
+
+  // SEKME 1: KURUM İÇİ YAZIŞMA & MAİL SİSTEMİ
+  if (tab === 'mail') {
+    const sel = store.mails.find(m => m.id === store.selectedMailId) || store.mails[0];
+    if (sel) store.selectedMailId = sel.id;
+
+    p.innerHTML = `
+      <div class="mail-grid">
+        <div class="mail-list">
+          <div class="row" style="justify-content:space-between;margin-top:0">
+            <b>Gelen / Giden Trafik</b>
+            <span class="note">${store.mails.filter(m => !m.processed).length} bekleyen</span>
+          </div>
+          ${store.mails.length ? store.mails.map(m => `
+            <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${m.id}';render()">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px">
+                <b>${esc(m.f)} → ${esc(m.t)}</b>
+                <span class="note">${esc(m.time)}</span>
+              </div>
+              <div style="font-weight:700;margin:2px 0">${esc(m.subj)}</div>
+              <div class="note" style="display:flex;justify-content:space-between">
+                <span>${esc(m.type.toUpperCase())}</span>
+                <span>${m.processed ? '✓ İşlendi' : '⏳ Sırada'}</span>
+              </div>
+            </div>
+          `).join('') : '<p class="note">Henüz kurum içi yazışma yok. Yukarıdan bir departmana görev gönderin.</p>'}
+        </div>
+        <div>
+          ${sel ? `
+            <div class="row" style="justify-content:space-between;margin-top:0;border-bottom:1px solid var(--ln);padding-bottom:8px">
+              <div>
+                <h3 style="margin:0">${esc(sel.subj)}</h3>
+                <div class="note">Gönderen: <b>${esc(sel.f)}</b> → Alıcı: <b>${esc(sel.t)}</b> · Saat: ${esc(sel.time)}</div>
+              </div>
+              <span class="chip">${sel.processed ? 'Tamamlandı' : 'İşlem Sırasında'}</span>
+            </div>
+            <div style="white-space:pre-wrap;line-height:1.65;margin:12px 0;padding:12px;background:var(--bg);border-radius:12px">${esc(sel.body)}</div>
+            <div class="row">
+              <input id="replyTxt" style="flex:1" placeholder="${esc(sel.f)} veya ${esc(sel.t)} personeline ek talimat / yanıt yaz...">
+              <button class="p" onclick="replyToMail('${sel.id}')">Bu Yazışmaya Müdahale Et / Yanıtla</button>
+            </div>
+          ` : '<p class="note">Detayını görmek için soldan bir yazışma seçin.</p>'}
+        </div>
+      </div>`;
+  }
+
+  // SEKME 2: PERSONEL & GÜNLÜK KOTA HAVUZLARI
+  else if (tab === 'staff') {
+    p.innerHTML = `
+      <div class="row" style="margin-top:0">
+        <button class="p" onclick="form()">+ Yeni Ajan / Personel Ekle</button>
+        ${store.staff.length ? '' : '<button onclick="seedDefaultStaff()">Varsayılan Departman Kadrosunu Kur</button>'}
+      </div>
+      <table>
+        <tr><th>Personel & Oda</th><th>Uzmanlık (Skills)</th><th>Ana / Yedek Model</th><th>Durum</th><th></th></tr>
+        ${store.staff.map(s => `
+          <tr>
+            <td>
+              <span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b><br>
+              <span class="note">${esc(s.role)} · Oda ${s.room + 1}</span>
+            </td>
+            <td style="max-width:300px"><span class="note">${esc((s.skills || '').slice(0, 110))}...</span></td>
+            <td><b>${esc(s.model)}</b><br><span class="note">Yedek: ${esc(s.backup)} · Bugün: ${s.used || 0} istek</span></td>
+            <td><span class="chip">${esc(s.st)}</span></td>
+            <td><button onclick="form('${s.id}')">Düzenle</button></td>
+          </tr>
+        `).join('')}
+      </table>
+      <h3 style="margin-top:18px">Günlük Gemini Model & Kota Havuzları (${todayKey()})</h3>
+      ${MODELS.map(m => {
+        const w = poolOf(m.n);
+        const pct = Math.min(100, (m.u / m.l) * 100);
+        return `
+          <div style="display:flex;justify-content:space-between;font-size:13px">
+            <span><b>${m.n}</b> <span class="note">(${m.desc})</span> ${w.length ? `<span class="chip">${w.map(x => esc(x.name)).join(', ')}</span>` : ''}</span>
+            <span><b>${m.u} / ${m.l}</b> istek</span>
+          </div>
+          <div class="bar"><i style="width:${pct}%"></i></div>`;
+      }).join('')}`;
+  }
+
+  // SEKME 3: GÖREV PANOSU & CANLI KAYIT
+  else if (tab === 'tasks') {
+    const pendingMails = store.mails.filter(m => !m.processed && m.toId !== 'owner');
+    const doneMails = store.mails.filter(m => m.processed);
+    p.innerHTML = `
+      <div class="cols">
+        <div>
+          <h3>⏳ Sırada Bekleyen Görevler (${pendingMails.length})</h3>
+          ${pendingMails.map(m => `
+            <div style="padding:8px;border:1px solid var(--ln);border-radius:10px;margin-bottom:6px">
+              <b>${esc(m.t)}</b> <span class="note">← ${esc(m.f)}</span><br>
+              <span>${esc(m.subj)}</span>
+            </div>
+          `).join('') || '<span class="note">Sırada bekleyen görev yok.</span>'}
+        </div>
+        <div>
+          <h3>✅ Tamamlanan Adımlar (${doneMails.length})</h3>
+          ${doneMails.slice(0, 8).map(m => `
+            <div style="padding:8px;border-bottom:1px solid var(--ln)">
+              <b>${esc(m.f)} → ${esc(m.t)}</b><br>
+              <span class="note">${esc(m.subj)}</span>
+            </div>
+          `).join('') || '<span class="note">Henüz tamamlanan adım yok.</span>'}
+        </div>
+        <div>
+          <h3>📡 Canlı Ofis Kayıtları</h3>
+          <div class="note" style="max-height:340px;overflow-y:auto;line-height:1.7">
+            ${store.log.map(esc).join('<br>') || 'Henüz kayıt yok.'}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // SEKME 4: ORTAK KLASÖR (AJANLARIN ÜRETTİĞİ KODLAR, MAKALELER, TASARIMLAR)
+  else if (tab === 'files') {
+    const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
+    if (sf) store.selectedFileId = sf.id;
+
+    p.innerHTML = `
+      <div class="mail-grid">
+        <div class="mail-list">
+          <div class="row" style="justify-content:space-between;margin-top:0">
+            <b>Ortak Klasör Dosyaları</b>
+            <button onclick="newFilePrompt()">+ Dosya Ekle</button>
+          </div>
+          ${store.files.length ? store.files.map(f => `
+            <div class="mail-item ${f.id === store.selectedFileId ? 'active' : ''}" onclick="store.selectedFileId='${f.id}';render()">
+              <b>📄 ${esc(f.path)}</b>
+              <div class="note">Yazan: ${esc(f.owner)} · v${f.version || 1}</div>
+            </div>
+          `).join('') : '<p class="note">Ajanlar henüz Ortak Klasöre dosya bırakmadı.</p>'}
+        </div>
+        <div>
+          ${sf ? `
+            <div class="row" style="justify-content:space-between;margin-top:0">
+              <div>
+                <h3 style="margin:0">${esc(sf.path)} <span class="chip">v${sf.version || 1}</span></h3>
+                <span class="note">Son güncelleyen departman: <b>${esc(sf.owner)}</b></span>
+              </div>
+              <div class="row" style="margin:0">
+                <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">Kodu/Metni Kopyala</button>
+              </div>
+            </div>
+            <pre class="code">${esc(sf.content)}</pre>
+          ` : '<p class="note">İçeriğini görmek için soldan bir dosya seçin.</p>'}
+        </div>
+      </div>`;
+  }
+
+  // SEKME 5: API ANAHTARI & MOLA AYARLARI
+  else if (tab === 'cfg') {
+    p.innerHTML = `
+      <h3>🔐 Gemini API & Kota Koruma Ayarları</h3>
+      <p class="note">API anahtarınız tarayıcınızda ve sadece sizin okuyabildiğiniz Firestore yönetici kasasında saklanır.</p>
+      <div class="cols">
+        <div>
+          <label>Gemini API Anahtarı (Google AI Studio)</label>
+          <input id="cfgKey" type="password" value="${esc(store.geminiKey)}" placeholder="AIzaSy...">
+          <label>Ajanlar Arası Zorunlu Dinlenme / Mola Süresi (Saniye)</label>
+          <input id="cfgCool" type="number" min="5" max="900" value="${store.cooldownSec}">
+          <span class="note">Örn: 30 saniye veya 300 saniye (5 dk). Dakika başı limit (RPM) aşımını önler.</span>
+          <div class="row" style="margin-top:12px">
+            <button class="p" onclick="saveSettings()">Ayarları Kaydet</button>
+          </div>
+        </div>
+        <div>
+          <label>7/24 Arka Plan Çalışma Durumu</label>
+          <div class="note" style="background:var(--bg);padding:12px;border-radius:12px">
+            • Tarayıcı açıkken bu sayfa süresi gelen görevleri otomatik işler.<br>
+            • Bilgisayar kapalıyken çalışması için GitHub reponuza <b>agent-worker.js</b> ve <b>office-heartbeat.yml</b> dosyalarını ekleyin.
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
+function replyToMail(mailId) {
+  const m = store.mails.find(x => x.id === mailId);
+  const txt = $('#replyTxt')?.value.trim();
+  if (!m || !txt) return;
+  const target = store.staff.find(s => s.id === m.fromId || s.name === m.f) || store.staff[0];
+  if (!target) return;
+  createInternalMail({
+    fromId: 'owner', fromName: 'Sen (Burak Bey)',
+    toId: target.id, toName: target.name,
+    subject: 'RE: ' + m.subj, body: txt,
+    type: 'görev', threadId: m.threadId, notBeforeMs: Date.now()
+  });
+  lg(`Sen → ${target.name}: ${txt}`);
+  $('#replyTxt').value = '';
+}
+
+function newFilePrompt() {
+  const path = prompt('Dosya adı (Örn: proje-notlari.md veya index.js):');
+  if (!path) return;
+  const content = prompt('Dosya içeriği:');
+  if (content == null) return;
+  saveSharedFile(path.trim(), content, 'md', 'Sen (Burak Bey)');
+  render();
+}
+
+async function saveSettings() {
+  const k = $('#cfgKey').value.trim();
+  const c = Math.max(5, Number($('#cfgCool').value || 25));
+  store.geminiKey = k;
+  store.cooldownSec = c;
+  localStorage.setItem('tonoz_gemini_key', k);
+  localStorage.setItem('tonoz_cooldown_sec', String(c));
+  if (CONN && OWN) {
+    await db.doc('settings/guard').set({
+      paused: halt, cooldownSec: c, maxChainDepth: store.maxChainDepth, updatedAt: FV().serverTimestamp()
+    }, { merge: true }).catch(() => {});
+  }
+  alert('Ayarlar kaydedildi! Ajanlar artık bu API anahtarı ve mola süresiyle çalışacak.');
+  render();
+}
+
+function form(id) {
+  const a = id ? store.staff.find(s => s.id == id) : null, c = $('#card');
+  c.style.display = 'block';
+  const opt = sel => MODELS.map(m => `<option ${m.n === sel ? 'selected' : ''}>${m.n}</option>`).join('');
+  const free = RM.filter(r => !store.staff.some(s => s.room === r.i) || (a && a.room === r.i));
+  c.innerHTML = `
+    <h3>${a ? 'Personeli Düzenle' : 'Yeni Ajan / Personel Ekle'}</h3>
+    <label>İsim (Örn: Ahmet Bey, Selin Hanım)</label>
+    <input id="f1" value="${esc(a ? a.name : '')}" placeholder="Ahmet Bey">
+    <label>Departman / Unvan (Oda tabelasında ve rehberde görünür)</label>
+    <input id="f2" value="${esc(a ? a.role : '')}" placeholder="Kod & Yazılım Uzmanı">
+    <label>Oda</label>
+    <select id="f3">${free.map(r => `<option value="${r.i}" ${a && a.room === r.i ? 'selected' : ''}>${r.top ? 'Üst' : 'Alt'} Oda ${r.i + 1}</option>`).join('')}</select>
+    <label>Ana Yapay Zeka Modeli</label>
+    <select id="f4">${opt(a ? a.model : 'Gemini 3.5 Flash Lite')}</select>
+    <label>Kota Dolduğunda Geçilecek Yedek Model</label>
+    <select id="f5">${opt(a ? a.backup : 'Gemma 4 31B')}</select>
+    <label>Uzmanlık & Görev Talimatları (Diğer ajanlar bu açıklamaya göre iş verir)</label>
+    <textarea id="f6" rows="4" placeholder="Örn: Haritacılık, ITRF-ED50 koordinat dönüşümleri ve temiz JavaScript kodlaması uzmanıdır...">${esc(a ? a.skills : '')}</textarea>
+    <div class="row">
+      <button class="p" onclick="saveAgentForm('${a ? a.id : ''}')">Kaydet</button>
+      ${a ? `<button class="danger" onclick="delAgent('${a.id}')">Sil</button>` : ''}
+      <button onclick="$('#card').style.display='none'">Kapat</button>
+    </div>`;
+}
+
+function saveAgentForm(id) {
+  const v = i => $('#f' + i).value.trim(), name = v(1), role = v(2);
+  if (!name || !role) return alert('İsim ve departman alanı zorunludur.');
+  if (id) {
+    const a = store.staff.find(s => s.id == id), nr = +v(3);
+    Object.assign(a, { name, role, model: v(4), backup: v(5), skills: v(6) });
+    if (nr !== a.room) { a.room = nr; a.act = true; goHome(a).then(() => a.act = false); }
+    fbSaveStaff(a);
+  } else {
+    const a = addStaff({ name, role, room: +v(3), model: v(4), backup: v(5), skills: v(6) });
+    if (a) lg('Yeni personel katıldı: ' + name + ' (' + role + ')');
+  }
+  $('#card').style.display = 'none';
+  updateTargetSelect();
+  render();
+}
+
+function delAgent(id) {
+  const a = store.staff.find(s => s.id == id);
+  if (!a || !confirm(a.name + ' şirketten çıkarılsın mı?')) return;
+  a.alive = false;
+  store.staff = store.staff.filter(s => s !== a);
+  fbDelStaff(id);
+  $('#card').style.display = 'none';
+  updateTargetSelect();
+  render();
+}
+
+cv.addEventListener('click', e => {
+  if (!OWN) return;
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 800, y = (e.clientY - r.top) / r.height * 530;
+  let best = null, bd = 26;
+  store.staff.forEach(a => {
+    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - x, q[1] - 24 - y);
+    if (d < bd) { bd = d; best = a; }
+  });
+  if (best) form(best.id);
+});
+
+/* ============================================================================
+   7. FIREBASE AUTH VE CANLI DINLEYICILER (SNAPSHOTS)
+   ============================================================================ */
+function stfData(a) {
+  const o = {
+    name: a.name, role: a.role, room: a.room,
+    model: a.model, backup: a.backup, skills: a.skills || '',
+    color: a.c, hair: a.h, active: true, status: a.st || 'Odasında',
+    usedToday: a.used || 0, createdBy: a.by || 'owner'
+  };
+  if (!a.saved) o.createdAt = FV().serverTimestamp();
+  return o;
+}
+
+function fbSaveStaff(a) {
+  if (!CONN || !OWN) return;
+  db.collection('staff').doc(a.id).set(stfData(a), { merge: true }).then(() => { a.saved = true; pub(); }).catch(e => lg('Personel kayıt hatası: ' + e.code));
+}
+
+function fbDelStaff(id) {
+  if (!CONN || !OWN) return;
+  db.collection('staff').doc(id).delete().then(pub).catch(e => lg('Silme hatası: ' + e.code));
+}
+
+function pub() {
+  if (!CONN || !OWN) return;
+  clearTimeout(pt);
+  pt = setTimeout(() => db.doc('public/office').set({
+    updatedAt: FV().serverTimestamp(),
+    paused: halt,
+    items: tbOn ? ['yemek-masasi'] : [],
+    staff: store.staff.map(a => ({ id: a.id, name: a.name, role: a.role, room: a.room, color: a.c, hair: a.h, state: 'work' }))
+  }).catch(() => {}), 1000);
+}
+
+function stopOwnerListeners() { un.forEach(f => f()); un = []; }
+
+function startOwnerListeners() {
+  clearInterval(vt); stopOwnerListeners();
+
+  // Başlangıç budget belgesini garantiye al
+  db.doc('settings/budget').set({
+    allowedModels: MODELS.map(m => m.n),
+    maxStaff: 16,
+    dailyCallCap: 15000
+  }, { merge: true }).catch(() => {});
+
+  un.push(db.collection('staff').onSnapshot(q => {
+    if (q.empty && store.staff.length === 0) {
+      seedDefaultStaff();
+      return;
+    }
+    syncStaff(q.docs.map(d => ({ id: d.id, ...d.data() })));
+    render();
+  }));
+
+  un.push(db.collection('mails').orderBy('createdAt', 'desc').limit(80).onSnapshot(q => {
+    store.mails = q.docs.map(d => {
+      const m = d.data();
+      return {
+        id: d.id,
+        fromId: m.from,
+        toId: m.to,
+        f: nm(m.from),
+        t: nm(m.to),
+        subj: m.subject,
+        body: m.body,
+        type: m.type || 'görev',
+        threadId: m.threadId || d.id,
+        processed: !!m.processed,
+        notBeforeMs: m.notBefore && m.notBefore.toMillis ? m.notBefore.toMillis() : 0,
+        time: tm(m.createdAt)
+      };
+    });
+    render();
+  }));
+
+  un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(50).onSnapshot(q => {
+    store.files = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.updatedAt) }));
+    render();
+  }));
+
+  un.push(db.collection('usage').doc(todayKey()).onSnapshot(d => {
+    if (d.exists && d.data().pools) {
+      const p = d.data().pools;
+      MODELS.forEach(m => { if (p[m.n] != null) m.u = p[m.n]; });
+      render();
+    }
+  }));
+}
+
+async function pollPublic() {
+  try {
+    const d = await db.doc('public/office').get(), o = d.exists ? d.data() : {};
+    if (o.staff && o.staff.length) syncStaff(o.staff);
+    else if (!store.staff.length) seedDefaultStaff();
+  } catch (e) {
+    if (!store.staff.length) seedDefaultStaff();
+  }
+}
+
+function setOwner(b) {
+  OWN = b;
+  $('#panel').classList.toggle('on', b);
+  $('#bl').textContent = b ? 'Çıkış Yap' : 'Yönetici Girişi';
+  $('#bl').className = b ? '' : 'p';
+  updateEngineBadges();
+  render();
+}
+
+$('#bl').onclick = () => {
+  if (CONN && !OWN) return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert('Giriş hatası: ' + e.message));
+  if (CONN && OWN) return auth.signOut();
+  setOwner(!OWN);
+};
+
+$('#go').onclick = async () => {
+  const txt = $('#ti').value.trim();
+  if (!txt) return alert('Lütfen departmana iletilecek görev konusunu yazın.');
+  const targetId = $('#targetAgent').value;
+  const target = store.staff.find(s => s.id === targetId) || store.staff[0];
+  if (!target) return alert('Önce şirkete personel ekleyin.');
+
+  $('#ti').value = '';
+  const subj = txt.length > 55 ? txt.slice(0, 55) + '...' : txt;
+  await createInternalMail({
+    fromId: 'owner', fromName: 'Sen (Burak Bey)',
+    toId: target.id, toName: target.name,
+    subject: subj, body: txt,
+    type: 'görev', threadId: 'th_' + Date.now(), notBeforeMs: Date.now()
+  });
+  lg(`Sen → ${target.name}: Yeni görev verildi (${subj})`);
+  processNextPendingMail(true);
+};
+
+$('#stepBtn').onclick = () => processNextPendingMail(true);
+
+$('#stop').onclick = () => {
+  halt = !halt;
+  $('#stop').textContent = halt ? 'Mesaiye Devam Et' : 'Acil Durdur';
+  lg(halt ? '⏸ ACİL DURDUR: Tüm ajanlar beklemeye alındı.' : '▶️ Mesai devam ediyor.');
+  updateEngineBadges();
+};
+
+async function fbLoad() {
+  try {
+    for (const u of ['app', 'auth', 'firestore']) {
+      await new Promise((r, j) => {
+        const s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-' + u + '-compat.js';
+        s.onload = r; s.onerror = j; document.head.appendChild(s);
+      });
+    }
+    firebase.initializeApp(FB);
+    db = firebase.firestore(); auth = firebase.auth(); CONN = true;
+    auth.onAuthStateChanged(async u => {
+      if (!u) { setOwner(false); pollPublic(); vt = setInterval(pollPublic, 30000); return; }
+      try {
+        await db.doc('settings/guard').get();
+        setOwner(true); startOwnerListeners();
+      } catch (e) {
+        setOwner(false); await auth.signOut();
+        alert('Bu Google hesabı (buraktonoz@gmail.com dışındaki hesaplar) yönetici paneline erişemez.');
+      }
+    });
+  } catch (e) {
+    CONN = false; seedDefaultStaff(); setOwner(true);
+  }
+}
+fbLoad();
+</script>
+</body>
+</html>
