@@ -3,98 +3,269 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tonoz AI Ofisi · Otonom Multi-Agent Şirketi</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>TONOZ AI COMPANY · Otonom Multi-Agent Şirket & Ofis Sistemi</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#121019;--card:#1c1829;--tx:#ede8ff;--mut:#8b7fae;--ln:#2e2645;
-  --acc:#7c5cef;--acc-h:#6845db;--on:#fff;--ok:#10b981;--warn:#f59e0b;--err:#ef4444;
-  --code-bg:#0d0a14;--code-tx:#dcd6ff;
+  --bg:#0b0d14;
+  --bg-grad:radial-gradient(1200px 600px at 15% -10%, rgba(99,102,241,.16), transparent 60%),
+            radial-gradient(900px 500px at 90% 10%, rgba(16,185,129,.10), transparent 55%),
+            #0b0d14;
+  --card:rgba(19,23,36,.88);
+  --card-2:#161b2b;
+  --card-3:#1e253a;
+  --tx:#f1f5f9;
+  --mut:#94a3b8;
+  --ln:rgba(148,163,184,.16);
+  --acc:#6366f1;
+  --acc-h:#4f46e5;
+  --acc-glow:rgba(99,102,241,.35);
+  --ok:#10b981;
+  --warn:#f59e0b;
+  --err:#ef4444;
+  --cyan:#06b6d4;
+  --code-bg:#07090e;
+  --code-tx:#e2e8f0;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:14.5px/1.6 'Nunito',sans-serif}
-.wrap{max-width:1300px;margin:0 auto;padding:16px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
-h1{font:600 24px 'Fredoka',sans-serif;margin:0;letter-spacing:.3px}
-h3{font:500 16px 'Fredoka',sans-serif;margin:0 0 10px}
-.badge{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--card);border:1.5px solid var(--ln);color:var(--mut)}
-.badge.live{border-color:var(--ok);color:var(--ok)}
-.badge.wait{border-color:var(--warn);color:var(--warn)}
+body{
+  margin:0;
+  background:var(--bg-grad);
+  color:var(--tx);
+  font:14px/1.6 'Plus Jakarta Sans',sans-serif;
+  min-height:100vh;
+}
+.wrap{max-width:1440px;margin:0 auto;padding:16px 20px 36px}
+
+/* Üst Kurumsal Bar (Header) */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:12px 18px;margin-bottom:16px;flex-wrap:wrap;
+  background:var(--card);backdrop-filter:blur(16px);
+  border:1px solid var(--ln);border-radius:18px;
+  box-shadow:0 12px 32px rgba(0,0,0,.35);
+}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo-mark{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,#6366f1,#06b6d4);
+  display:grid;place-items:center;font:800 18px 'Space Grotesk',sans-serif;
+  color:#fff;box-shadow:0 4px 16px var(--acc-glow);
+}
+.brand-title h1{
+  font:700 20px/1.15 'Space Grotesk',sans-serif;margin:0;letter-spacing:.4px;
+  background:linear-gradient(90deg,#fff,#cbd5e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.brand-title span{font-size:11.5px;color:var(--mut);font-weight:600;letter-spacing:.3px}
+.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* Sağ Üst Canlı Saat & Eklenti Yuvası */
+.clock-pill{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 13px;border-radius:12px;
+  background:var(--card-2);border:1px solid var(--ln);
+  font:600 13px 'JetBrains Mono',monospace;color:var(--tx);
+}
+.clock-pill i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+#ext-header-menu,#ext-top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+.badge{
+  font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;
+  background:var(--card-2);border:1px solid var(--ln);color:var(--mut);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.badge.live{border-color:rgba(16,185,129,.45);color:#34d399;background:rgba(16,185,129,.1)}
+.badge.wait{border-color:rgba(245,158,11,.45);color:#fbbf24;background:rgba(245,158,11,.1)}
+
 button,select,input,textarea{font:inherit;color:var(--tx)}
-button{font-weight:700;border:1.5px solid var(--ln);background:var(--card);border-radius:999px;padding:7px 16px;cursor:pointer;transition:.15s}
-button:hover{border-color:var(--acc)}
-button.p{background:var(--acc);border-color:var(--acc);color:var(--on)}
-button.p:hover{background:var(--acc-h)}
-button.danger{border-color:var(--err);color:var(--err)}
-input,select,textarea{border:1.5px solid var(--ln);border-radius:12px;padding:9px 13px;background:#161322;width:100%}
-label{display:block;font-size:12.5px;font-weight:700;color:var(--mut);margin:10px 0 4px}
-canvas{width:100%;height:auto;display:block;border-radius:20px;border:1.5px solid var(--ln);background:#171424;box-shadow:0 10px 35px rgba(0,0,0,.35)}
-.box{background:var(--card);border:1.5px solid var(--ln);border-radius:20px;padding:18px;margin-top:14px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+button{
+  font-weight:700;font-size:13px;border:1px solid var(--ln);
+  background:var(--card-2);border-radius:11px;padding:8px 15px;
+  cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:6px;
+}
+button:hover{border-color:var(--acc);background:var(--card-3);transform:translateY(-1px)}
+button.p{background:linear-gradient(135deg,var(--acc),var(--acc-h));border-color:transparent;color:#fff;box-shadow:0 4px 14px var(--acc-glow)}
+button.p:hover{filter:brightness(1.08)}
+button.ok{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.45);color:#34d399}
+button.warn{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.45);color:#fbbf24}
+button.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#f87171}
+input,select,textarea{
+  border:1px solid var(--ln);border-radius:11px;padding:9px 13px;
+  background:#0f1320;width:100%;transition:.15s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.4px}
+
+/* Sahne & Canvas Alanı */
+.stage-wrap{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--ln);background:#0d101b;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+canvas{width:100%;height:auto;display:block;cursor:grab}
+canvas:active{cursor:grabbing}
+.stage-hud{
+  position:absolute;top:14px;left:14px;right:14px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  pointer-events:none;gap:12px;flex-wrap:wrap;
+}
+.hud-pill{
+  pointer-events:auto;background:rgba(13,16,27,.85);backdrop-filter:blur(10px);
+  border:1px solid var(--ln);border-radius:14px;padding:8px 14px;
+  font-size:12.5px;color:var(--tx);box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+#hoverHud{
+  display:none;position:absolute;bottom:14px;left:14px;
+  background:rgba(15,19,32,.94);backdrop-filter:blur(12px);
+  border:1px solid var(--acc);border-radius:14px;padding:10px 15px;
+  pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:340px;
+}
+
+.box{
+  background:var(--card);backdrop-filter:blur(14px);
+  border:1px solid var(--ln);border-radius:20px;padding:18px;
+  margin-top:16px;box-shadow:0 10px 30px rgba(0,0,0,.28);
+}
 #panel,#ap{display:none}
 #panel.on{display:block}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.tabs button.on{background:var(--acc);color:var(--on);border-color:var(--acc)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{text-align:left;padding:10px 12px;border-bottom:1px solid var(--ln);vertical-align:middle}
-th{color:var(--mut);font-weight:700;font-size:12px;text-transform:uppercase}
-.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px}
-.bar{height:9px;border-radius:9px;background:var(--bg);margin:4px 0 10px;overflow:hidden;border:1px solid var(--ln)}
-.bar i{display:block;height:100%;border-radius:9px;background:var(--acc);transition:width .3s}
-.chip{font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;background:var(--bg);color:var(--mut);margin-left:6px;border:1px solid var(--ln)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.mail-grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
-@media(max-width:850px){.mail-grid{grid-template-columns:1fr}}
-.mail-list{max-height:520px;overflow-y:auto;border-right:1px solid var(--ln);padding-right:10px}
-.mail-item{padding:11px 13px;border-radius:14px;border:1px solid transparent;cursor:pointer;margin-bottom:8px;background:#151221;transition:.15s}
-.mail-item:hover,.mail-item.active{border-color:var(--acc);background:#1f1b33}
+
+/* Komut Çubuğu & Hızlı Senaryolar */
+.cmd-bar{
+  display:grid;grid-template-columns:220px 210px 1fr auto;gap:10px;align-items:center;
+}
+@media(max-width:1024px){.cmd-bar{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.cmd-bar{grid-template-columns:1fr}}
+.quick-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.qchip{
+  font-size:12px;padding:5px 11px;border-radius:999px;
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);
+  color:#c7d2fe;cursor:pointer;transition:.15s;
+}
+.qchip:hover{background:rgba(99,102,241,.22);border-color:var(--acc)}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc);box-shadow:0 4px 12px var(--acc-glow)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{text-align:left;padding:11px 12px;border-bottom:1px solid var(--ln);vertical-align:middle}
+th{color:var(--mut);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.bar{height:8px;border-radius:99px;background:#0b0e17;margin:5px 0 12px;overflow:hidden;border:1px solid var(--ln)}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--cyan));transition:width .35s}
+.chip{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:#0f1320;color:var(--mut);margin-left:5px;border:1px solid var(--ln)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.mail-grid{display:grid;grid-template-columns:370px 1fr;gap:18px}
+@media(max-width:900px){.mail-grid{grid-template-columns:1fr}}
+.mail-list{max-height:540px;overflow-y:auto;border-right:1px solid var(--ln);padding-right:12px}
+.mail-item{padding:12px 14px;border-radius:14px;border:1px solid var(--ln);cursor:pointer;margin-bottom:8px;background:var(--card-2);transition:.15s}
+.mail-item:hover,.mail-item.active{border-color:var(--acc);background:var(--card-3)}
 .mail-item.unread{border-left:4px solid var(--acc)}
 .note{font-size:12.5px;color:var(--mut)}
 .row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center}
-pre.code{background:var(--code-bg);color:var(--code-tx);padding:14px;border-radius:14px;overflow-x:auto;font:13px/1.6 'JetBrains Mono',monospace;max-height:460px;white-space:pre-wrap;border:1px solid var(--ln)}
-#card{display:none;position:fixed;right:18px;bottom:18px;width:min(440px,calc(100vw - 36px));max-height:88vh;overflow:auto;z-index:40;box-shadow:0 15px 45px rgba(0,0,0,.6);border:1.5px solid var(--ln)}
-footer{text-align:center;font-size:12px;color:var(--mut);margin:22px 0 8px}
+pre.code{
+  background:var(--code-bg);color:var(--code-tx);padding:15px;border-radius:14px;
+  overflow-x:auto;font:12.5px/1.65 'JetBrains Mono',monospace;max-height:480px;
+  white-space:pre-wrap;border:1px solid var(--ln);
+}
+.tier-card{
+  background:var(--card-2);border:1px solid var(--ln);border-radius:16px;padding:14px;
+}
+.approval-card{
+  background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(16,185,129,.08));
+  border:1px solid rgba(99,102,241,.4);border-radius:16px;padding:16px;margin-bottom:12px;
+}
+#card{
+  display:none;position:fixed;right:20px;bottom:20px;
+  width:min(480px,calc(100vw - 40px));max-height:88vh;overflow:auto;
+  z-index:60;box-shadow:0 20px 60px rgba(0,0,0,.75);border:1px solid var(--acc);
+}
+#ext-floating-widget{position:fixed;left:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;gap:8px}
+footer{text-align:center;font-size:12px;color:var(--mut);margin:28px 0 8px}
 </style>
+<style id="ext-custom-css"></style>
 </head>
 <body>
 <div class="wrap">
-  <header>
+  <!-- ÜST KURUMSAL BAR -->
+  <header class="topbar">
     <div class="brand">
-      <h1>Tonoz AI Ofisi</h1>
-      <span id="engBadge" class="badge">Ziyaretçi Modu</span>
+      <div class="logo-mark">T</div>
+      <div class="brand-title">
+        <h1>TONOZ AI COMPANY</h1>
+        <span>Otonom Multi-Agent Şirket & Canlı Ofis Sistemi</span>
+      </div>
+      <span id="engBadge" class="badge">Ziyaretçi Vitrini</span>
       <span id="coolBadge" class="badge" style="display:none"></span>
     </div>
-    <div class="row" style="margin:0">
+
+    <div class="top-right">
+      <!-- Dinamik Üst Menü Eklenti Yuvası -->
+      <div id="ext-header-menu"></div>
+      <!-- Dinamik Sağ Köşe Eklenti Yuvası -->
+      <div id="ext-top-right"></div>
+      <!-- Canlı Dijital Saat & Tarih -->
+      <div class="clock-pill" title="Tonoz AI Şirket Saati (Canlı)">
+        <i></i>
+        <span id="liveClock">00:00:00</span>
+      </div>
+      <button id="settingsBtn" style="display:none" onclick="openSettingsModal()">⚙️ API & GitHub Ayarları</button>
       <button id="bl" class="p">Yönetici Girişi</button>
     </div>
   </header>
 
-  <canvas id="cv" width="1600" height="1060" role="img" aria-label="Tonoz AI Ofisi İzometrik Simülasyonu"></canvas>
+  <!-- 2.5D İZOMETRİK OFİS SAHNESİ -->
+  <div class="stage-wrap">
+    <div class="stage-hud">
+      <div class="hud-pill">
+        <b>🏢 Canlı 2.5D Ofis</b> · <span class="note" id="hudSummary">Personel aktif mesai halinde</span>
+      </div>
+      <div class="hud-pill" id="activeModsBadge" style="display:none"></div>
+    </div>
+    <canvas id="cv" width="1600" height="1040" role="img" aria-label="Tonoz AI Company 2.5D İzometrik Ofis Simülasyonu"></canvas>
+    <div id="hoverHud"></div>
+  </div>
 
+  <!-- CANLI ONAY & GITHUB BİLDİRİM KUTUSU -->
   <div id="ap" class="box"></div>
 
+  <!-- YÖNETİCİ KONTROL MERKEZİ -->
   <section id="panel">
     <div class="box">
-      <div class="row" style="margin-top:0">
-        <select id="targetAgent" style="max-width:240px" title="Görevi ilk teslim alacak departman"></select>
-        <input id="ti" style="flex:1;min-width:260px" placeholder="Örn: Haritacılık ve ITRF koordinat dönüşümleri hakkında detaylı makale hazırlayın">
-        <button id="go" class="p">Görevi Başlat</button>
-        <button id="stepBtn" title="Bekleyen kuyruğu hemen tetikle">⚡ Şimdi İşlet</button>
-        <button id="resetProj" class="danger" title="Tüm yazışmaları ve dosyaları sıfırla">🗑️ Yeni Projeye Başla</button>
-        <button id="stop">Acil Durdur</button>
+      <div class="cmd-bar">
+        <select id="targetAgent" title="Görevi ilk teslim alacak departman"></select>
+        <select id="taskMode" title="Görev Türü">
+          <option value="auto">🤖 Otomatik Algıla (Tüm Görevler)</option>
+          <option value="project">📄 Standart Proje / Makale / Kod</option>
+          <option value="scene">🌳 2D Ofis Dekorasyonu & Eşya Ekle</option>
+          <option value="ui">🧩 Siteye Menü / Saat / Özellik Ekle</option>
+        </select>
+        <input id="ti" placeholder="Örn: Odalara ağaç istiyorum VEYA Sağ üst köşeye döviz/hava durumu widget'ı ekleyin VEYA ITRF makalesi yazın...">
+        <div class="row" style="margin:0">
+          <button id="go" class="p">🚀 Görevi Başlat</button>
+          <button id="stepBtn" class="ok" title="Bekleyen sıradaki görevi mola beklemeden hemen çalıştır">⚡ Şimdi İşlet</button>
+          <button id="stop" class="warn">⏸ Duraklat</button>
+          <button id="resetProj" class="danger" title="Yazışmaları ve dosyaları temizle">🗑️ Sıfırla</button>
+        </div>
       </div>
+
+      <div class="quick-chips">
+        <span class="note" style="font-weight:700">⚡ Hızlı Emirler:</span>
+        <span class="qchip" onclick="setQuickTask('scene','Tüm personel odalarına ve koridora dekoratif yeşil ofis ağaçları ekleyin, aranızda planlayıp onay kutusuna sunun.')">🌳 Odalara Ağaç İste</span>
+        <span class="qchip" onclick="setQuickTask('scene','Toplantı alanına sunum tahtası, dinlenme alanına akvaryum ve kitaplık ekleyin.')">🐠 Akvaryum & Kitaplık Ekle</span>
+        <span class="qchip" onclick="setQuickTask('ui','Sağ üst köşeye ve üst menüye mevcut kodu bozmadan canlı performans sayacı, dünya saati ve hızlı durum menüsü ekleyin.')">🕒 Sağ Köşeye Saat & Menü Ekle</span>
+        <span class="qchip" onclick="setQuickTask('project','Haritacılıkta ITRF96 ve ED50 koordinat dönüşümleri hakkında örnek JS kodlu kapsamlı teknik rehber hazırlayın.')">📐 CBS / Harita Projesi</span>
+      </div>
+
       <div class="tabs" id="tabs"></div>
     </div>
     <div id="pn" class="box"></div>
   </section>
 
+  <!-- MODAL & FLOATING WIDGET YUVASI -->
   <aside id="card" class="box" aria-live="polite"></aside>
-  <footer>Created by Tonoz · Otonom Multi-Agent Şirket Mimarisi</footer>
+  <div id="ext-floating-widget"></div>
+  <footer>TONOZ AI COMPANY · Firestore Gerçek Zamanlı Multi-Agent İşletim Sistemi & GitHub Otomasyonu</footer>
 </div>
 
 <script>
 /* ============================================================================
-   1. MODEL HAVUZU (GÜNCELLENMİŞ VE GENİŞLETİLMİŞ KOTALAR)
+   1. FİRESTORE YAPILANDIRMASI VE AKILLI MODEL / KOTA HAVUZU (YOL PLANI)
    ============================================================================ */
 const FB = {
   apiKey: 'AIzaSyAoPd-gsCIEzXJ8_TOeZBvcSICNvHvW29Q',
@@ -112,65 +283,121 @@ const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 const hhmm = () => new Date().toTimeString().slice(0, 5);
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
-// Kullanıcı isteğine göre genişletilmiş model listesi ve RPM sınırları
+// Canlı Saat Güncelleyici
+setInterval(() => {
+  const el = $('#liveClock');
+  if (el) el.textContent = new Date().toLocaleTimeString('tr-TR', { hour12: false });
+}, 1000);
+
+// Gerçek Gemini API Modelleri + Katmanlı Kota Yol Planı (Tier 1 -> Tier 4)
 const MODELS = [
-  { n: 'Gemini 3.8 Flash',      api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'En Güçlü Stratejik Model (20 RPD, 5 RPM)' },
-  { n: 'Gemini 3.6 Flash',      api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'Kıdemli Analiz Modeli (20 RPD, 5 RPM)' },
-  { n: 'Gemini 3 Flash',        api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'Denetim Modeli (20 RPD, 5 RPM)' },
-  { n: 'Gemini 2.5 Flash',      api: 'gemini-2.5-flash',      l: 20,    u: 0, desc: 'Koordinasyon Modeli (20 RPD, 5 RPM)' },
-  { n: 'Gemini 3.5 Flash Lite', api: 'gemini-3.5-flash-lite', l: 500,   u: 0, desc: 'Hızlı Üretim Modeli (500 RPD, 15 RPM)' },
-  { n: 'Gemini 3.1 Flash Lite', api: 'gemini-3.5-flash-lite', l: 500,   u: 0, desc: 'Genel Üretim Modeli (500 RPD, 15 RPM)' },
-  { n: 'Gemma 4 31B',           api: 'gemini-3.5-flash-lite', l: 14400, u: 0, desc: 'Geniş Yedek Havuz (14.4K RPD)' }
+  { n: 'Gemini 2.5 Pro',        api: 'gemini-2.5-pro',        l: 25,    rpm: 5,  u: 0, tier: 'Seviye 1 · Stratejik Mimari', desc: 'Karmaşık mimari, derin analiz ve kritik kararlar (5 RPM, 25 RPD)' },
+  { n: 'Gemini 2.5 Flash',      api: 'gemini-2.5-flash',      l: 250,   rpm: 10, u: 0, tier: 'Seviye 2 · Planlama & Denetim', desc: 'SEO stratejisi, iş dağılımı ve kalite kontrol (10 RPM, 250 RPD)' },
+  { n: 'Gemini 2.0 Flash',      api: 'gemini-2.0-flash',      l: 500,   rpm: 15, u: 0, tier: 'Seviye 2 · Koordinasyon', desc: 'Hızlı departmanlar arası koordinasyon ve kod üretimi (15 RPM, 500 RPD)' },
+  { n: 'Gemini 2.5 Flash Lite', api: 'gemini-2.5-flash-lite', l: 1000,  rpm: 15, u: 0, tier: 'Seviye 3 · Ana Üretim Motoru', desc: 'Kodlama, UI/UX tasarım ve teknik içerik üretimi (15 RPM, 1000 RPD)' },
+  { n: 'Gemini 2.0 Flash Lite', api: 'gemini-2.0-flash-lite', l: 1500,  rpm: 30, u: 0, tier: 'Seviye 3 · Seri Üretim', desc: 'Yüksek hızlı metin, dokümantasyon ve revizyon (30 RPM, 1500 RPD)' },
+  { n: 'Gemma 3 27B',           api: 'gemma-3-27b-it',        l: 14400, rpm: 30, u: 0, tier: 'Seviye 4 · Geniş Yedek Havuz', desc: 'Kesintisiz 7/24 yedek kapasite havuzu (30 RPM, 14.400 RPD)' }
 ];
-const mdl = n => MODELS.find(m => m.n === n) || MODELS[4];
+
+// Firestore'daki eski model isimlerini yeni geçerli API modellerine bağlayan uyumluluk haritası
+const LEGACY_MODEL_ALIASES = {
+  'Gemini 3.8 Flash':      'Gemini 2.5 Flash',
+  'Gemini 3.6 Flash':      'Gemini 2.5 Flash',
+  'Gemini 3 Flash':        'Gemini 2.5 Flash',
+  'Gemini 3.5 Flash Lite': 'Gemini 2.5 Flash Lite',
+  'Gemini 3.1 Flash Lite': 'Gemini 2.5 Flash Lite',
+  'Gemma 4 31B':           'Gemma 3 27B'
+};
+
+function normalizeModelName(name) {
+  if (!name) return 'Gemini 2.5 Flash Lite';
+  if (LEGACY_MODEL_ALIASES[name]) return LEGACY_MODEL_ALIASES[name];
+  if (MODELS.some(m => m.n === name)) return name;
+  return 'Gemini 2.5 Flash Lite';
+}
+const mdl = n => MODELS.find(m => m.n === normalizeModelName(n)) || MODELS[3];
 
 const store = {
   staff: [],
   mails: [],
   tasks: [],
   files: [],
+  approvals: [],
   log: [],
   selectedMailId: null,
   selectedFileId: null,
   geminiKey: '',
-  cooldownSec: 70, // Dakikada 5 istek sınırına takılmamak için sabit ve güvenli mola süresi (70 sn)
-  maxChainDepth: 10
+  githubToken: '',
+  githubRepo: '',
+  githubBranch: 'main',
+  cooldownSec: 18, // Model bazlı akıllı RPM koruması ile dengeli varsayılan bekleme
+  maxChainDepth: 12,
+  officeMods: {
+    version: 1,
+    sceneMods: [],
+    uiMods: []
+  },
+  previewMods: null // Yönetici "Canlı Önizle" dediğinde geçici gösterilen yamalar
 };
 
+// Personel ismini sahnede kısaltan yardımcı ("Selin Hanım" -> "Selin")
+function shortName(fullName) {
+  if (!fullName) return 'Ajan';
+  return String(fullName)
+    .replace(/\b(Hanım|Bey|Uzmanı|Yöneticisi|Müdürü|Dr\.|Prof\.)\b/gi, '')
+    .trim()
+    .split(/\s+/)[0] || fullName;
+}
+function shortRole(role) {
+  if (!role) return 'Uzman';
+  const r = role.toLowerCase();
+  if (r.includes('seo') || r.includes('strateji')) return 'STRATEJİ';
+  if (r.includes('plan')) return 'PLANLAMA';
+  if (r.includes('kod') || r.includes('yazılım') || r.includes('dev')) return 'YAZILIM';
+  if (r.includes('tasarım') || r.includes('görsel') || r.includes('ui')) return 'TASARIM';
+  if (r.includes('metin') || r.includes('içerik') || r.includes('yazar')) return 'İÇERİK';
+  if (r.includes('kalite') || r.includes('denetim') || r.includes('qa')) return 'KALİTE';
+  return role.slice(0, 10).toUpperCase();
+}
+
 /* ============================================================================
-   2. İZOMETRİK 2.5D OFİS MOTORU (PERSONEL ETİKETLERİ İLE)
+   2. 2.5D İZOMETRİK OFİS MOTORU (2D TABELALAR, KISA ETİKETLER & CANLI YAMALAR)
    ============================================================================ */
 const cv = $('#cv'), cx = cv.getContext('2d');
 cx.scale(2, 2);
-const TW = 28, TH = 14, OX = 400, OY = 118, N = 14, WL = 90;
+const TW = 28, TH = 14, OX = 400, OY = 112, N = 14, WL = 92;
 const P = (x, y, z = 0) => [OX + (x - y) * TW, OY + (x + y) * TH - z];
-const hs = (c, d) => 'hsl(' + c[0] + ' ' + c[1] + '% ' + Math.max(4, Math.min(97, c[2] + d)) + '%)';
+const hs = (c, d) => 'hsl(' + c[0] + ' ' + c[1] + '% ' + Math.max(4, Math.min(96, c[2] + d)) + '%)';
 
-function poly(p, f, s) {
+function poly(p, f, s, lw = 1) {
   cx.beginPath();
   p.forEach((q, i) => i ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]));
   cx.closePath();
   cx.fillStyle = f; cx.fill();
-  if (s) { cx.strokeStyle = s; cx.lineWidth = 1; cx.stroke(); }
+  if (s) { cx.strokeStyle = s; cx.lineWidth = lw; cx.stroke(); }
 }
 function box(x, y, w, d, h, z, c, g) {
   const t = z + h;
   poly([P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x, y + d, t)], g || hs(c, -8));
-  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], hs(c, -17));
-  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], hs(c, 7));
+  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], hs(c, -18));
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], hs(c, 8));
 }
 function glass(x, y, w, d, h) {
   const t = h;
-  poly([P(x, y + d, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.25)', 'rgba(160,140,220,.5)');
-  poly([P(x + w, y, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x + w, y, t)], 'rgba(200,190,240,.3)', 'rgba(160,140,220,.5)');
-  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.45)');
+  poly([P(x, y + d, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(148,163,184,.16)', 'rgba(148,163,184,.38)');
+  poly([P(x + w, y, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x + w, y, t)], 'rgba(148,163,184,.22)', 'rgba(148,163,184,.38)');
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(226,232,240,.35)');
 }
 const disc = (x, y, r, c) => { cx.beginPath(); cx.arc(x, y, r, 0, 7); cx.fillStyle = c; cx.fill(); };
 const el = (x, y, a, b, c) => { cx.beginPath(); cx.ellipse(x, y, a, b, 0, 0, 7); cx.fillStyle = c; cx.fill(); };
-const rr = (x, y, w, h, r, c) => { cx.beginPath(); cx.roundRect(x, y, w, h, r); cx.fillStyle = c; cx.fill(); };
+const rr = (x, y, w, h, r, c, s) => {
+  cx.beginPath(); cx.roundRect(x, y, w, h, r);
+  cx.fillStyle = c; cx.fill();
+  if (s) { cx.strokeStyle = s; cx.lineWidth = 1.2; cx.stroke(); }
+};
 
-const WOOD = [32, 62, 65], DK = [28, 30, 35], WT = [260, 40, 90], COR = [12, 80, 65],
-      GRN = [140, 45, 45], BLU = [205, 70, 65], YEL = [45, 85, 65], PNK = [340, 55, 65], CH = [255, 40, 55];
+const WOOD = [30, 52, 58], DK = [222, 28, 26], WT = [220, 30, 92], COR = [14, 78, 62],
+      GRN = [145, 52, 42], BLU = [210, 75, 60], YEL = [42, 88, 62], PNK = [335, 60, 62], CH = [235, 45, 52];
 
 const RM = [
   [0, 0, 3, 1], [4, 0, 3, 1], [8, 0, 3, 1],
@@ -178,13 +405,13 @@ const RM = [
   [12, 0, 2, 1], [12, 10, 2, 0]
 ].map((r, i) => ({
   i, x: r[0], y: r[1], w: r[2], top: r[3], wy: r[3] ? 3 : 9,
-  hue: [265, 330, 200, 150, 45, 15, 285, 100][i],
+  hue: [235, 325, 195, 155, 38, 12, 275, 175][i],
   dx: r[2] == 3 ? r[0] + 1 : r[0], dy: r[3] ? 0 : 12,
   sx: r[2] == 3 ? r[0] + 1 : r[0], sy: r[3] ? 1 : 11
 }));
 
 const BL = Array.from({ length: N }, () => Array(N).fill(0));
-const blk = (x, y, w = 1, d = 1) => { for (let i = 0; i < w; i++) for (let j = 0; j < d; j++) BL[y + j][x + i] = 1; };
+const blk = (x, y, w = 1, d = 1) => { for (let i = 0; i < w; i++) for (let j = 0; j < d; j++) if (BL[y + j]) BL[y + j][x + i] = 1; };
 RM.forEach(r => {
   blk(r.dx, r.dy, 2, 1);
   for (let x = r.x + 1; x < r.x + r.w; x++) blk(x, r.wy);
@@ -222,8 +449,8 @@ function walk(a, x, y) {
   a.path = bfs([Math.floor(a.ax), Math.floor(a.ay)], [x, y]);
   return new Promise(r => { a.res = r; if (!a.path.length) r(); });
 }
-const door = a => { const r = RM[a.room]; return [r.x, r.top ? 4 : 8]; };
-const seat = a => { const r = RM[a.room]; return [r.sx, r.sy]; };
+const door = a => { const r = RM[a.room] || RM[0]; return [r.x, r.top ? 4 : 8]; };
+const seat = a => { const r = RM[a.room] || RM[0]; return [r.sx, r.sy]; };
 const goHome = a => walk(a, ...seat(a));
 const say = (a, i, t) => { a.bi = i; a.bt = t; a.on = 1; };
 const hush = a => { a.on = 0; };
@@ -232,7 +459,7 @@ function upd(dt) {
   store.staff.forEach(a => {
     a.mv = 0;
     if (a.path.length) {
-      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.5 * dt;
+      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.6 * dt;
       a.mv = 1;
       if (d <= s) {
         a.ax = p[0]; a.ay = p[1]; a.path.shift();
@@ -242,6 +469,30 @@ function upd(dt) {
   });
 }
 
+// 2.5D Ağaç Çizim Fonksiyonu (Standart Bitki ve "Odalara Ağaç" Yaması İçin)
+function drawTree3D(x, y, scale = 1, variant = 0) {
+  // Ahşap/Seramik Saksı
+  box(x - .22 * scale, y - .22 * scale, .44 * scale, .44 * scale, 11 * scale, 0, [24, 52, 48]);
+  box(x - .18 * scale, y - .18 * scale, .36 * scale, .36 * scale, 2 * scale, 11 * scale, [110, 35, 25]);
+  // Gövde
+  box(x - .05 * scale, y - .05 * scale, .10 * scale, .10 * scale, 14 * scale, 12 * scale, [28, 45, 32]);
+  const q = P(x, y, (24 * scale));
+  const sway = Math.sin(T * 1.8 + x * 2 + y) * 1.6;
+  const hueBase = variant % 2 === 0 ? [142, 54, 42] : [158, 58, 38];
+  // Katmanlı Yaprak Küreleri
+  [
+    [0, -10 * scale, 11 * scale, 2],
+    [-8 * scale, -5 * scale, 8.5 * scale, -4],
+    [8 * scale, -5 * scale, 8.5 * scale, -6],
+    [-4 * scale, -16 * scale, 8 * scale, 6],
+    [5 * scale, -15 * scale, 7.5 * scale, 4],
+    [0, -22 * scale, 7 * scale, 11]
+  ].forEach(l => {
+    disc(q[0] + l[0] + sway, q[1] + l[1], l[2], hs(hueBase, l[3]));
+  });
+}
+
+// Sabit Ofis Mobilyaları
 const OB = [], add = (k, f) => OB.push({ k, f });
 RM.forEach(r => {
   add(r.dx + r.dy + 1.5, () => {
@@ -250,7 +501,8 @@ RM.forEach(r => {
     box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
     box(x, y, 2, 1, 5, 24, WOOD);
     box(x + .85, y + .22, .3, .25, 4, 29, DK);
-    box(x + .55, y + .2, .9, .1, 17, 33, DK, a && a.mon ? '#34d399' : '#4b4470');
+    // Aktif çalışırken parlayan monitör
+    box(x + .52, y + .2, .96, .1, 18, 33, DK, a && a.mon ? '#10b981' : '#334155');
     box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
     box(x + 1.6, y + .6, .2, .2, 6, 29, COR);
   });
@@ -258,47 +510,62 @@ RM.forEach(r => {
     box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
     box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
   });
+  // Oda köşesi standart küçük bitki
   const px = r.x + r.w - 1, py = r.top ? 2 : 10;
   add(px + py + 1, () => {
-    box(px + .25, py + .25, .5, .5, 10, 0, [18, 55, 60]);
-    const q = P(px + .5, py + .5, 14);
-    [[0, -14, 9], [-8, -8, 7], [8, -8, 7], [0, -22, 6]].forEach(l =>
-      disc(q[0] + l[0] + Math.sin(T * 1.5 + px) * 1.5, q[1] + l[1], l[2], hs(GRN, 8 - l[1] * .4))
+    box(px + .28, py + .28, .44, .44, 9, 0, [20, 50, 52]);
+    const q = P(px + .5, py + .5, 13);
+    [[0, -11, 7.5], [-6, -6, 6], [6, -6, 6], [0, -17, 5]].forEach(l =>
+      disc(q[0] + l[0] + Math.sin(T * 1.5 + px) * 1.2, q[1] + l[1], l[2], hs(GRN, 8 - l[1] * .35))
     );
   });
 });
+
+// Yemekhane Masaları
 [5, 7].forEach(y => add(2.5 + y + .5, () => {
   box(1, y, 3, 1, 5, 22, WOOD);
   [1.1, 3.7].forEach(x => box(x, y + .1, .2, .8, 22, 0, DK));
   [1.3, 2.1, 2.9].forEach(x => {
-    box(x, y + .4, .35, .3, 1, 27, WT);
+    box(x, y + .4, .35, .3, 1.2, 27, WT);
     box(x + .05, y - .5, .4, .4, 7, 0, CH);
     box(x + .05, y + 1.1, .4, .4, 7, 0, CH);
   });
 }));
+
+// Toplantı & Planlama Masası
 add(10, () => {
   box(6, 6, 3, 1, 5, 22, WOOD);
   [6.1, 8.7].forEach(x => box(x, 6.1, .2, .8, 22, 0, DK));
   [6.2, 7.1, 8.0].forEach(x => { box(x, 5.2, .5, .5, 7, 0, BLU); box(x, 7.3, .5, .5, 7, 0, BLU); });
+  // Masa üstü dizüstü/projeksiyon cihazı
+  box(7.2, 6.3, .5, .4, 2, 27, WT);
 });
+
+// Dinlenme Alanı Koltuğu
 add(19, () => {
   box(11, 7, 2, 1, 10, 0, PNK); box(11, 7.75, 2, .25, 26, 0, PNK);
   box(11, 7, .25, 1, 17, 0, PNK); box(12.75, 7, .25, 1, 17, 0, PNK);
 });
+
+// Kahve İstasyonu (Buharlı)
 add(17.5, () => {
-  box(13.1, 4.1, .8, .8, 34, 0, PNK); box(13.2, 4.2, .6, .6, 6, 34, DK);
-  const q = P(13.5, 4.5, 44);
+  box(13.1, 4.1, .8, .8, 34, 0, WOOD); box(13.2, 4.2, .6, .6, 8, 34, DK);
+  const q = P(13.5, 4.5, 46);
   for (let i = 0; i < 3; i++) {
-    const o = (T * 20 + i * 12) % 24;
-    cx.fillStyle = 'rgba(255,255,255,' + (.55 - o / 50) + ')';
-    cx.fillRect(q[0] - 2 + Math.sin(T * 3 + i) * 2, q[1] - o, 3, 3);
+    const o = (T * 18 + i * 11) % 22;
+    cx.fillStyle = 'rgba(226,232,240,' + (.5 - o / 46) + ')';
+    cx.fillRect(q[0] - 2 + Math.sin(T * 3 + i) * 2, q[1] - o, 2.5, 2.5);
   }
 });
+
+// Ortak Klasör / Sunucu & Arşiv Dolabı
 add(19, () => {
-  box(13.05, 5.05, .9, 1.9, 44, 0, WOOD);
-  [12, 24, 36].forEach(z => box(13.95, 5.2, .05, .6, 2, z, DK));
-  box(13.2, 5.3, .5, .5, 4, 44, BLU); box(13.2, 6.2, .5, .5, 4, 44, YEL);
+  box(13.05, 5.05, .9, 1.9, 46, 0, DK);
+  [12, 24, 36].forEach(z => box(13.95, 5.2, .06, .6, 2, z, BLU));
+  box(13.2, 5.3, .5, .5, 4, 46, BLU); box(13.2, 6.2, .5, .5, 4, 46, YEL);
 });
+
+// Onay Sonrası Ekstra Kutlama Masası
 add(13, () => {
   if (!tbOn) return;
   box(9, 4, 2, 1, 4, 22, WOOD);
@@ -307,85 +574,245 @@ add(13, () => {
   box(9.9, 4.4, .1, .1, 7, 26, YEL);
 });
 
-const SIGNS = [['Yemekhane', 2.5, 6, 34], ['Toplantı & Planlama', 7.5, 6, 34], ['Dinlenme Alanı', 12, 7.9, 40], ['Ortak Klasör (0)', 13.5, 5.5, 52]];
+// DİNAMİK SAHNE YAMALARI ÇİZİCİSİ (Odalara Ağaç, Akvaryum, Kitaplık vb.)
+function getActiveSceneMods() {
+  const base = (store.officeMods && Array.isArray(store.officeMods.sceneMods)) ? store.officeMods.sceneMods : [];
+  const prev = (store.previewMods && Array.isArray(store.previewMods.sceneMods)) ? store.previewMods.sceneMods : [];
+  return [...base, ...prev];
+}
+
+function collectDynamicSceneObjects() {
+  const mods = getActiveSceneMods();
+  const dyn = [];
+  mods.forEach((m, idx) => {
+    const type = String(m.type || 'tree').toLowerCase();
+    const target = String(m.target || 'all_rooms').toLowerCase();
+    const sc = Number(m.scale) || 1.15;
+
+    if (type.includes('tree') || type.includes('agac') || type.includes('ağaç') || type.includes('bonsai')) {
+      if (target === 'all_rooms' || target === 'rooms' || target === 'oda') {
+        RM.forEach((r, ri) => {
+          const tx = r.x + 0.42;
+          const ty = r.top ? 2.35 : 10.35;
+          dyn.push({ k: tx + ty + 0.8, f: () => drawTree3D(tx, ty, sc, ri) });
+        });
+        // Koridor köşelerine de 2 büyük saksı ağacı
+        dyn.push({ k: 0.5 + 4.3, f: () => drawTree3D(0.5, 4.3, sc * 1.1, 1) });
+        dyn.push({ k: 10.5 + 4.3, f: () => drawTree3D(10.5, 4.3, sc * 1.1, 2) });
+      } else if (target.startsWith('room_')) {
+        const ri = parseInt(target.split('_')[1], 10) || 0;
+        const r = RM[ri] || RM[0];
+        const tx = r.x + 0.42, ty = r.top ? 2.35 : 10.35;
+        dyn.push({ k: tx + ty + 0.8, f: () => drawTree3D(tx, ty, sc, ri) });
+      } else {
+        const tx = Number(m.x) || 5.2, ty = Number(m.y) || 4.5;
+        dyn.push({ k: tx + ty + 0.8, f: () => drawTree3D(tx, ty, sc, idx) });
+      }
+    }
+    else if (type.includes('aqua') || type.includes('akvaryum')) {
+      const ax = Number(m.x) || 9.2, ay = Number(m.y) || 8.1;
+      dyn.push({
+        k: ax + ay + 1.2,
+        f: () => {
+          box(ax, ay, 1.4, .55, 16, 0, DK);
+          box(ax + .05, ay + .05, 1.3, .45, 14, 16, [195, 85, 55], 'rgba(6,182,212,.55)');
+          const q = P(ax + .7, ay + .25, 23);
+          disc(q[0] + Math.sin(T * 2.5) * 9, q[1], 3, '#f97316');
+          disc(q[0] - Math.cos(T * 2.1) * 7, q[1] - 3, 2.5, '#fde047');
+        }
+      });
+    }
+    else if (type.includes('book') || type.includes('kitap') || type.includes('whiteboard') || type.includes('tahta')) {
+      const bx = Number(m.x) || 5.2, by = Number(m.y) || 4.1;
+      dyn.push({
+        k: bx + by + 1,
+        f: () => {
+          box(bx, by, 1.3, .35, 36, 0, WOOD);
+          [10, 20, 28].forEach((z, zi) => box(bx + .1, by + .05, 1.1, .28, 4, z, [zi * 90 + 20, 70, 58]));
+        }
+      });
+    }
+  });
+  return dyn;
+}
+
+// 2D/2.5D FİZİKSEL ASILI OFİS TABELALARI (Yazılar birbirine girmez, mimari tabela görünümü)
+function drawSignboard25D(gx, gy, gz, title, sub, icon, accentHex) {
+  const q = P(gx, gy, gz);
+  const x = q[0], y = q[1];
+  const w = 104, h = 28;
+
+  // 1) Tavandan / Земinden Asma Demir Çubukları (Bracket)
+  cx.strokeStyle = '#475569';
+  cx.lineWidth = 2;
+  cx.beginPath();
+  cx.moveTo(x - 28, y - h - 9); cx.lineTo(x - 28, y - h + 2);
+  cx.moveTo(x + 28, y - h - 9); cx.lineTo(x + 28, y - h + 2);
+  cx.stroke();
+  disc(x - 28, y - h - 9, 2.5, '#94a3b8');
+  disc(x + 28, y - h - 9, 2.5, '#94a3b8');
+
+  // 2) 3D Tabela Gövdesi (Gölge + Derinlik + Ön Yüz)
+  rr(x - w / 2 + 2, y - h + 3, w, h, 6, 'rgba(0,0,0,.55)');
+  rr(x - w / 2, y - h, w, h, 6, '#131826', accentHex);
+
+  // Sol Renkli İkon Şeridi
+  rr(x - w / 2 + 3, y - h + 3, 22, h - 6, 4, accentHex);
+  cx.font = '12px sans-serif';
+  cx.textAlign = 'center';
+  cx.fillStyle = '#fff';
+  cx.fillText(icon, x - w / 2 + 14, y - h / 2 + 4);
+
+  // Tabela Başlığı & Alt Bilgi
+  cx.textAlign = 'left';
+  cx.font = '800 9.5px "Space Grotesk",sans-serif';
+  cx.fillStyle = '#f8fafc';
+  cx.fillText(title, x - w / 2 + 30, y - h + 12);
+
+  cx.font = '600 8px "Plus Jakarta Sans",sans-serif';
+  cx.fillStyle = '#94a3b8';
+  cx.fillText(sub, x - w / 2 + 30, y - h + 22);
+}
+
+// Oda Cam Üstü Mini Numara & Departman Plakaları
+function drawRoomPlaque(r) {
+  const occupant = store.staff.find(s => s.room === r.i);
+  const dept = occupant ? shortRole(occupant.role) : ('ODA 0' + (r.i + 1));
+  const num = '0' + (r.i + 1);
+  const q = P(r.x + r.w / 2, r.wy + 0.4, 38);
+  const w = 68, h = 15;
+  rr(q[0] - w / 2, q[1] - h / 2, w, h, 4, 'rgba(15,23,42,.92)', `hsl(${r.hue},70%,60%)`);
+  cx.textAlign = 'center';
+  cx.font = '700 8px "JetBrains Mono",monospace';
+  cx.fillStyle = `hsl(${r.hue},85%,75%)`;
+  cx.fillText(`${num}·${dept}`, q[0], q[1] + 2.8);
+}
 
 function floor() {
   for (let i = 0; i < N; i++) for (let j = 0; j < N; j++)
-    poly([P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)], (i + j) % 2 ? '#1a1626' : '#151221');
-  RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',50%,22%,.4)'));
-  poly([P(0, 4), P(5, 4), P(5, 9), P(0, 9)], 'rgba(245,158,11,.08)');
-  poly([P(5, 4), P(9, 4), P(9, 9), P(5, 9)], 'rgba(59,130,246,.08)');
-  poly([P(9, 4), P(14, 4), P(14, 9), P(9, 9)], 'rgba(236,72,153,.08)');
-  poly([P(0, N), P(N, N), P(N, N, -12), P(0, N, -12)], '#211a33');
-  poly([P(N, 0), P(N, N), P(N, N, -12), P(N, 0, -12)], '#1b1428');
-}
-function walls() {
-  poly([P(0, 0), P(0, N), P(0, N, WL), P(0, 0, WL)], '#1e192b');
-  poly([P(0, 0), P(N, 0), P(N, 0, WL), P(0, 0, WL)], '#191524');
-  poly([P(0, 0), P(0, N), P(0, N, 6), P(0, 0, 6)], '#2a233d');
-  poly([P(0, 0), P(N, 0), P(N, 0, 6), P(0, 0, 6)], '#251f35');
-  [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.2, 13.8]].forEach(w => {
-    poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#2d2440');
-    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#362e4d');
-    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#4a3d6b');
-  });
-}
-function over() {
-  RM.forEach(r => { const y = r.wy + .4; glass(r.x + 1, y, r.w - 1, .2, 34); glass(r.x, y, .12, .2, 34); });
-  [3, 7, 11].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
-  cx.font = '700 11px Nunito,sans-serif';
-  SIGNS[3][0] = 'Ortak Klasör (' + store.files.length + ')';
-  SIGNS.forEach(s => {
-    const q = P(s[1], s[2], s[3]), w = cx.measureText(s[0]).width + 16;
-    rr(q[0] - w / 2, q[1] - 10, w, 18, 9, 'rgba(124,92,239,.9)');
-    cx.fillStyle = '#fff'; cx.fillText(s[0], q[0], q[1] + 3);
-  });
+    poly([P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)], (i + j) % 2 ? '#131726' : '#0f1320');
+  RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',55%,22%,.35)'));
+  // Ortak alan zemin halı bölgeleri
+  poly([P(0.4, 4.4), P(4.6, 4.4), P(4.6, 8.6), P(0.4, 8.6)], 'rgba(245,158,11,.07)', 'rgba(245,158,11,.18)');
+  poly([P(5.3, 4.6), P(8.8, 4.6), P(8.8, 8.5), P(5.3, 8.5)], 'rgba(59,130,246,.08)', 'rgba(59,130,246,.22)');
+  poly([P(9.4, 4.4), P(13.6, 4.4), P(13.6, 8.6), P(9.4, 8.6)], 'rgba(236,72,153,.06)', 'rgba(236,72,153,.16)');
+  // Platform kalınlığı
+  poly([P(0, N), P(N, N), P(N, N, -12), P(0, N, -12)], '#192036');
+  poly([P(N, 0), P(N, N), P(N, N, -12), P(N, 0, -12)], '#111626');
 }
 
-// Personel üzerinde isim ve unvan etiketleme
+function walls() {
+  poly([P(0, 0), P(0, N), P(0, N, WL), P(0, 0, WL)], '#171d30');
+  poly([P(0, 0), P(N, 0), P(N, 0, WL), P(0, 0, WL)], '#131829');
+  poly([P(0, 0), P(0, N), P(0, N, 6), P(0, 0, 6)], '#242c46');
+  poly([P(0, 0), P(N, 0), P(N, 0, 6), P(0, 0, 6)], '#1e253b');
+
+  // Duvar Pencereleri
+  [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.2, 13.8]].forEach(w => {
+    poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#232b44');
+    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#2d3a5e');
+    poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#3b4d7a');
+  });
+
+  // Sol Duvar Kurumsal TONOZ AI Duvar Tabelası
+  const lq = P(0, 6.5, 58);
+  rr(lq[0] - 58, lq[1] - 14, 116, 26, 7, 'rgba(15,23,42,.92)', '#6366f1');
+  cx.textAlign = 'center';
+  cx.font = '800 10.5px "Space Grotesk",sans-serif';
+  cx.fillStyle = '#e0e7ff';
+  cx.fillText('⚡ TONOZ AI HQ', lq[0], lq[1] + 2);
+}
+
+function over() {
+  RM.forEach(r => {
+    const y = r.wy + .4;
+    glass(r.x + 1, y, r.w - 1, .2, 34);
+    glass(r.x, y, .12, .2, 34);
+    drawRoomPlaque(r);
+  });
+  [3, 7, 11].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
+
+  // Ortak Alan 2.5D Asılı Mimari Tabelalar (Yüksekte asılı, karakterlerle çakışmaz)
+  drawSignboard25D(2.3, 6.0, 54, 'YEMEKHANE', 'Sosyal & Mola', '🍴', '#f59e0b');
+  drawSignboard25D(7.3, 6.0, 54, 'TOPLANTI ODASI', 'Planlama & Kurul', '📊', '#3b82f6');
+  drawSignboard25D(11.8, 7.6, 52, 'DİNLENME ALANI', 'Kahve & Lounge', '☕', '#ec4899');
+  drawSignboard25D(13.4, 5.6, 66, 'ORTAK ARŞİV', `${store.files.length} Dosya Kayıtlı`, '🗄️', '#10b981');
+}
+
+// Karakter Çizimi
 function dAg(a) {
   const q = P(a.ax, a.ay, 0), sit = !a.mv && Math.hypot(a.ax - seat(a)[0] - .5, a.ay - seat(a)[1] - .5) < .06,
         b = a.mv ? Math.abs(Math.sin(T * 12 + a.ph)) * 2.5 : 0, x = q[0], y = q[1] + (sit ? -5 : 0) - b;
-  el(q[0], q[1] + 1, 11, 5, 'rgba(0,0,0,.35)');
-  if (!sit) { cx.fillStyle = '#302845'; cx.fillRect(x - 6, y - 9, 4, 9); cx.fillRect(x + 2, y - 9, 4, 9); }
+  el(q[0], q[1] + 1, 11, 5, 'rgba(0,0,0,.4)');
+  if (!sit) { cx.fillStyle = '#1e293b'; cx.fillRect(x - 6, y - 9, 4, 9); cx.fillRect(x + 2, y - 9, 4, 9); }
   rr(x - 8, y - 26, 16, 19, 6, a.c); rr(x - 11, y - 24, 4, 12, 2, a.c); rr(x + 7, y - 24, 4, 12, 2, a.c);
-  disc(x, y - 34, 10.5, '#fbcfe8'); cx.fillStyle = a.h; cx.beginPath(); cx.arc(x, y - 35, 11, Math.PI, 0); cx.fill();
-  const bl = (T + a.ph) % 4 < .12 ? .5 : 2.4;
-  el(x - 4, y - 33, 1.8, bl, '#221a29'); el(x + 4, y - 33, 1.8, bl, '#221a29');
+  disc(x, y - 34, 10.5, '#fde68a'); cx.fillStyle = a.h; cx.beginPath(); cx.arc(x, y - 35, 11, Math.PI, 0); cx.fill();
+  const bl = (T + a.ph) % 4 < .12 ? .5 : 2.2;
+  el(x - 4, y - 33, 1.7, bl, '#0f172a'); el(x + 4, y - 33, 1.7, bl, '#0f172a');
 }
 
-function tag(a) {
-  const q = P(a.ax, a.ay, 0); cx.textAlign = 'center';
-  const label = `${a.name} · ${a.role}`;
-  cx.font = '700 10.5px Nunito,sans-serif';
-  const w = cx.measureText(label).width + 12;
-  rr(q[0] - w / 2, q[1] - 66, w, 18, 9, 'rgba(22,18,34,.95)');
-  cx.fillStyle = '#fff'; cx.fillText(label, q[0], q[1] - 53);
+// Çakışma Önlemeli Kısa İsim Etiketi ("Selin", "Arda" vb. - Uzun unvanlar üst üste binmez)
+function drawAllAgentTagsAndBubbles() {
+  const placed = [];
+  store.staff.forEach(a => {
+    const q = P(a.ax, a.ay, 0);
+    let tx = q[0], ty = q[1] - 56;
+    // Yakın duran ajanların etiketlerini dikey ayrıştır
+    placed.forEach(p => {
+      if (Math.abs(tx - p.x) < 48 && Math.abs(ty - p.y) < 18) {
+        ty = p.y - 19;
+      }
+    });
+    placed.push({ x: tx, y: ty });
+
+    const sName = shortName(a.name);
+    cx.font = '700 10px "Plus Jakarta Sans",sans-serif';
+    const w = cx.measureText(sName).width + 22;
+    const isWorking = a.mon || a.st === 'Çalışıyor';
+    const dotCol = isWorking ? '#10b981' : (a.mv ? '#f59e0b' : a.c);
+
+    rr(tx - w / 2, ty - 11, w, 17, 8.5, 'rgba(11,13,20,.92)', isWorking ? '#10b981' : 'rgba(148,163,184,.35)');
+    disc(tx - w / 2 + 8, ty - 2.5, 3, dotCol);
+    cx.textAlign = 'left';
+    cx.fillStyle = '#f8fafc';
+    cx.fillText(sName, tx - w / 2 + 14, ty + 1);
+
+    // Konuşma/Durum Balonu varsa etiketin hemen üstünde göster
+    if (a.on && a.bt) {
+      const bt = a.bt.slice(0, 28);
+      cx.font = '700 9.5px "Plus Jakarta Sans",sans-serif';
+      const bw = cx.measureText(bt).width + 26;
+      const bx = Math.max(bw / 2 + 6, Math.min(794 - bw / 2, tx));
+      const by = ty - 24;
+      rr(bx - bw / 2, by - 9, bw, 18, 9, '#1e1b4b', '#6366f1');
+      ic(a.bi, bx - bw / 2 + 11, by);
+      cx.fillStyle = '#e0e7ff';
+      cx.fillText(bt, bx - bw / 2 + 21, by + 3);
+    }
+  });
 }
 
 function ic(t, x, y) {
-  cx.strokeStyle = cx.fillStyle = '#9b82ff'; cx.lineWidth = 1.5; cx.beginPath();
-  if (t == 'mail') { cx.rect(x - 6, y - 4, 12, 8); cx.moveTo(x - 6, y - 4); cx.lineTo(x, y + 1); cx.lineTo(x + 6, y - 4); cx.stroke(); }
-  else if (t == 'cup') { cx.rect(x - 5, y - 3, 8, 7); cx.moveTo(x + 3, y - 1); cx.arc(x + 4, y + 1, 2, -1.6, 1.6); cx.stroke(); }
-  else if (t == 'doc') { cx.rect(x - 4, y - 5, 8, 10); cx.moveTo(x - 2, y - 1); cx.lineTo(x + 2, y - 1); cx.moveTo(x - 2, y + 2); cx.lineTo(x + 2, y + 2); cx.stroke(); }
-  else for (let i = -1; i < 2; i++) { cx.beginPath(); cx.arc(x + i * 5, y, 1.6 + (Math.sin(T * 6 + i) > .5 ? .8 : 0), 0, 7); cx.fill(); }
+  cx.strokeStyle = cx.fillStyle = '#818cf8'; cx.lineWidth = 1.4; cx.beginPath();
+  if (t == 'mail') { cx.rect(x - 5, y - 3.5, 10, 7); cx.moveTo(x - 5, y - 3.5); cx.lineTo(x, y + 1); cx.lineTo(x + 5, y - 3.5); cx.stroke(); }
+  else if (t == 'cup') { cx.rect(x - 4, y - 3, 7, 6); cx.moveTo(x + 3, y - 1); cx.arc(x + 3.5, y + 1, 1.8, -1.6, 1.6); cx.stroke(); }
+  else if (t == 'doc') { cx.rect(x - 3.5, y - 4.5, 7, 9); cx.moveTo(x - 1.5, y - 1); cx.lineTo(x + 1.5, y - 1); cx.stroke(); }
+  else for (let i = -1; i < 2; i++) { cx.beginPath(); cx.arc(x + i * 4, y, 1.4, 0, 7); cx.fill(); }
 }
-function dBub(a) {
-  if (!a.on) return;
-  const q = P(a.ax, a.ay, 0), t = a.bt ? a.bt.slice(0, 42) : '';
-  cx.font = '700 11px Nunito,sans-serif'; cx.textAlign = 'left';
-  const w = (t ? cx.measureText(t).width + 12 : 0) + 26, x = Math.max(w / 2 + 4, Math.min(796 - w / 2, q[0])), y = q[1] - 88;
-  cx.fillStyle = '#1c1829'; cx.strokeStyle = '#7c5cef'; cx.lineWidth = 1.5;
-  cx.beginPath(); cx.roundRect(x - w / 2, y - 10, w, 22, 10); cx.fill(); cx.stroke();
-  ic(a.bi, x - w / 2 + 13, y);
-  if (t) { cx.fillStyle = '#ede8ff'; cx.fillText(t, x - w / 2 + 25, y + 4); }
-}
+
 function draw() {
-  cx.clearRect(0, 0, 800, 530);
-  floor(); walls();
-  OB.concat(store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) }))).sort((p, q) => p.k - q.k).forEach(o => o.f());
-  over(); store.staff.forEach(tag); store.staff.forEach(dBub);
+  cx.clearRect(0, 0, 800, 520);
+  floor();
+  walls();
+  const dynObjs = collectDynamicSceneObjects();
+  OB.concat(dynObjs)
+    .concat(store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) })))
+    .sort((p, q) => p.k - q.k)
+    .forEach(o => o.f());
+  over();
+  drawAllAgentTagsAndBubbles();
 }
+
 let lt = 0;
 function frame(ts) {
   const dt = Math.min(.05, (ts - lt) / 1000 || 0); lt = ts; T = ts / 1000;
@@ -394,24 +821,41 @@ function frame(ts) {
 requestAnimationFrame(frame);
 
 /* ============================================================================
-   3. PERSONEL YÖNETİMİ & ANİMASYONLAR
+   3. PERSONEL YÖNETİMİ, HOVER HUD & CANLI ANİMASYONLAR
    ============================================================================ */
 const PAL = [
-  ['#8b5cf6', '#4c1d95'], ['#ec4899', '#831843'], ['#10b981', '#064e3b'], ['#f59e0b', '#78350f'],
-  ['#3b82f6', '#1e3a8a'], ['#6366f1', '#312e81'], ['#14b8a6', '#134e4a'], ['#f43f5e', '#881337']
+  ['#6366f1', '#312e81'], ['#ec4899', '#831843'], ['#10b981', '#064e3b'], ['#f59e0b', '#78350f'],
+  ['#3b82f6', '#1e3a8a'], ['#8b5cf6', '#4c1d95'], ['#06b6d4', '#164e63'], ['#f43f5e', '#881337']
 ];
 let sid = 0;
 
 function mkAgent(o) {
   const p = PAL[(sid++) % 8], r = RM[o.room] || RM[0];
   const a = {
-    id: o.id || ('s' + sid), name: o.name, role: o.role, room: o.room || 0,
-    model: o.model || 'Gemini 3.5 Flash Lite', backup: o.backup || 'Gemma 4 31B',
-    skills: o.skills || '', tasks: [], used: o.usedToday || 0,
-    c: o.color || p[0], h: o.hair || p[1],
-    ax: r.sx + .5, ay: r.sy + .5, path: [], mon: 0, act: false,
-    bt: '', bi: '', on: 0, st: o.status || 'Odasında', ph: Math.random() * 6,
-    alive: true, by: o.createdBy || 'owner', saved: false
+    id: o.id || ('s' + sid),
+    name: o.name,
+    role: o.role,
+    room: o.room || 0,
+    model: normalizeModelName(o.model || 'Gemini 2.5 Flash Lite'),
+    backup: normalizeModelName(o.backup || 'Gemma 3 27B'),
+    skills: o.skills || '',
+    tasks: [],
+    used: o.usedToday || 0,
+    c: o.color || p[0],
+    h: o.hair || p[1],
+    ax: r.sx + .5,
+    ay: r.sy + .5,
+    path: [],
+    mon: 0,
+    act: false,
+    bt: '',
+    bi: '',
+    on: 0,
+    st: o.status || 'Odasında',
+    ph: Math.random() * 6,
+    alive: true,
+    by: o.createdBy || 'owner',
+    saved: false
   };
   store.staff.push(a);
   life(a);
@@ -419,26 +863,26 @@ function mkAgent(o) {
 }
 
 async function life(a) {
-  await sleep(rnd(1000, 4000));
+  await sleep(rnd(1200, 3800));
   while (a.alive) {
-    if (busy || halt || a.act) { await sleep(800); continue; }
+    if (busy || halt || a.act) { await sleep(900); continue; }
     a.act = true;
     const r = Math.random();
-    if (r < .55) {
-      a.st = 'Masasında'; a.mon = 1; say(a, 'type', 'Verileri inceliyor');
-      await sleep(rnd(7000, 12000)); a.mon = 0;
-    } else if (r < .80) {
+    if (r < .58) {
+      a.st = 'Masasında'; a.mon = 1; say(a, 'type', 'Veri inceliyor');
+      await sleep(rnd(6500, 11000)); a.mon = 0;
+    } else if (r < .82) {
       const k = ['yemek', 'mola', 'toplanti'][Math.floor(Math.random() * 3)];
       const sp = SP[k][Math.floor(Math.random() * 3)];
-      a.st = k == 'yemek' ? 'Yemekhanede' : k == 'mola' ? 'Kahve Molasında' : 'Toplantı Alanında';
+      a.st = k == 'yemek' ? 'Yemekhanede' : k == 'mola' ? 'Kahve Molasında' : 'Toplantı Odasında';
       hush(a); await walk(a, sp[0], sp[1]);
       say(a, k == 'toplanti' ? 'type' : 'cup', a.st);
-      await sleep(rnd(6000, 10000)); hush(a);
+      await sleep(rnd(5500, 9000)); hush(a);
     } else {
-      a.st = 'Ortak Klasörde'; hush(a);
+      a.st = 'Ortak Arşivde'; hush(a);
       const sp = SP.arsiv[Math.floor(Math.random() * 2)];
       await walk(a, sp[0], sp[1]); say(a, 'doc', 'Arşivi tarıyor');
-      await sleep(3500);
+      await sleep(3200);
     }
     hush(a); a.st = 'Odasına dönüyor'; await goHome(a); a.st = 'Odasında'; a.act = false;
     await sleep(rnd(4000, 7000));
@@ -446,22 +890,22 @@ async function life(a) {
 }
 
 const DEF_STAFF = [
-  { name: 'Selin Hanım', role: 'SEO & Strateji Uzmanı', model: 'Gemini 3.8 Flash', backup: 'Gemini 3.5 Flash Lite', skills: 'Gelen konuyu SEO ve içerik stratejisi açısından analiz eder, anahtar kelimeleri belirleyip Planlama Yöneticisine iletir.' },
-  { name: 'Arda Bey',    role: 'Planlama Yöneticisi', model: 'Gemini 3.6 Flash', backup: 'Gemini 3.5 Flash Lite', skills: 'Şirket personelini analiz eder, talebi alt görevlere böler ve Tasarım, Kod, Metin uzmanlarına görev dağılımı yapar.' },
-  { name: 'Ahmet Bey',   role: 'Kod Uzmanı', model: 'Gemini 3.5 Flash Lite', backup: 'Gemma 4 31B', skills: 'Temiz, hatasız HTML, JS, CSS ve CBS/Harita kodları yazar. Ortak Klasöre kaydeder.' },
-  { name: 'Elif Hanım',  role: 'Görsel Tasarım Uzmanı', model: 'Gemini 3.5 Flash Lite', backup: 'Gemma 4 31B', skills: 'Projeler için modern SVG diyagramlar ve UI şemaları üretir.' },
-  { name: 'Mert Bey',    role: 'Metin Yazarı', model: 'Gemini 3.1 Flash Lite', backup: 'Gemma 4 31B', skills: 'SEO uyumlu, teknik derinliği yüksek makaleler yazar.' },
-  { name: 'Deniz Bey',   role: 'Kalite Kontrol', model: 'Gemini 3 Flash', backup: 'Gemini 3.1 Flash Lite', skills: 'Ortak klasördeki dosyaları inceler. Eksik varsa düzeltir.' }
+  { name: 'Selin Hanım', role: 'SEO & Strateji Uzmanı', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.5 Flash Lite', skills: 'Projeleri SEO, kullanıcı deneyimi ve kurumsal strateji açısından analiz eder; gereksinimleri çıkarıp Planlama Yöneticisine aktarır.' },
+  { name: 'Arda Bey',    role: 'Planlama Yöneticisi', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.0 Flash', skills: 'Talepleri (proje, 2D ofis dekorasyonu veya site yeni özellik/menü talebi) analiz eder, Tasarım ve Kod uzmanlarına net görev dağılımı yapar.' },
+  { name: 'Ahmet Bey',   role: 'Kod & Sistem Uzmanı', model: 'Gemini 2.5 Flash Lite', backup: 'Gemini 2.0 Flash Lite', skills: 'Temiz HTML/CSS/JS, CBS/Harita kodları ve mevcut sistemi bozmayan canlı ofis/UI yamaları (sceneMods & uiMods) üretir.' },
+  { name: 'Elif Hanım',  role: 'Görsel Tasarım Uzmanı', model: 'Gemini 2.5 Flash Lite', backup: 'Gemma 3 27B', skills: '2.5D ofis dekorasyon yerleşimlerini, modern UI bileşenlerini ve SVG diyagramları tasarlar.' },
+  { name: 'Mert Bey',    role: 'Teknik İçerik Yazarı', model: 'Gemini 2.0 Flash Lite', backup: 'Gemma 3 27B', skills: 'SEO uyumlu, teknik derinliği yüksek kurumsal makaleler ve dokümantasyon yazar.' },
+  { name: 'Deniz Bey',   role: 'Kalite & GitHub Denetçisi', model: 'Gemini 2.5 Flash', backup: 'Gemini 2.5 Flash Lite', skills: 'Üretilen dosyaları, 2D ofis eşyalarını ve UI yamalarını denetler, mevcut yapıyı bozmadığını doğrulayıp Burak Beyin onayına sunar.' }
 ];
 
 function seedDefaultStaff() {
   DEF_STAFF.forEach((d, idx) => addStaff({ ...d, room: idx }));
-  lg('Varsayılan kurumsal departman kadrosu kuruldu.');
+  lg('Varsayılan 6 kişilik kurumsal departman kadrosu oluşturuldu.');
 }
 
 function addStaff(o) {
   const room = o.room != null ? o.room : RM.findIndex(r => !store.staff.some(s => s.room === r.i));
-  if (room < 0) { alert('Ofiste boş oda kalmadı.'); return null; }
+  if (room < 0) { alert('Ofiste boş oda kalmadı (Maksimum 8 Oda).'); return null; }
   const a = mkAgent({ ...o, room, id: (CONN && OWN) ? db.collection('staff').doc().id : undefined });
   fbSaveStaff(a);
   updateTargetSelect();
@@ -479,9 +923,13 @@ function syncStaff(list) {
     else {
       const rc = a.room !== room;
       Object.assign(a, {
-        name: x.name, role: x.role, model: x.model || a.model,
-        backup: x.backup || a.backup, skills: x.skills || '',
-        used: x.usedToday || a.used, room
+        name: x.name,
+        role: x.role,
+        model: normalizeModelName(x.model || a.model),
+        backup: normalizeModelName(x.backup || a.backup),
+        skills: x.skills || '',
+        used: x.usedToday || a.used,
+        room
       });
       if (rc) { a.act = true; goHome(a).then(() => a.act = false); }
     }
@@ -494,34 +942,282 @@ function updateTargetSelect() {
   const sel = $('#targetAgent');
   if (!sel) return;
   const cur = sel.value;
-  sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">${esc(a.name)} (${esc(a.role)})</option>`).join('');
+  sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">👤 ${esc(a.name)} · ${esc(shortRole(a.role))}</option>`).join('');
   if (cur && store.staff.some(a => a.id === cur)) sel.value = cur;
   else {
-    const seo = store.staff.find(a => /seo|plan|yönet/i.test(a.role));
-    if (seo) sel.value = seo.id;
+    const plan = store.staff.find(a => /plan|strateji|seo/i.test(a.role));
+    if (plan) sel.value = plan.id;
+  }
+}
+
+function setQuickTask(mode, text) {
+  if ($('#taskMode')) $('#taskMode').value = mode;
+  if ($('#ti')) { $('#ti').value = text; $('#ti').focus(); }
+  // Eğer sahne veya UI yaması ise Planlama veya Kod uzmanını otomatik seç
+  if (mode === 'scene' || mode === 'ui') {
+    const devOrPlan = store.staff.find(a => /plan|kod|yazılım/i.test(a.role));
+    if (devOrPlan && $('#targetAgent')) $('#targetAgent').value = devOrPlan.id;
   }
 }
 
 function lg(t) {
   store.log.unshift(hhmm() + ' · ' + t);
-  store.log.length = Math.max(store.log.length, 60);
+  if (store.log.length > 80) store.log.length = 80;
+  const hud = $('#hudSummary');
+  if (hud) hud.textContent = t.slice(0, 68);
   if (tab === 'tasks') render();
 }
 
+// Sahne Üzerinde Fare Gezdirildiğinde Detaylı Kart Gösterimi (Hover HUD)
+cv.addEventListener('mousemove', e => {
+  const r = cv.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width * 800;
+  const y = (e.clientY - r.top) / r.height * 520;
+  let best = null, bd = 28;
+  store.staff.forEach(a => {
+    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - x, q[1] - 24 - y);
+    if (d < bd) { bd = d; best = a; }
+  });
+  const hud = $('#hoverHud');
+  if (best) {
+    hud.style.display = 'block';
+    hud.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span class="dot" style="background:${best.c};margin:0"></span>
+        <b>${esc(best.name)}</b>
+        <span class="chip">Oda 0${best.room + 1}</span>
+      </div>
+      <div class="note" style="color:#cbd5e1;font-weight:600">${esc(best.role)}</div>
+      <div class="note" style="margin-top:4px">🤖 Model: <b>${esc(best.model)}</b> (Yedek: ${esc(best.backup)})</div>
+      <div class="note">⚡ Durum: <b>${esc(best.st)}</b> · Bugün: ${best.used || 0} istek</div>
+    `;
+  } else {
+    hud.style.display = 'none';
+  }
+});
+
+cv.addEventListener('click', e => {
+  if (!OWN) return;
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 800, y = (e.clientY - r.top) / r.height * 520;
+  let best = null, bd = 28;
+  store.staff.forEach(a => {
+    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - x, q[1] - 24 - y);
+    if (d < bd) { bd = d; best = a; }
+  });
+  if (best) openAgentModal(best.id);
+});
+
 /* ============================================================================
-   4. GERÇEK GEMINI API & GÜVENLİ KOTA YÖNETİCİSİ (70 SN MOLA)
+   4. CANLI OFİS & SİTE EKLENTİ MOTORU (MEVCUT KODU BOZMADAN GÜNCELLEME & GITHUB)
+   ============================================================================ */
+function renderActiveUIMods() {
+  const topSlot = $('#ext-top-right');
+  const menuSlot = $('#ext-header-menu');
+  const floatSlot = $('#ext-floating-widget');
+  const cssSlot = $('#ext-custom-css');
+  if (!topSlot || !menuSlot || !floatSlot || !cssSlot) return;
+
+  topSlot.innerHTML = '';
+  menuSlot.innerHTML = '';
+  floatSlot.innerHTML = '';
+  cssSlot.textContent = '';
+
+  const baseUI = (store.officeMods && Array.isArray(store.officeMods.uiMods)) ? store.officeMods.uiMods : [];
+  const prevUI = (store.previewMods && Array.isArray(store.previewMods.uiMods)) ? store.previewMods.uiMods : [];
+  const allUI = [...baseUI, ...prevUI];
+
+  let combinedCSS = '';
+  allUI.forEach((mod, i) => {
+    if (mod.css) combinedCSS += `\n/* Mod: ${mod.title || i} */\n` + mod.css;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ext-widget-item';
+    wrapper.style.display = 'inline-flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.innerHTML = mod.html || '';
+
+    const slot = String(mod.slot || 'top-right').toLowerCase();
+    if (slot.includes('menu') || slot.includes('header')) menuSlot.appendChild(wrapper);
+    else if (slot.includes('float')) floatSlot.appendChild(wrapper);
+    else topSlot.appendChild(wrapper);
+
+    if (mod.js) {
+      try {
+        const fn = new Function(mod.js);
+        fn();
+      } catch (err) {
+        console.warn('UI Eklenti JS uyarısı:', err);
+      }
+    }
+  });
+  cssSlot.textContent = combinedCSS;
+
+  const totalMods = getActiveSceneMods().length + allUI.length;
+  const b = $('#activeModsBadge');
+  if (b) {
+    if (totalMods > 0) {
+      b.style.display = 'block';
+      b.innerHTML = `✨ <b>${totalMods} Canlı Eklenti Aktif</b>${store.previewMods ? ' <span style="color:#fbbf24">(Önizleme Modu)</span>' : ''}`;
+    } else {
+      b.style.display = 'none';
+    }
+  }
+}
+
+async function loadRepoOfficeMods() {
+  try {
+    const res = await fetch('./office-mods.json?t=' + Date.now());
+    if (!res.ok) return;
+    const data = await res.json();
+    if ((!store.officeMods.sceneMods || !store.officeMods.sceneMods.length) && Array.isArray(data.sceneMods)) {
+      store.officeMods.sceneMods = data.sceneMods;
+    }
+    if ((!store.officeMods.uiMods || !store.officeMods.uiMods.length) && Array.isArray(data.uiMods)) {
+      store.officeMods.uiMods = data.uiMods;
+    }
+    renderActiveUIMods();
+  } catch (e) {}
+}
+
+// Onaylanan Yamayı Firestore'a Kaydetme (Anlık Senkronizasyon)
+async function applyApprovalToOffice(approvalId) {
+  const ap = store.approvals.find(x => x.id === approvalId);
+  if (!ap) return;
+
+  const newScene = Array.isArray(ap.sceneMods) ? ap.sceneMods : [];
+  const newUI = Array.isArray(ap.uiMods) ? ap.uiMods : [];
+
+  // Mevcut yamalarla birleştir (aynı id varsa güncelle)
+  const mergedScene = [...(store.officeMods.sceneMods || [])];
+  newScene.forEach(ns => {
+    const idx = mergedScene.findIndex(x => x.id && x.id === ns.id);
+    if (idx >= 0) mergedScene[idx] = ns;
+    else mergedScene.push({ ...ns, id: ns.id || ('sc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5)) });
+  });
+
+  const mergedUI = [...(store.officeMods.uiMods || [])];
+  newUI.forEach(nu => {
+    const idx = mergedUI.findIndex(x => x.id && x.id === nu.id);
+    if (idx >= 0) mergedUI[idx] = nu;
+    else mergedUI.push({ ...nu, id: nu.id || ('ui_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5)) });
+  });
+
+  store.officeMods = {
+    version: (store.officeMods.version || 1) + 1,
+    sceneMods: mergedScene,
+    uiMods: mergedUI
+  };
+  store.previewMods = null;
+  ap.status = 'approved';
+  tbOn = true;
+
+  renderActiveUIMods();
+
+  if (CONN && OWN) {
+    await db.doc('settings/office_mods').set({
+      ...store.officeMods,
+      updatedAt: FV().serverTimestamp()
+    }, { merge: true }).catch(() => {});
+
+    if (!String(ap.id).startsWith('ap_')) {
+      await db.collection('approvals').doc(ap.id).set({
+        status: 'approved',
+        approvedAt: FV().serverTimestamp()
+      }, { merge: true }).catch(() => {});
+    }
+    pub();
+  }
+
+  lg(`✅ Onaylandı ve canlı ofise uygulandı: ${ap.title}`);
+  renderApprovalBanner();
+  render();
+}
+
+// GitHub REST API ile Doğrudan Repo'ya Commit & Push (veya GitHub Actions Kuyruğuna Ekleme)
+async function pushModsToGitHub(approvalId) {
+  if (approvalId) {
+    const ap = store.approvals.find(x => x.id === approvalId);
+    if (ap && ap.status !== 'approved') {
+      await applyApprovalToOffice(approvalId);
+    }
+  }
+
+  const payloadStr = JSON.stringify({
+    version: store.officeMods.version || 1,
+    updatedAt: new Date().toISOString(),
+    sceneMods: store.officeMods.sceneMods || [],
+    uiMods: store.officeMods.uiMods || []
+  }, null, 2);
+
+  // Ortak klasöre de güncel office-mods.json olarak kaydet
+  await saveSharedFile('office-mods.json', payloadStr, 'json', 'Burak Bey (GitHub Senkronizasyonu)');
+
+  if (!store.githubToken || !store.githubRepo) {
+    if (CONN && OWN && approvalId && !String(approvalId).startsWith('ap_')) {
+      await db.collection('approvals').doc(approvalId).set({ status: 'github_queued' }, { merge: true }).catch(() => {});
+    }
+    alert('Onayınız Firestore\'a ve GitHub Actions kuyruğuna kaydedildi! (Tarayıcıdan anında GitHub push yapmak isterseniz sağ üstteki "⚙️ API & GitHub Ayarları" menüsünden GitHub Repo ve Token girebilirsiniz.)');
+    return;
+  }
+
+  try {
+    const branch = store.githubBranch || 'main';
+    const apiUrl = `https://api.github.com/repos/${store.githubRepo.trim()}/contents/office-mods.json`;
+    const headers = {
+      'Authorization': `Bearer ${store.githubToken.trim()}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    };
+
+    // Mevcut dosyanın SHA değerini al (varsa)
+    let sha = undefined;
+    const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers });
+    if (getRes.ok) {
+      const getJson = await getRes.json();
+      sha = getJson.sha;
+    }
+
+    const base64Content = btoa(unescape(encodeURIComponent(payloadStr)));
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        message: `🤖 Tonoz AI: Canlı ofis ve UI güncellemesi (v${store.officeMods.version || 1})`,
+        content: base64Content,
+        branch,
+        ...(sha ? { sha } : {})
+      })
+    });
+
+    if (!putRes.ok) {
+      const errTxt = await putRes.text();
+      throw new Error(`GitHub API (${putRes.status}): ${errTxt.slice(0, 200)}`);
+    }
+
+    if (CONN && OWN && approvalId && !String(approvalId).startsWith('ap_')) {
+      await db.collection('approvals').doc(approvalId).set({ status: 'github_pushed' }, { merge: true }).catch(() => {});
+    }
+    lg(`🐙 GitHub reposuna (${store.githubRepo}) başarıyla commit & push yapıldı!`);
+    alert(`Başarılı! Güncellemeler GitHub (${store.githubRepo}) reposuna mevcut kodu bozmadan eklendi.`);
+    render();
+  } catch (err) {
+    alert('GitHub Push Hatası: ' + err.message);
+  }
+}
+
+/* ============================================================================
+   5. AKILLI GEMINI API MOTORU & OTOMATİK MODEL FAILOVER YÖNETİCİSİ
    ============================================================================ */
 let nextAllowedCallTime = 0;
 
-function selectAvailableModel(agent) {
-  const primary = mdl(agent.model);
-  if (primary.u < primary.l) return primary;
-  const backup = mdl(agent.backup || 'Gemma 4 31B');
-  if (backup.u < backup.l) {
-    lg(`⚠️ ${agent.name} ana model kotasını doldurdu. Yedek modele (${backup.n}) geçildi.`);
-    return backup;
-  }
-  return null;
+function getCandidateModelsForAgent(agent) {
+  const p = mdl(agent.model);
+  const b = mdl(agent.backup || 'Gemma 3 27B');
+  const pool = [p, b, mdl('Gemini 2.5 Flash Lite'), mdl('Gemini 2.0 Flash Lite'), mdl('Gemma 3 27B')];
+  const unique = [];
+  pool.forEach(m => {
+    if (m && m.u < m.l && !unique.some(u => u.n === m.n)) unique.push(m);
+  });
+  return unique;
 }
 
 async function incrementModelQuota(modelObj, agent) {
@@ -538,55 +1234,71 @@ async function incrementModelQuota(modelObj, agent) {
 
 async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
   const apiKey = store.geminiKey;
-  if (!apiKey) throw new Error('Gemini API Anahtarı bulunamadı! Firestore settings/secret belgesine anahtarınızı ekleyin.');
+  if (!apiKey) throw new Error('Gemini API Anahtarı tanımlı değil! Sağ üstteki "⚙️ API & GitHub Ayarları" butonundan anahtarınızı kaydedin.');
 
-  const chosenModel = selectAvailableModel(agent);
-  if (!chosenModel) throw new Error(`${agent.name} için tüm model günlük kotaları tükendi!`);
+  const candidates = getCandidateModelsForAgent(agent);
+  if (!candidates.length) throw new Error(`${agent.name} için tüm günlük model kotaları doldu!`);
 
   const companyDirectory = store.staff.map(s =>
     `- ID: "${s.id}" | İsim: ${s.name} (${s.role}) | Uzmanlık: ${s.skills || ''}`
   ).join('\n');
 
-  const historyText = threadMails.slice(-4).map(m =>
+  const historyText = threadMails.slice(-5).map(m =>
     `[${m.f} (${m.fRole || ''}) -> ${m.t} (${m.type})]: ${m.subj}\n${m.body}`
   ).join('\n---\n');
 
   const filesOverview = relatedFiles.slice(0, 4).map(f =>
-    `Dosya: ${f.path} (Yazan: ${f.owner})\nİçerik:\n${f.content.slice(0, 3000)}`
+    `Dosya: ${f.path} (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, 2800)}`
   ).join('\n===\n') || 'Ortak klasör boş.';
 
-  const systemInstruction = `Sen "Tonoz AI Ofisi" şirketinde çalışan "${agent.name}", unvanın "${agent.role}" konumundasın.
+  const systemInstruction = `Sen "TONOZ AI COMPANY" şirketinde çalışan "${agent.name}", unvanın "${agent.role}".
 Uzmanlığın: ${agent.skills || ''}
 
-ŞİRKET KURALLARI:
-1. Kurumsal İstanbul Türkçesi (Bey/Hanım) kullan. Hitap ederken unvanları belirt (Örn: "Elif Hanım, Görsel Tasarım Uzmanı olarak...").
-2. İş bölümü yaparken SADECE aşağıdaki personel listesindeki ID'leri ("toAgentId") kullan:
+ŞİRKET VE İŞLEYİŞ KURALLARI:
+1. Kurumsal İstanbul Türkçesi (Bey/Hanım) kullan.
+2. Görev atarken SADECE aşağıdaki personel listesindeki ID'leri ("toAgentId") kullan:
 ${companyDirectory}
-- Genel Müdür ID: "owner" (Burak Bey). Sadece son sunum veya onay aşamasında "owner"a rapor gönder.
-3. Token tasarrufu için gereksiz mesajlaşma yapma; işini hemen yapıp ortak klasöre kaydet ve sonraki departmana ilet.
-4. Yanıtını SADECE aşağıdaki JSON formatında ver:
+- Şirket Sahibi ID: "owner" (Burak Bey). Sadece çalışma/yama tamamlandığında veya son kontrolde "owner"a rapor/onay gönder.
+3. ÖZEL YETENEK (CANLI 2D OFİS DEKORASYONU VE SİTE ÖZELLİK/MENÜ YAMASI):
+   - Eğer Burak Bey odalara ağaç, bitki, akvaryum, kitaplık, sunum tahtası gibi bir 2D ofis objesi istediyse VEYA siteye sağ üst köşeye saat, sayaç, yeni menü, widget gibi mevcut kodu bozmadan eklenecek bir özellik istediyse:
+   - Planlama Yöneticisi isen: Tasarım ve Kod uzmanlarına görev ata.
+   - Kod, Tasarım veya Kalite Uzmanı isen: İşi yap, "officePatch.hasPatch": true olarak işaretle ve "sceneMods" (2D ofis eşyası için) veya "uiMods" (HTML/CSS/JS menü/saat/widget için) dizisini doldurup Burak Bey'e ("owner") sun!
+   - Desteklenen sceneMods tipleri: "tree" (ağaç), "aquarium" (akvaryum), "bookshelf" (kitaplık), "whiteboard" (tahta). Hedef ("target"): "all_rooms" (tüm odalar), "corridor", "room_0".."room_7".
+   - Desteklenen uiMods yuvaları ("slot"): "top-right" (sağ üst köşe), "header-menu" (üst menü), "floating-widget" (sol alt yüzen araç).
+4. Yanıtını SADECE aşağıdaki geçerli JSON formatında ver:
 {
-  "canvasBubble": "Kısa durum (Örn: Kodları yazıyor)",
+  "canvasBubble": "Kısa eylem (Örn: Oda ağaçlarını modelliyor)",
   "fileToSave": {
-    "path": "Dosya adı (Örn: makale.md veya script.js) - dosya yoksa boş ''",
+    "path": "Dosya adı (Örn: ofis-agac-plani.md veya saat-widget.js) - yoksa ''",
     "kind": "md | code | svg | json",
     "content": "Dosya içeriği"
   },
   "outgoingMails": [
     {
-      "toAgentId": "Alıcı ID",
-      "subject": "Mesaj konusu",
-      "body": "Kurumsal talimat veya rapor",
+      "toAgentId": "Alıcı ID (veya owner)",
+      "subject": "Konu",
+      "body": "Detaylı mesaj",
       "type": "görev | rapor | onay"
     }
   ],
+  "officePatch": {
+    "hasPatch": false,
+    "title": "Yama başlığı (Örn: Tüm Odalara Dekoratif Ağaç Eklentisi)",
+    "summary": "Burak Bey için yapılan değişikliğin özeti",
+    "sceneMods": [
+      { "id": "mod_trees", "type": "tree", "target": "all_rooms", "scale": 1.15, "label": "Oda Ağaçları" }
+    ],
+    "uiMods": [
+      { "id": "mod_widget", "slot": "top-right", "title": "Ekstra Widget", "html": "<div class='badge live'>...</div>", "css": "", "js": "" }
+    ]
+  },
   "submitFinalApproval": {
     "ready": false,
-    "summary": "Tüm süreç tamamlandıysa Burak Bey için özet"
+    "summary": "Proje tamamlandıysa yönetici özeti"
   }
 }`;
 
-  const userPrompt = `GÖREV / MESAJ:
+  const userPrompt = `GELEN GÖREV / MESAJ:
 Gönderen: ${incomingMail.f} (${incomingMail.fRole || 'Yönetici'})
 Konu: ${incomingMail.subj}
 İçerik: ${incomingMail.body}
@@ -597,26 +1309,37 @@ ${historyText}
 ORTAK KLASÖR DOSYALARI:
 ${filesOverview}`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel.api}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: systemInstruction }] },
-      contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-      generationConfig: { temperature: 0.4, responseMimeType: 'application/json' }
-    })
-  });
+  let lastErr = null;
+  for (let i = 0; i < candidates.length; i++) {
+    const modelObj = candidates[i];
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelObj.api}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+          generationConfig: { temperature: 0.35, responseMimeType: 'application/json' }
+        })
+      });
 
-  if (!res.ok) {
-    const errTxt = await res.text();
-    throw new Error(`Gemini API Hatası (${res.status}): ${errTxt.slice(0, 250)}`);
+      if (!res.ok) {
+        const errTxt = await res.text();
+        lastErr = new Error(`${modelObj.n} (${ res.status }): ${errTxt.slice(0, 180)}`);
+        lg(`🔄 ${agent.name}: ${modelObj.n} meşgul/limitli (${res.status}), yedek modele geçiliyor...`);
+        continue;
+      }
+
+      await incrementModelQuota(modelObj, agent);
+      const data = await res.json();
+      const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      return JSON.parse(rawText);
+    } catch (e) {
+      lastErr = e;
+    }
   }
-
-  await incrementModelQuota(chosenModel, agent);
-  const data = await res.json();
-  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-  return JSON.parse(rawText);
+  throw lastErr || new Error('Gemini API yanıt vermedi.');
 }
 
 async function processNextPendingMail(forceNow = false) {
@@ -641,7 +1364,7 @@ async function processNextPendingMail(forceNow = false) {
   }
 
   busy = true;
-  updateEngineBadges('Çalışıyor: ' + agent.name);
+  updateEngineBadges(`⚡ Çalışıyor: ${shortName(agent.name)}`);
 
   try {
     agent.act = true;
@@ -658,10 +1381,15 @@ async function processNextPendingMail(forceNow = false) {
       const sp = SP.arsiv[0];
       agent.st = 'Arşive dosya yüklüyor';
       await walk(agent, sp[0], sp[1]);
-      say(agent, 'doc', decision.fileToSave.path + ' kaydedildi');
-      await saveSharedFile(decision.fileToSave.path, decision.fileToSave.content, decision.fileToSave.kind || 'md', `${agent.name} (${agent.role})`);
-      lg(`📁 ${agent.name} (${agent.role}) dosya kaydetti: ${decision.fileToSave.path}`);
-      await sleep(1400);
+      say(agent, 'doc', decision.fileToSave.path);
+      await saveSharedFile(
+        decision.fileToSave.path,
+        decision.fileToSave.content,
+        decision.fileToSave.kind || 'md',
+        `${agent.name} (${shortRole(agent.role)})`
+      );
+      lg(`📁 ${shortName(agent.name)} ortak arşive kaydetti: ${decision.fileToSave.path}`);
+      await sleep(1100);
     }
 
     const outList = Array.isArray(decision.outgoingMails) ? decision.outgoingMails : [];
@@ -670,21 +1398,20 @@ async function processNextPendingMail(forceNow = false) {
       if (!out.toAgentId || !out.body) continue;
 
       const target = out.toAgentId === 'owner'
-        ? { id: 'owner', name: 'Sen (Burak Bey)', role: 'Şirket Sahibi' }
+        ? { id: 'owner', name: 'Burak Bey (Yönetici)', role: 'Şirket Sahibi' }
         : (store.staff.find(s => s.id === out.toAgentId || s.name === out.toAgentId) || null);
 
       if (!target) continue;
 
       if (target.id !== 'owner') {
         const d = door(target);
-        agent.st = target.name + ' odasına gidiyor';
+        agent.st = shortName(target.name) + ' ile görüşüyor';
         await walk(agent, d[0], d[1]);
-        say(agent, 'mail', target.name + ' ile görüşüyor');
+        say(agent, 'mail', shortName(target.name) + ' ile görüşüyor');
       } else {
-        say(agent, 'doc', 'Yöneticiye rapor sunuyor');
+        say(agent, 'doc', 'Onaya sunuyor');
       }
 
-      // RPM sınırına takılmamak için sabit 70 sn (veya kademeli) mola
       const delayMs = (i + 1) * (store.cooldownSec * 1000);
       await createInternalMail({
         fromId: agent.id, fromName: agent.name, fromRole: agent.role,
@@ -695,12 +1422,23 @@ async function processNextPendingMail(forceNow = false) {
         threadId: pending.threadId || pending.id,
         notBeforeMs: Date.now() + delayMs
       });
-      lg(`✉️ ${agent.name} (${agent.role}) → ${target.name}: ${out.subject}`);
-      await sleep(1500);
+      lg(`✉️ ${shortName(agent.name)} → ${shortName(target.name)}: ${out.subject}`);
+      await sleep(1100);
     }
 
-    if (decision.submitFinalApproval && decision.submitFinalApproval.ready) {
-      showApprovalBox(pending.subj, decision.submitFinalApproval.summary || 'Çalışma tamamlandı.');
+    // Ofis/UI Yaması veya Son Onay Kutusu Oluşturma
+    const hasPatch = decision.officePatch && decision.officePatch.hasPatch;
+    const isFinal = decision.submitFinalApproval && decision.submitFinalApproval.ready;
+    if (hasPatch || isFinal) {
+      await createApprovalItem({
+        title: (decision.officePatch && decision.officePatch.title) || pending.subj,
+        summary: (decision.officePatch && decision.officePatch.summary) || (decision.submitFinalApproval && decision.submitFinalApproval.summary) || 'Ekip çalışmayı tamamladı ve onayınıza sunar.',
+        createdBy: `${agent.name} (${shortRole(agent.role)})`,
+        hasPatch: !!hasPatch,
+        sceneMods: (decision.officePatch && Array.isArray(decision.officePatch.sceneMods)) ? decision.officePatch.sceneMods : [],
+        uiMods: (decision.officePatch && Array.isArray(decision.officePatch.uiMods)) ? decision.officePatch.uiMods : [],
+        threadId: pending.threadId || pending.id
+      });
     }
 
     await markMailProcessed(pending.id);
@@ -712,9 +1450,9 @@ async function processNextPendingMail(forceNow = false) {
     nextAllowedCallTime = Date.now() + (store.cooldownSec * 1000);
   } catch (err) {
     console.error(err);
-    lg(`❌ Hata (${agent.name}): ${err.message}`);
+    lg(`❌ Hata (${shortName(agent.name)}): ${err.message}`);
     agent.mon = 0; agent.act = false; hush(agent);
-    nextAllowedCallTime = Date.now() + 20000;
+    nextAllowedCallTime = Date.now() + 15000;
   } finally {
     busy = false;
     render();
@@ -725,38 +1463,42 @@ setInterval(() => {
   const coolEl = $('#coolBadge');
   const rem = Math.ceil((nextAllowedCallTime - Date.now()) / 1000);
   if (rem > 0 && !busy) {
-    coolEl.style.display = 'inline-block';
+    coolEl.style.display = 'inline-flex';
     coolEl.className = 'badge wait';
-    coolEl.textContent = `☕ Güvenli Mola (${rem} sn)`;
+    coolEl.textContent = `⏳ Kota Koruma (${rem} sn)`;
   } else {
     coolEl.style.display = 'none';
   }
   if (!busy && !halt && OWN) {
     processNextPendingMail(false);
   }
-}, 3000);
+}, 2000);
 
 function updateEngineBadges(stateText) {
   const b = $('#engBadge');
-  if (!OWN) { b.className = 'badge'; b.textContent = 'Ziyaretçi Modu'; return; }
+  if (!OWN) { b.className = 'badge'; b.textContent = '👁️ Ziyaretçi Vitrini'; return; }
   b.className = 'badge live';
-  b.textContent = stateText || (halt ? '⏸ Duraklatıldı' : '🟢 Otonom Motor Aktif (RPM Korumalı)');
+  b.textContent = stateText || (halt ? '⏸ Duraklatıldı' : '🟢 Otonom Motor Aktif');
 }
 
 /* ============================================================================
-   5. FIRESTORE & SEKRETERYA İŞLEMLERİ (YENİ PROJE SIFIRLAMA ÖZELLİĞİ)
+   6. FIRESTORE İŞLEMLERİ, ONAY MERKEZİ & SEKME ARAYÜZLERİ
    ============================================================================ */
 let db = null, auth = null, CONN = false, vt = 0, un = [], pt = 0;
 const FV = () => firebase.firestore.FieldValue;
 
-const nm = id => id === 'owner' ? 'Sen (Burak Bey)' : (store.staff.find(s => s.id === id) || { name: id }).name;
+const nm = id => id === 'owner' ? 'Burak Bey (Yönetici)' : (store.staff.find(s => s.id === id) || { name: id }).name;
 const tm = t => t && t.toDate ? t.toDate().toTimeString().slice(0, 5) : hhmm();
 
 async function createInternalMail({ fromId, fromName, fromRole, toId, toName, subject, body, type, threadId, notBeforeMs }) {
+  const cleanSubj = String(subject || 'Görev').slice(0, 290);
+  const cleanBody = String(body || '').slice(0, 39000);
+  const cleanType = ['görev', 'rapor', 'soru', 'bilgi', 'onay'].includes(type) ? type : 'görev';
+
   const mailObj = {
     id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
     fromId, toId, f: fromName, fRole: fromRole || 'Uzman', t: toName,
-    subj: subject, body, type: type || 'görev',
+    subj: cleanSubj, body: cleanBody, type: cleanType,
     threadId: threadId || ('th_' + Date.now()),
     processed: toId === 'owner',
     notBeforeMs: notBeforeMs || Date.now(),
@@ -768,14 +1510,24 @@ async function createInternalMail({ fromId, fromName, fromRole, toId, toName, su
     const tid = db.collection('tasks').doc().id;
     if (toId !== 'owner') {
       await db.collection('tasks').doc(tid).set({
-        title: subject, description: body.slice(0, 1500),
-        owner: toId, createdBy: fromId, status: 'bekliyor',
-        priority: 1, createdAt: ts, updatedAt: ts
+        title: cleanSubj,
+        description: cleanBody.slice(0, 1500),
+        owner: toId,
+        createdBy: fromId,
+        status: 'bekliyor',
+        priority: 1,
+        createdAt: ts,
+        updatedAt: ts
       }).catch(() => {});
     }
     await db.collection('mails').add({
-      from: fromId, to: toId, subject, body, type: mailObj.type,
-      taskId: tid, threadId: mailObj.threadId,
+      from: fromId,
+      to: toId,
+      subject: cleanSubj,
+      body: cleanBody,
+      type: cleanType,
+      taskId: tid,
+      threadId: mailObj.threadId,
       processed: mailObj.processed,
       notBefore: firebase.firestore.Timestamp.fromMillis(mailObj.notBeforeMs),
       createdAt: ts
@@ -784,6 +1536,96 @@ async function createInternalMail({ fromId, fromName, fromRole, toId, toName, su
     store.mails.unshift(mailObj);
     render();
   }
+}
+
+async function createApprovalItem(item) {
+  const apObj = {
+    id: 'ap_' + Date.now(),
+    title: item.title || 'Yönetici Onayı Bekleyen Çalışma',
+    summary: item.summary || '',
+    createdBy: item.createdBy || 'Tonoz AI Ekibi',
+    status: 'pending',
+    hasPatch: !!item.hasPatch,
+    sceneMods: item.sceneMods || [],
+    uiMods: item.uiMods || [],
+    time: hhmm()
+  };
+
+  if (CONN && OWN) {
+    await db.collection('approvals').add({
+      ...apObj,
+      createdAt: FV().serverTimestamp()
+    }).catch(() => {});
+  } else {
+    store.approvals.unshift(apObj);
+    renderApprovalBanner();
+    render();
+  }
+}
+
+function previewApprovalMods(approvalId) {
+  const ap = store.approvals.find(x => x.id === approvalId);
+  if (!ap) return;
+  if (store.previewMods && store.previewMods._apId === approvalId) {
+    store.previewMods = null;
+    lg('👁️ Önizleme kapatıldı.');
+  } else {
+    store.previewMods = {
+      _apId: approvalId,
+      sceneMods: ap.sceneMods || [],
+      uiMods: ap.uiMods || []
+    };
+    lg(`👁️ Canlı önizleme aktif: ${ap.title}`);
+  }
+  renderActiveUIMods();
+  renderApprovalBanner();
+  render();
+}
+
+function renderApprovalBanner() {
+  const e = $('#ap');
+  if (!e) return;
+  const pendingList = store.approvals.filter(a => a.status === 'pending');
+  if (!pendingList.length || !OWN) {
+    e.style.display = 'none';
+    return;
+  }
+  const latest = pendingList[0];
+  const isPrev = store.previewMods && store.previewMods._apId === latest.id;
+  e.style.display = 'block';
+  e.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
+      <div>
+        <div class="badge live" style="margin-bottom:6px">🔔 YÖNETİCİ ONAY & GITHUB KUTUSU (${pendingList.length} Bekleyen)</div>
+        <h3 style="margin:0 0 6px;font:700 17px 'Space Grotesk',sans-serif">${esc(latest.title)}</h3>
+        <div class="note" style="color:#e2e8f0">${esc(latest.summary)}</div>
+        <div class="note" style="margin-top:4px">Hazırlayan: <b>${esc(latest.createdBy)}</b> · ${latest.sceneMods?.length || 0} Ofis Eşyası · ${latest.uiMods?.length || 0} UI Eklentisi</div>
+      </div>
+      <div class="row" style="margin:0">
+        ${(latest.sceneMods?.length || latest.uiMods?.length) ? `
+          <button class="warn" onclick="previewApprovalMods('${latest.id}')">${isPrev ? '🙈 Önizlemeyi Kapat' : '👁️ Canlı Önizle (Test Et)'}</button>
+        ` : ''}
+        <button class="ok" onclick="applyApprovalToOffice('${latest.id}')">✅ Onayla & Ofise Uygula</button>
+        <button class="p" onclick="pushModsToGitHub('${latest.id}')">🐙 GitHub'a Ekle (Commit & Push)</button>
+        <button onclick="askRevision('${latest.id}')">↩️ Revize İste</button>
+      </div>
+    </div>
+  `;
+}
+
+function askRevision(approvalId) {
+  const ap = store.approvals.find(x => x.id === approvalId);
+  const note = prompt('Ekibe iletilecek revize talimatınızı yazın:');
+  if (!note) return;
+  if (ap) ap.status = 'revised';
+  if (CONN && OWN && ap && !String(ap.id).startsWith('ap_')) {
+    db.collection('approvals').doc(ap.id).set({ status: 'revised' }, { merge: true }).catch(() => {});
+  }
+  store.previewMods = null;
+  renderActiveUIMods();
+  renderApprovalBanner();
+  $('#ti').value = `REVİZE (${ap ? ap.title : ''}): ${note}`;
+  $('#go').click();
 }
 
 async function markMailProcessed(mailId) {
@@ -797,20 +1639,22 @@ async function markMailProcessed(mailId) {
 }
 
 async function saveSharedFile(path, content, kind, ownerName) {
-  const existing = store.files.find(f => f.path === path);
+  const cleanPath = String(path || 'dosya.md').slice(0, 240);
+  const cleanContent = String(content || '').slice(0, 900000);
+  const existing = store.files.find(f => f.path === cleanPath);
   if (CONN && OWN) {
     const ts = FV().serverTimestamp();
     const docId = existing ? existing.id : db.collection('files').doc().id;
     const ver = existing ? (existing.version || 1) + 1 : 1;
     await db.collection('files').doc(docId).set({
-      path, content, owner: ownerName, kind: kind || 'md',
+      path: cleanPath, content: cleanContent, owner: ownerName, kind: kind || 'md',
       version: ver, createdAt: ts, updatedAt: ts
     }, { merge: true });
   } else {
     if (existing) {
-      existing.content = content; existing.version++; existing.owner = ownerName; existing.time = hhmm();
+      existing.content = cleanContent; existing.version++; existing.owner = ownerName; existing.time = hhmm();
     } else {
-      store.files.unshift({ id: 'f_' + Date.now(), path, content, kind, owner: ownerName, version: 1, time: hhmm() });
+      store.files.unshift({ id: 'f_' + Date.now(), path: cleanPath, content: cleanContent, kind, owner: ownerName, version: 1, time: hhmm() });
     }
   }
 }
@@ -821,17 +1665,25 @@ function downloadFile(fileId) {
   const blob = new Blob([f.content], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = f.path;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = f.path;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-// Projeyi sıfırlama (Tüm mailleri, görevleri ve dosyaları temizleme)
+async function clearAllOfficeMods() {
+  if (!confirm('Ofise sonradan eklenen tüm dekorasyon ve UI eklentileri kaldırılsın mı?')) return;
+  store.officeMods = { version: (store.officeMods.version || 1) + 1, sceneMods: [], uiMods: [] };
+  store.previewMods = null;
+  renderActiveUIMods();
+  if (CONN && OWN) {
+    await db.doc('settings/office_mods').set({ ...store.officeMods, updatedAt: FV().serverTimestamp() }).catch(() => {});
+    pub();
+  }
+  render();
+}
+
 async function resetProject() {
-  if (!confirm('Mevcut projedeki tüm yazışmalar, görevler ve ortak dosyalar kalıcı olarak silinecek. Yeni bir projeye başlansın mı?')) return;
+  if (!confirm('Mevcut yazışmalar, görevler ve ortak klasör dosyaları sıfırlanacak. Onaylıyor musunuz?')) return;
   if (CONN && OWN) {
     try {
       const batch = db.batch();
@@ -842,60 +1694,33 @@ async function resetProject() {
       const fSnap = await db.collection('files').get();
       fSnap.forEach(d => batch.delete(d.ref));
       await batch.commit();
-      lg('🗑️ Proje sıfırlandı: Tüm yazışmalar ve dosyalar temizlendi.');
-      alert('Sistem başarıyla sıfırlandı, yeni projeye hazırsınız!');
+      lg('🗑️ Proje yazışma ve dosyaları temizlendi.');
     } catch (e) {
       alert('Sıfırlama hatası: ' + e.message);
     }
   } else {
-    store.mails = [];
-    store.tasks = [];
-    store.files = [];
-    store.log = [];
+    store.mails = []; store.tasks = []; store.files = []; store.log = [];
     render();
-    alert('Yerel simülasyon sıfırlandı.');
   }
 }
 
-function showApprovalBox(title, summary) {
-  const e = $('#ap');
-  e.style.display = 'block';
-  e.innerHTML = `
-    <h3>✅ Yönetici Onay Kutusu (Son Sunum)</h3>
-    <p style="margin:0 0 10px"><b>Konu:</b> ${esc(title)}<br><span class="note">${esc(summary)}</span></p>
-    <div class="row">
-      <button class="p" id="okBtn">Onayla & Arşivle</button>
-      <button id="revBtn">Revize İste</button>
-    </div>`;
-  $('#okBtn').onclick = () => {
-    tbOn = true; blk(9, 4, 2, 1);
-    e.innerHTML = '<p class="note" style="margin:0;color:var(--ok)"><b>Onaylandı!</b> Çıktılar ortak klasörde arşivlendi.</p>';
-    lg('Burak Bey: Çalışmayı onayladı.');
-    pub();
-  };
-  $('#revBtn').onclick = () => {
-    const note = prompt('Revize talebinizi yazın:');
-    if (note) { $('#ti').value = 'REVİZE: ' + note; $('#go').click(); }
-    e.style.display = 'none';
-  };
-}
-
-/* ============================================================================
-   6. ARAYÜZ SEKMELERİ
-   ============================================================================ */
 let tab = 'mail';
 const TABS = [
-  ['mail',  '✉️ Yazışmalar'],
-  ['staff', '👥 Personel & Kotalar'],
-  ['tasks', '📋 Görevler'],
-  ['files', '📁 Ortak Klasör']
+  ['mail',      '✉️ İç Yazışmalar'],
+  ['approvals', '🚀 Onay & GitHub Merkezi'],
+  ['staff',     '👥 Personel & Kadro'],
+  ['roadmap',   '🗺️ Model & Kota Yol Planı'],
+  ['files',     '📁 Ortak Klasör'],
+  ['tasks',     '📡 Görev Akışı & Loglar']
 ];
 
 function tabsUI() {
   const unread = store.mails.filter(m => !m.processed && m.toId !== 'owner').length;
+  const pendAp = store.approvals.filter(a => a.status === 'pending').length;
   $('#tabs').innerHTML = TABS.map(t =>
     `<button class="${tab == t[0] ? 'on' : ''}" onclick="tab='${t[0]}';tabsUI();render()">${t[1]}${
       t[0] == 'mail' ? `<span class="chip">${store.mails.length}${unread ? ' · ' + unread + ' sırada' : ''}</span>` :
+      t[0] == 'approvals' ? `<span class="chip">${pendAp ? '🔔 ' + pendAp : store.approvals.length}</span>` :
       t[0] == 'files' ? `<span class="chip">${store.files.length}</span>` : ''
     }</button>`
   ).join('');
@@ -907,6 +1732,7 @@ function render() {
   if (!OWN) return;
   tabsUI();
   updateEngineBadges();
+  renderApprovalBanner();
   const p = $('#pn');
 
   if (tab === 'mail') {
@@ -917,22 +1743,22 @@ function render() {
       <div class="mail-grid">
         <div class="mail-list">
           <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Yazışma Akışı</b>
-            <span class="note">${store.mails.filter(m => !m.processed).length} bekleyen</span>
+            <b>Kurum İçi Yazışma Akışı</b>
+            <span class="note">${store.mails.filter(m => !m.processed && m.toId !== 'owner').length} kuyrukta</span>
           </div>
           ${store.mails.length ? store.mails.map(m => `
             <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${m.id}';render()">
               <div style="display:flex;justify-content:space-between;font-size:12px">
-                <b>${esc(m.f)} → ${esc(m.t)}</b>
+                <b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b>
                 <span class="note">${esc(m.time)}</span>
               </div>
-              <div style="font-weight:700;margin:3px 0">${esc(m.subj)}</div>
+              <div style="font-weight:700;margin:4px 0">${esc(m.subj)}</div>
               <div class="note" style="display:flex;justify-content:space-between">
                 <span>${esc(m.type.toUpperCase())}</span>
-                <span>${m.processed ? '✓ Bitti' : '⏳ Bekliyor'}</span>
+                <span>${m.processed ? '✓ İşlendi' : '⏳ Sırada'}</span>
               </div>
             </div>
-          `).join('') : '<p class="note">Henüz yazışma yok.</p>'}
+          `).join('') : '<p class="note">Henüz yazışma yok. Yukarıdan yeni bir görev başlatın.</p>'}
         </div>
         <div>
           ${sel ? `
@@ -941,75 +1767,134 @@ function render() {
                 <h3 style="margin:0">${esc(sel.subj)}</h3>
                 <div class="note">Gönderen: <b>${esc(sel.f)}</b> (${esc(sel.fRole || 'Uzman')}) → Alıcı: <b>${esc(sel.t)}</b></div>
               </div>
-              <span class="chip">${sel.processed ? 'Tamamlandı' : 'Sırada'}</span>
+              <span class="chip">${sel.processed ? 'Tamamlandı' : 'Kuyrukta'}</span>
             </div>
-            <div style="white-space:pre-wrap;line-height:1.65;margin:14px 0;padding:14px;background:#151221;border-radius:14px;border:1px solid var(--ln)">${esc(sel.body)}</div>
+            <div style="white-space:pre-wrap;line-height:1.7;margin:14px 0;padding:16px;background:var(--card-2);border-radius:14px;border:1px solid var(--ln)">${esc(sel.body)}</div>
             <div class="row">
-              <input id="replyTxt" style="flex:1" placeholder="Yazışmaya müdahale et / talimat ekle...">
-              <button class="p" onclick="replyToMail('${sel.id}')">Gönder</button>
+              <input id="replyTxt" style="flex:1" placeholder="Bu yazışmaya yönetici talimatı ekle...">
+              <button class="p" onclick="replyToMail('${sel.id}')">Talimat Gönder</button>
             </div>
-          ` : '<p class="note">Detay için bir yazışma seçin.</p>'}
+          ` : '<p class="note">Detayları görmek için soldan bir yazışma seçin.</p>'}
         </div>
       </div>`;
   }
+  else if (tab === 'approvals') {
+    const activeScene = store.officeMods.sceneMods || [];
+    const activeUI = store.officeMods.uiMods || [];
+    p.innerHTML = `
+      <div class="row" style="justify-content:space-between;margin-top:0">
+        <div>
+          <h3 style="margin:0">🚀 Canlı Ofis Yamaları, Onay Kutusu & GitHub Entegrasyonu</h3>
+          <span class="note">Ajanların tasarladığı 2D ofis objelerini (ağaç, akvaryum vb.) ve site özelliklerini (saat, menü vb.) mevcut kodu bozmadan burada önizleyip GitHub'a ekleyebilirsiniz.</span>
+        </div>
+        <div class="row" style="margin:0">
+          <button class="p" onclick="pushModsToGitHub()">🐙 Mevcut Durumu GitHub'a Push Et</button>
+          <button class="danger" onclick="clearAllOfficeMods()">Eklentileri Temizle</button>
+        </div>
+      </div>
+
+      <div class="cols" style="margin-top:14px">
+        <div class="tier-card">
+          <b>🌳 Aktif 2.5D Ofis Eşyaları (${activeScene.length})</b>
+          <div class="note" style="margin:6px 0">Hızlı eklemek için tıklayın veya ajanlardan isteyin:</div>
+          <div class="row">
+            <button onclick="quickApplySceneMod('tree','all_rooms','Oda Ağaçları')">+ 🌳 Odalara Ağaç</button>
+            <button onclick="quickApplySceneMod('aquarium','mola','Dinlenme Akvaryumu')">+ 🐠 Akvaryum</button>
+            <button onclick="quickApplySceneMod('bookshelf','toplanti','Toplantı Kitaplığı')">+ 📚 Kitaplık</button>
+          </div>
+          ${activeScene.map(s => `<div class="chip" style="display:inline-block;margin:4px 4px 0 0">✓ ${esc(s.label || s.type)} (${esc(s.target)})</div>`).join('') || '<p class="note">Henüz ek sahne objesi yok.</p>'}
+        </div>
+
+        <div class="tier-card">
+          <b>🧩 Aktif UI & Menü Eklentileri (${activeUI.length})</b>
+          <div class="note" style="margin:6px 0">Mevcut kodu bozmadan çalışan canlı bileşenler:</div>
+          <div class="row">
+            <button onclick="quickApplyUIMod('world-clock')">+ 🌍 Dünya Saatleri & Kur</button>
+            <button onclick="quickApplyUIMod('quick-status')">+ 📊 Performans Sayacı</button>
+          </div>
+          ${activeUI.map(u => `<div class="chip" style="display:inline-block;margin:4px 4px 0 0">✓ ${esc(u.title || u.id)} (${esc(u.slot)})</div>`).join('') || '<p class="note">Sağ üstteki ana dijital saat aktif.</p>'}
+        </div>
+      </div>
+
+      <h3 style="margin-top:20px">📋 Ajanların Sunduğu Onay Paketleri (${store.approvals.length})</h3>
+      ${store.approvals.length ? store.approvals.map(ap => `
+        <div class="approval-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <b>${esc(ap.title)}</b> <span class="chip">${esc(ap.status.toUpperCase())}</span>
+              <div class="note" style="margin-top:4px">${esc(ap.summary)}</div>
+              <div class="note">Sunan: ${esc(ap.createdBy)} · ${ap.sceneMods?.length || 0} Sahne Yaması · ${ap.uiMods?.length || 0} UI Yaması</div>
+            </div>
+            <div class="row" style="margin:0">
+              ${(ap.sceneMods?.length || ap.uiMods?.length) ? `<button class="warn" onclick="previewApprovalMods('${ap.id}')">👁️ Önizle</button>` : ''}
+              <button class="ok" onclick="applyApprovalToOffice('${ap.id}')">✅ Onayla & Uygula</button>
+              <button class="p" onclick="pushModsToGitHub('${ap.id}')">🐙 GitHub'a Ekle</button>
+            </div>
+          </div>
+        </div>
+      `).join('') : '<p class="note">Henüz onay bekleyen çalışma yok. Yukarıdan "🌳 Odalara Ağaç İste" veya "🕒 Sağ Köşeye Saat & Menü Ekle" butonuna basarak ajanları çalıştırabilirsiniz.</p>'}
+    `;
+  }
   else if (tab === 'staff') {
     p.innerHTML = `
-      <div class="row" style="margin-top:0">
-        <button class="p" onclick="openAgentModal()">+ Yeni Ajan Ekle</button>
-        ${store.staff.length ? '' : '<button onclick="seedDefaultStaff()">Varsayılan Kadroyu Kur</button>'}
+      <div class="row" style="margin-top:0;justify-content:space-between">
+        <div>
+          <button class="p" onclick="openAgentModal()">+ Yeni Ajan Ekle</button>
+          ${store.staff.length ? '' : '<button onclick="seedDefaultStaff()">Varsayılan Kadroyu Kur</button>'}
+        </div>
+        <span class="note">💡 İpucu: 2.5D ofisteki herhangi bir karaktere tıklayarak da düzenleyebilirsiniz.</span>
       </div>
       <table>
-        <tr><th>Personel & Unvan</th><th>Uzmanlık</th><th>Model & İstek</th><th>Durum</th><th>İşlem</th></tr>
+        <tr><th>Personel & Kısa Etiket</th><th>Departman / Unvan</th><th>Ana & Yedek Model</th><th>Durum</th><th>İşlem</th></tr>
         ${store.staff.map(s => `
           <tr>
-            <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b><br><span class="note">${esc(s.role)} · Oda ${s.room + 1}</span></td>
-            <td><span class="note">${esc((s.skills || '').slice(0, 90))}...</span></td>
-            <td><b>${esc(s.model)}</b><br><span class="note">Bugün: ${s.used || 0}</span></td>
+            <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b> <span class="chip">${esc(shortName(s.name))}</span></td>
+            <td><b>${esc(s.role)}</b><br><span class="note">Oda 0${s.room + 1} · ${esc((s.skills || '').slice(0, 75))}...</span></td>
+            <td><b>${esc(s.model)}</b><br><span class="note">Yedek: ${esc(s.backup)} · Bugün: ${s.used || 0}</span></td>
             <td><span class="chip">${esc(s.st)}</span></td>
             <td><button onclick="openAgentModal('${s.id}')">Düzenle</button></td>
           </tr>
         `).join('')}
-      </table>
-      <h3 style="margin-top:20px">Günlük Model Havuzları (${todayKey()})</h3>
+      </table>`;
+  }
+  else if (tab === 'roadmap') {
+    p.innerHTML = `
+      <div class="row" style="justify-content:space-between;margin-top:0">
+        <div>
+          <h3 style="margin:0">🗺️ Gemini API Çoklu Model & Akıllı Kota Yol Planı (${todayKey()})</h3>
+          <span class="note">Her modelin dakikalık (RPM) ve günlük (RPD) sınırı farklıdır. Sistem bir model kotaya takıldığında (429) otomatik olarak bir alt katmandaki yedek modele geçer.</span>
+        </div>
+      </div>
+      <div class="cols" style="margin:14px 0">
+        <div class="tier-card">
+          <b>1️⃣ Strateji & Planlama Katmanı</b>
+          <p class="note">Selin Hanım (SEO) ve Arda Bey (Planlama) az sayıda ama yüksek zekalı istek yapar. <b>Gemini 2.5 Flash / Pro</b> kullanır.</p>
+        </div>
+        <div class="tier-card">
+          <b>2️⃣ Yoğun Üretim Katmanı (Kod & Tasarım)</b>
+          <p class="note">Ahmet Bey, Elif Hanım ve Mert Bey çok sayıda kod/içerik üretir. Yüksek kotalı (1000-1500 RPD) <b>Gemini 2.5 / 2.0 Flash Lite</b> kullanır.</p>
+        </div>
+        <div class="tier-card">
+          <b>3️⃣ Kesintisiz Yedek Havuz (Failover)</b>
+          <p class="note">Herhangi bir model günlük veya dakikalık sınıra ulaşırsa sistem işi durdurmaz; <b>14.400 RPD</b> kapasiteli <b>Gemma 3 27B</b> havuzuna devreder.</p>
+        </div>
+      </div>
       ${MODELS.map(m => {
         const w = poolOf(m.n);
         const pct = Math.min(100, (m.u / m.l) * 100);
         return `
-          <div style="display:flex;justify-content:space-between;font-size:13px">
-            <span><b>${m.n}</b> <span class="note">(${m.desc})</span> ${w.length ? `<span class="chip">${w.map(x => esc(x.name)).join(', ')}</span>` : ''}</span>
-            <span><b>${m.u} / ${m.l}</b></span>
-          </div>
-          <div class="bar"><i style="width:${pct}%"></i></div>`;
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:13px;align-items:center">
+              <span>
+                <b>${esc(m.n)}</b> <span class="chip">${esc(m.tier)}</span>
+                <span class="note" style="margin-left:6px">${esc(m.desc)}</span>
+                ${w.length ? `<span class="chip" style="border-color:var(--acc);color:#c7d2fe">${w.map(x => esc(shortName(x.name))).join(', ')}</span>` : ''}
+              </span>
+              <span><b>${m.u} / ${m.l}</b> <span class="note">(${m.rpm} RPM)</span></span>
+            </div>
+            <div class="bar"><i style="width:${pct}%"></i></div>
+          </div>`;
       }).join('')}`;
-  }
-  else if (tab === 'tasks') {
-    const pendingMails = store.mails.filter(m => !m.processed && m.toId !== 'owner');
-    const doneMails = store.mails.filter(m => m.processed);
-    p.innerHTML = `
-      <div class="cols">
-        <div>
-          <h3>⏳ Bekleyen Görevler (${pendingMails.length})</h3>
-          ${pendingMails.map(m => `
-            <div style="padding:10px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:#151221">
-              <b>${esc(m.t)}</b> <span class="note">← ${esc(m.f)}</span><br><span>${esc(m.subj)}</span>
-            </div>
-          `).join('') || '<span class="note">Bekleyen görev yok.</span>'}
-        </div>
-        <div>
-          <h3>✅ Tamamlananlar (${doneMails.length})</h3>
-          ${doneMails.slice(0, 8).map(m => `
-            <div style="padding:10px;border-bottom:1px solid var(--ln)">
-              <b>${esc(m.f)} → ${esc(m.t)}</b><br><span class="note">${esc(m.subj)}</span>
-            </div>
-          `).join('') || '<span class="note">Tamamlanan adım yok.</span>'}
-        </div>
-        <div>
-          <h3>📡 Canlı Kayıtlar</h3>
-          <div class="note" style="max-height:360px;overflow-y:auto;line-height:1.7">
-            ${store.log.map(esc).join('<br>') || 'Kayıt yok.'}
-          </div>
-        </div>
-      </div>`;
   }
   else if (tab === 'files') {
     const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
@@ -1019,15 +1904,15 @@ function render() {
       <div class="mail-grid">
         <div class="mail-list">
           <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Ortak Dosyalar</b>
-            <button onclick="newFilePrompt()">+ Dosya Ekle</button>
+            <b>Ortak Arşiv Dosyaları</b>
+            <button onclick="newFilePrompt()">+ Yeni Dosya</button>
           </div>
           ${store.files.length ? store.files.map(f => `
             <div class="mail-item ${f.id === store.selectedFileId ? 'active' : ''}" onclick="store.selectedFileId='${f.id}';render()">
               <b>📄 ${esc(f.path)}</b>
               <div class="note">Yazan: ${esc(f.owner)} · v${f.version || 1}</div>
             </div>
-          `).join('') : '<p class="note">Dosya bulunmuyor.</p>'}
+          `).join('') : '<p class="note">Henüz üretilen dosya yok.</p>'}
         </div>
         <div>
           ${sf ? `
@@ -1037,15 +1922,91 @@ function render() {
                 <span class="note">Yazan: <b>${esc(sf.owner)}</b></span>
               </div>
               <div class="row" style="margin:0">
-                <button class="p" onclick="downloadFile('${sf.id}')">📥 Dosyayı İndir</button>
-                <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">Kopyala</button>
+                <button class="p" onclick="downloadFile('${sf.id}')">📥 İndir</button>
+                <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">📋 Kopyala</button>
               </div>
             </div>
             <pre class="code">${esc(sf.content)}</pre>
-          ` : '<p class="note">Dosya seçin.</p>'}
+          ` : '<p class="note">Görüntülemek için dosya seçin.</p>'}
         </div>
       </div>`;
   }
+  else if (tab === 'tasks') {
+    const pendingMails = store.mails.filter(m => !m.processed && m.toId !== 'owner');
+    const doneMails = store.mails.filter(m => m.processed);
+    p.innerHTML = `
+      <div class="cols">
+        <div>
+          <h3>⏳ Sırada Bekleyen Görevler (${pendingMails.length})</h3>
+          ${pendingMails.map(m => `
+            <div style="padding:11px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:var(--card-2)">
+              <b>${esc(shortName(m.t))}</b> <span class="note">← ${esc(shortName(m.f))}</span><br><span>${esc(m.subj)}</span>
+            </div>
+          `).join('') || '<span class="note">Bekleyen görev yok.</span>'}
+        </div>
+        <div>
+          <h3>✅ Tamamlanan Adımlar (${doneMails.length})</h3>
+          ${doneMails.slice(0, 10).map(m => `
+            <div style="padding:10px;border-bottom:1px solid var(--ln)">
+              <b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b><br><span class="note">${esc(m.subj)}</span>
+            </div>
+          `).join('') || '<span class="note">Henüz tamamlanan adım yok.</span>'}
+        </div>
+        <div>
+          <h3>📡 Canlı Sistem Kayıtları</h3>
+          <div class="note" style="max-height:380px;overflow-y:auto;line-height:1.75;background:var(--card-2);padding:12px;border-radius:12px">
+            ${store.log.map(esc).join('<br>') || 'Kayıt yok.'}
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
+// Hızlı Sahne ve UI Eklenti Butonları (Tek Tıkla Test & Uygulama)
+async function quickApplySceneMod(type, target, label) {
+  await createApprovalItem({
+    title: `${label} (2.5D Ofis Güncellemesi)`,
+    summary: `${label} tüm ilgili alanlara (${target}) yerleştirildi. Onaylayıp GitHub'a ekleyebilirsiniz.`,
+    createdBy: 'Ahmet Bey & Elif Hanım',
+    hasPatch: true,
+    sceneMods: [{ id: 'mod_' + type, type, target, scale: 1.15, label }],
+    uiMods: []
+  });
+  const latest = store.approvals[0];
+  if (latest) await applyApprovalToOffice(latest.id);
+}
+
+async function quickApplyUIMod(preset) {
+  let mod = null;
+  if (preset === 'world-clock') {
+    mod = {
+      id: 'ui_world_clock',
+      slot: 'header-menu',
+      title: 'Küresel Saat & Durum Menüsü',
+      html: `<div class="badge live" style="gap:10px"><span>🌍 UTC: <b id="utcClk">--:--</b></span><span>⚡ Sistem: <b>%100</b></span></div>`,
+      css: ``,
+      js: `setInterval(()=>{const e=document.getElementById('utcClk');if(e)e.textContent=new Date().toISOString().slice(11,16);},1000);`
+    };
+  } else {
+    mod = {
+      id: 'ui_perf_counter',
+      slot: 'top-right',
+      title: 'Aktif Ajan & Dosya Sayacı',
+      html: `<div class="badge" style="border-color:#06b6d4;color:#67e8f9">📊 ${store.staff.length} Ajan · ${store.files.length} Çıktı</div>`,
+      css: ``,
+      js: ``
+    };
+  }
+  await createApprovalItem({
+    title: mod.title,
+    summary: 'Mevcut kodu bozmadan üst bar eklenti yuvasına (slot) entegre edildi.',
+    createdBy: 'Ahmet Bey (YAZILIM)',
+    hasPatch: true,
+    sceneMods: [],
+    uiMods: [mod]
+  });
+  const latest = store.approvals[0];
+  if (latest) await applyApprovalToOffice(latest.id);
 }
 
 function replyToMail(mailId) {
@@ -1055,54 +2016,104 @@ function replyToMail(mailId) {
   const target = store.staff.find(s => s.id === m.fromId || s.name === m.f) || store.staff[0];
   if (!target) return;
   createInternalMail({
-    fromId: 'owner', fromName: 'Sen (Burak Bey)', fromRole: 'Şirket Sahibi',
+    fromId: 'owner', fromName: 'Burak Bey (Yönetici)', fromRole: 'Şirket Sahibi',
     toId: target.id, toName: target.name,
     subject: 'RE: ' + m.subj, body: txt,
     type: 'görev', threadId: m.threadId, notBeforeMs: Date.now()
   });
-  lg(`Sen → ${target.name}: ${txt}`);
+  lg(`Sen → ${shortName(target.name)}: ${txt}`);
   $('#replyTxt').value = '';
 }
 
 function newFilePrompt() {
-  const path = prompt('Dosya adı (örn: kod.js):');
+  const path = prompt('Dosya adı (örn: notlar.md):');
   if (!path) return;
-  const content = prompt('İçerik:');
+  const content = prompt('Dosya içeriği:');
   if (content == null) return;
-  saveSharedFile(path.trim(), content, 'md', 'Sen (Burak Bey)');
+  saveSharedFile(path.trim(), content, 'md', 'Burak Bey (Yönetici)');
+  render();
+}
+
+function openSettingsModal() {
+  const c = $('#card');
+  c.style.display = 'block';
+  c.innerHTML = `
+    <h3>⚙️ Gemini API, Kota & GitHub Ayarları</h3>
+    <p class="note">Bu bilgiler sadece yöneticinin okuyabildiği Firestore <code>settings/secret</code> ve <code>settings/guard</code> belgelerinde güvenle saklanır.</p>
+    <label>Gemini API Anahtarı (AI Studio)</label>
+    <input id="setGeminiKey" type="password" value="${esc(store.geminiKey)}" placeholder="AIzaSy...">
+    <label>İstekler Arası Güvenli Mola Süresi (Saniye)</label>
+    <input id="setCooldown" type="number" min="5" max="180" value="${store.cooldownSec}">
+    <label>GitHub Repo (kullaniciadi/repo-adi)</label>
+    <input id="setGhRepo" value="${esc(store.githubRepo)}" placeholder="buraktonoz/ofis">
+    <label>GitHub Personal Access Token (Onayları Tek Tıkla GitHub'a Eklemek İçin)</label>
+    <input id="setGhToken" type="password" value="${esc(store.githubToken)}" placeholder="ghp_... veya github_pat_...">
+    <label>GitHub Dalı (Branch)</label>
+    <input id="setGhBranch" value="${esc(store.githubBranch || 'main')}" placeholder="main">
+    <div class="row" style="margin-top:14px">
+      <button class="p" onclick="saveSettingsModal()">💾 Firestore'a Kaydet</button>
+      <button onclick="$('#card').style.display='none'">Kapat</button>
+    </div>
+  `;
+}
+
+async function saveSettingsModal() {
+  store.geminiKey = $('#setGeminiKey').value.trim();
+  store.cooldownSec = Math.max(5, parseInt($('#setCooldown').value, 10) || 18);
+  store.githubRepo = $('#setGhRepo').value.trim();
+  store.githubToken = $('#setGhToken').value.trim();
+  store.githubBranch = $('#setGhBranch').value.trim() || 'main';
+
+  if (CONN && OWN) {
+    await db.doc('settings/secret').set({
+      apiKey: store.geminiKey,
+      githubRepo: store.githubRepo,
+      githubToken: store.githubToken,
+      githubBranch: store.githubBranch,
+      updatedAt: FV().serverTimestamp()
+    }, { merge: true }).catch(e => alert('Kayıt hatası: ' + e.message));
+
+    await db.doc('settings/guard').set({
+      cooldownSec: store.cooldownSec,
+      paused: halt,
+      updatedAt: FV().serverTimestamp()
+    }, { merge: true }).catch(() => {});
+  }
+  $('#card').style.display = 'none';
+  lg('⚙️ API ve GitHub entegrasyon ayarları güncellendi.');
   render();
 }
 
 function openAgentModal(id) {
   const a = id ? store.staff.find(s => s.id == id) : null, c = $('#card');
   c.style.display = 'block';
-  const opt = sel => MODELS.map(m => `<option ${m.n === sel ? 'selected' : ''}>${m.n}</option>`).join('');
+  const opt = sel => MODELS.map(m => `<option value="${esc(m.n)}" ${m.n === normalizeModelName(sel) ? 'selected' : ''}>${esc(m.n)} (${m.l} RPD)</option>`).join('');
   const free = RM.filter(r => !store.staff.some(s => s.room === r.i) || (a && a.room === r.i));
   c.innerHTML = `
-    <h3>${a ? 'Personeli Düzenle' : 'Yeni Ajan Ekle'}</h3>
-    <label>İsim</label>
-    <input id="modalName" value="${esc(a ? a.name : '')}" placeholder="Ahmet Bey">
+    <h3>${a ? '👤 Personeli Düzenle' : '+ Yeni Ajan Ekle'}</h3>
+    <label>İsim (Sahnede otomatik kısa görünür)</label>
+    <input id="modalName" value="${esc(a ? a.name : '')}" placeholder="Selin Hanım">
     <label>Unvan / Departman</label>
-    <input id="modalRole" value="${esc(a ? a.role : '')}" placeholder="Kod Uzmanı">
-    <label>Oda</label>
-    <select id="modalRoom">${free.map(r => `<option value="${r.i}" ${a && a.room === r.i ? 'selected' : ''}>Oda ${r.i + 1}</option>`).join('')}</select>
-    <label>Ana Model</label>
-    <select id="modalModel">${opt(a ? a.model : 'Gemini 3.5 Flash Lite')}</select>
-    <label>Yedek Model</label>
-    <select id="modalBackup">${opt(a ? a.backup : 'Gemma 4 31B')}</select>
-    <label>Uzmanlık (Skills)</label>
+    <input id="modalRole" value="${esc(a ? a.role : '')}" placeholder="SEO & Strateji Uzmanı">
+    <label>Oda Numarası</label>
+    <select id="modalRoom">${free.map(r => `<option value="${r.i}" ${a && a.room === r.i ? 'selected' : ''}>Oda 0${r.i + 1}</option>`).join('')}</select>
+    <label>Ana Model (Birincil)</label>
+    <select id="modalModel">${opt(a ? a.model : 'Gemini 2.5 Flash Lite')}</select>
+    <label>Yedek Model (Kota Dolduğunda Otomatik Geçer)</label>
+    <select id="modalBackup">${opt(a ? a.backup : 'Gemma 3 27B')}</select>
+    <label>Uzmanlık ve Görev Tanımı (Skills)</label>
     <textarea id="modalSkills" rows="3">${esc(a ? a.skills : '')}</textarea>
-    <div class="row">
-      <button class="p" onclick="saveAgentData('${a ? a.id : ''}')">Kaydet</button>
+    <div class="row" style="margin-top:14px">
+      <button class="p" onclick="saveAgentData('${a ? a.id : ''}')">💾 Kaydet</button>
       ${a ? `<button class="danger" onclick="delAgent('${a.id}')">Sil</button>` : ''}
       <button onclick="$('#card').style.display='none'">Kapat</button>
     </div>`;
 }
 
 function saveAgentData(id) {
-  const name = $('#modalName').value.trim();
-  const role = $('#modalRole').value.trim();
-  if (!name || !role) return alert('İsim ve rol zorunludur.');
+  const name = $('#modalName').value.trim().slice(0, 48);
+  const role = $('#modalRole').value.trim().slice(0, 75);
+  if (!name || !role) return alert('İsim ve unvan zorunludur.');
   const room = +$('#modalRoom').value;
   const model = $('#modalModel').value;
   const backup = $('#modalBackup').value;
@@ -1115,7 +2126,7 @@ function saveAgentData(id) {
     fbSaveStaff(a);
   } else {
     const a = addStaff({ name, role, room, model, backup, skills });
-    if (a) lg('Yeni personel katıldı: ' + name);
+    if (a) lg('Yeni personel kadroya katıldı: ' + name);
   }
   $('#card').style.display = 'none';
   updateTargetSelect();
@@ -1124,7 +2135,7 @@ function saveAgentData(id) {
 
 function delAgent(id) {
   const a = store.staff.find(s => s.id == id);
-  if (!a || !confirm(a.name + ' silinsin mi?')) return;
+  if (!a || !confirm(a.name + ' kadrodan çıkarılsın mı?')) return;
   a.alive = false;
   store.staff = store.staff.filter(s => s !== a);
   fbDelStaff(id);
@@ -1133,26 +2144,23 @@ function delAgent(id) {
   render();
 }
 
-cv.addEventListener('click', e => {
-  if (!OWN) return;
-  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 800, y = (e.clientY - r.top) / r.height * 530;
-  let best = null, bd = 26;
-  store.staff.forEach(a => {
-    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - x, q[1] - 24 - y);
-    if (d < bd) { bd = d; best = a; }
-  });
-  if (best) openAgentModal(best.id);
-});
-
 /* ============================================================================
-   7. FIREBASE AUTH & BAĞLANTILAR
+   7. FIREBASE AUTH & GERÇEK ZAMANLI (ONSNAPSHOT) SENKRONİZASYON
    ============================================================================ */
 function stfData(a) {
   const o = {
-    name: a.name, role: a.role, room: a.room,
-    model: a.model, backup: a.backup, skills: a.skills || '',
-    color: a.c, hair: a.h, active: true, status: a.st || 'Odasında',
-    usedToday: a.used || 0, createdBy: a.by || 'owner'
+    name: String(a.name || 'Ajan').slice(0, 48),
+    role: String(a.role || 'Uzman').slice(0, 75),
+    room: Number.isInteger(a.room) ? a.room : 0,
+    model: a.model,
+    backup: a.backup,
+    skills: a.skills || '',
+    color: a.c,
+    hair: a.h,
+    active: true,
+    status: a.st || 'Odasında',
+    usedToday: a.used || 0,
+    createdBy: a.by || 'owner'
   };
   if (!a.saved) o.createdAt = FV().serverTimestamp();
   return o;
@@ -1172,10 +2180,12 @@ function pub() {
   if (!CONN || !OWN) return;
   clearTimeout(pt);
   pt = setTimeout(() => db.doc('public/office').set({
-    updatedAt: FV().serverTimestamp(), paused: halt,
+    updatedAt: FV().serverTimestamp(),
+    paused: halt,
     items: tbOn ? ['yemek-masasi'] : [],
+    officeMods: store.officeMods,
     staff: store.staff.map(a => ({ id: a.id, name: a.name, role: a.role, room: a.room, color: a.c, hair: a.h, state: 'work' }))
-  }).catch(() => {}), 1000);
+  }, { merge: true }).catch(() => {}), 1000);
 }
 
 function stopOwnerListeners() { un.forEach(f => f()); un = []; }
@@ -1185,18 +2195,57 @@ async function startOwnerListeners() {
 
   try {
     const secretDoc = await db.doc('settings/secret').get();
-    if (secretDoc.exists && secretDoc.data().apiKey) {
-      store.geminiKey = secretDoc.data().apiKey;
-      lg('Gemini API anahtarı Firestore gizli kasasından yüklendi.');
+    if (secretDoc.exists) {
+      const sd = secretDoc.data();
+      if (sd.apiKey) store.geminiKey = sd.apiKey;
+      if (sd.githubRepo) store.githubRepo = sd.githubRepo;
+      if (sd.githubToken) store.githubToken = sd.githubToken;
+      if (sd.githubBranch) store.githubBranch = sd.githubBranch;
+      lg('🔐 API ve GitHub anahtarları Firestore gizli kasasından yüklendi.');
     }
   } catch (e) {}
 
+  try {
+    const guardDoc = await db.doc('settings/guard').get();
+    if (guardDoc.exists && guardDoc.data().cooldownSec) {
+      store.cooldownSec = guardDoc.data().cooldownSec;
+    }
+  } catch (e) {}
+
+  // Canlı Ofis & UI Yamalarını Dinle
+  un.push(db.doc('settings/office_mods').onSnapshot(doc => {
+    if (doc.exists) {
+      const d = doc.data();
+      store.officeMods = {
+        version: d.version || 1,
+        sceneMods: Array.isArray(d.sceneMods) ? d.sceneMods : [],
+        uiMods: Array.isArray(d.uiMods) ? d.uiMods : []
+      };
+      renderActiveUIMods();
+      render();
+    }
+  }));
+
+  // Günlük Model Kotalarını Dinle
+  un.push(db.collection('usage').doc(todayKey()).onSnapshot(doc => {
+    if (doc.exists && doc.data().pools) {
+      const pools = doc.data().pools;
+      Object.keys(pools).forEach(k => {
+        const m = mdl(k);
+        if (m) m.u = pools[k] || 0;
+      });
+      render();
+    }
+  }));
+
+  // Personel Koleksiyonunu Dinle
   un.push(db.collection('staff').onSnapshot(q => {
     if (q.empty && store.staff.length === 0) { seedDefaultStaff(); return; }
     syncStaff(q.docs.map(d => ({ id: d.id, ...d.data() })));
     render();
   }));
 
+  // Yazışmaları Dinle
   un.push(db.collection('mails').orderBy('createdAt', 'desc').limit(80).onSnapshot(q => {
     store.mails = q.docs.map(d => {
       const m = d.data();
@@ -1212,8 +2261,16 @@ async function startOwnerListeners() {
     render();
   }));
 
-  un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(50).onSnapshot(q => {
+  // Ortak Dosyaları Dinle
+  un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(60).onSnapshot(q => {
     store.files = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.updatedAt) }));
+    render();
+  }));
+
+  // Onay Kutusunu Dinle
+  un.push(db.collection('approvals').orderBy('createdAt', 'desc').limit(30).onSnapshot(q => {
+    store.approvals = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.createdAt) }));
+    renderApprovalBanner();
     render();
   }));
 }
@@ -1223,6 +2280,10 @@ async function pollPublic() {
     const d = await db.doc('public/office').get(), o = d.exists ? d.data() : {};
     if (o.staff && o.staff.length) syncStaff(o.staff);
     else if (!store.staff.length) seedDefaultStaff();
+    if (o.officeMods) {
+      store.officeMods = o.officeMods;
+      renderActiveUIMods();
+    }
   } catch (e) {
     if (!store.staff.length) seedDefaultStaff();
   }
@@ -1231,9 +2292,11 @@ async function pollPublic() {
 function setOwner(b) {
   OWN = b;
   $('#panel').classList.toggle('on', b);
+  $('#settingsBtn').style.display = b ? 'inline-flex' : 'none';
   $('#bl').textContent = b ? 'Çıkış Yap' : 'Yönetici Girişi';
   $('#bl').className = b ? '' : 'p';
   updateEngineBadges();
+  renderApprovalBanner();
   render();
 }
 
@@ -1244,21 +2307,28 @@ $('#bl').onclick = () => {
 };
 
 $('#go').onclick = async () => {
-  const txt = $('#ti').value.trim();
-  if (!txt) return alert('Lütfen görev konusunu yazın.');
+  const rawTxt = $('#ti').value.trim();
+  if (!rawTxt) return alert('Lütfen yapılacak görevi veya eklemek istediğiniz özelliği yazın.');
+  const mode = $('#taskMode') ? $('#taskMode').value : 'auto';
   const targetId = $('#targetAgent').value;
   const target = store.staff.find(s => s.id === targetId) || store.staff[0];
   if (!target) return alert('Önce personel ekleyin.');
 
+  let modePrefix = '';
+  if (mode === 'scene') modePrefix = '[2D OFİS DEKORASYON TALEBİ - Lütfen officePatch.sceneMods üretip onaya sunun]: ';
+  else if (mode === 'ui') modePrefix = '[CANLI SİTE ÖZELLİK/MENÜ TALEBİ - Mevcut kodu bozmadan officePatch.uiMods üretip onaya sunun]: ';
+
+  const fullBody = modePrefix + rawTxt;
   $('#ti').value = '';
-  const subj = txt.length > 50 ? txt.slice(0, 50) + '...' : txt;
+  const subj = rawTxt.length > 56 ? rawTxt.slice(0, 56) + '...' : rawTxt;
+
   await createInternalMail({
-    fromId: 'owner', fromName: 'Sen (Burak Bey)', fromRole: 'Şirket Sahibi',
+    fromId: 'owner', fromName: 'Burak Bey (Yönetici)', fromRole: 'Şirket Sahibi',
     toId: target.id, toName: target.name,
-    subject: subj, body: txt,
+    subject: subj, body: fullBody,
     type: 'görev', threadId: 'th_' + Date.now(), notBeforeMs: Date.now()
   });
-  lg(`Sen → ${target.name}: ${subj}`);
+  lg(`🚀 Görev başlatıldı → ${shortName(target.name)}: ${subj}`);
   processNextPendingMail(true);
 };
 
@@ -1267,12 +2337,13 @@ $('#resetProj').onclick = resetProject;
 
 $('#stop').onclick = () => {
   halt = !halt;
-  $('#stop').textContent = halt ? 'Devam Et' : 'Acil Durdur';
+  $('#stop').textContent = halt ? '▶️ Devam Et' : '⏸ Duraklat';
   lg(halt ? '⏸ Ajanlar duraklatıldı.' : '▶️ Çalışma devam ediyor.');
   updateEngineBadges();
 };
 
 async function fbLoad() {
+  await loadRepoOfficeMods();
   try {
     for (const u of ['app', 'auth', 'firestore']) {
       await new Promise((r, j) => {
