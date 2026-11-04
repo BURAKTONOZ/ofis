@@ -3,308 +3,143 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TONOZ AI COMPANY · Otonom Multi-Agent Şirket Sistemi</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Tonoz AI Ofisi · Otonom Multi-Agent & Tasarım Stüdyosu</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#090b11;
-  --card:rgba(15,19,30,.94);
-  --card-2:#141927;
-  --card-3:#1c2336;
-  --tx:#f1f5f9;
-  --mut:#94a3b8;
-  --ln:rgba(148,163,184,.18);
-  --acc:#6366f1;
-  --acc-h:#4f46e5;
-  --acc-glow:rgba(99,102,241,.38);
-  --ok:#10b981;
-  --warn:#f59e0b;
-  --err:#ef4444;
-  --cyan:#06b6d4;
-  --code-bg:#06080d;
-  --code-tx:#e2e8f0;
+  --bg:#0f0d16;--card:#181523;--tx:#f0ecff;--mut:#8e82b0;--ln:#2c2542;
+  --acc:#7c5cef;--acc-h:#6845db;--on:#fff;--ok:#10b981;--warn:#f59e0b;--err:#ef4444;
+  --code-bg:#0a0810;--code-tx:#dcd6ff;
 }
 *{box-sizing:border-box}
-html,body{
-  margin:0;padding:0;width:100vw;height:100vh;overflow:hidden;
-  background:var(--bg);color:var(--tx);
-  font:13.5px/1.55 'Plus Jakarta Sans',sans-serif;
-  user-select:none;
-}
-
-/* TAM EKRAN 2.5D KANVAS */
-#cv{
-  position:fixed;inset:0;width:100vw;height:100vh;
-  display:block;cursor:grab;z-index:1;
-}
-#cv:active{cursor:grabbing}
-
-/* ÜST YÜZEN MENÜ (SAĞA VE SOLA DENGELİ DAĞITILMIŞ) */
-.topbar{
-  position:fixed;top:14px;left:18px;right:18px;z-index:20;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  pointer-events:none;flex-wrap:wrap;
-}
-.top-left,.top-center,.top-right{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  pointer-events:auto;
-  background:var(--card);backdrop-filter:blur(16px);
-  border:1px solid var(--ln);border-radius:16px;
-  padding:8px 14px;box-shadow:0 12px 34px rgba(0,0,0,.45);
-}
-.logo-mark{
-  width:34px;height:34px;border-radius:10px;
-  background:linear-gradient(135deg,#6366f1,#06b6d4);
-  display:grid;place-items:center;font:800 16px 'Space Grotesk',sans-serif;
-  color:#fff;box-shadow:0 4px 14px var(--acc-glow);
-}
-.brand-title h1{
-  font:700 16px/1.1 'Space Grotesk',sans-serif;margin:0;letter-spacing:.4px;color:#fff;
-}
-.brand-title span{font-size:11px;color:var(--mut);font-weight:600;display:block}
-
-#ext-header-menu,#ext-top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#ext-floating-widget{position:fixed;left:18px;bottom:94px;z-index:25;display:flex;flex-direction:column;gap:8px}
-
-.badge{
-  font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;
-  background:var(--card-2);border:1px solid var(--ln);color:var(--mut);
-  display:inline-flex;align-items:center;gap:6px;
-}
-.badge.live{border-color:rgba(16,185,129,.45);color:#34d399;background:rgba(16,185,129,.12)}
-.badge.wait{border-color:rgba(245,158,11,.45);color:#fbbf24;background:rgba(245,158,11,.12)}
-
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.55 'Nunito',sans-serif}
+.wrap{max-width:1420px;margin:0 auto;padding:14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h1{font:600 22px 'Fredoka',sans-serif;margin:0}
+h3{font:500 15.5px 'Fredoka',sans-serif;margin:0 0 8px}
+.badge{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--card);border:1.5px solid var(--ln);color:var(--mut)}
+.badge.live{border-color:var(--ok);color:var(--ok)}
+.badge.wait{border-color:var(--warn);color:var(--warn)}
+.badge.err{border-color:var(--err);color:var(--err)}
 button,select,input,textarea{font:inherit;color:var(--tx)}
-button{
-  font-weight:700;font-size:12.5px;border:1px solid var(--ln);
-  background:var(--card-2);border-radius:11px;padding:7px 13px;
-  cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:6px;
-}
-button:hover{border-color:var(--acc);background:var(--card-3);transform:translateY(-1px)}
-button.active-win{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 4px 14px var(--acc-glow)}
-button.p{background:linear-gradient(135deg,var(--acc),var(--acc-h));border-color:transparent;color:#fff;box-shadow:0 4px 14px var(--acc-glow)}
-button.p:hover{filter:brightness(1.08)}
-button.ok{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.45);color:#34d399}
-button.warn{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.45);color:#fbbf24}
-button.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#f87171}
-button.sm{padding:4px 8px;font-size:11px;border-radius:8px}
+button{font-weight:700;border:1.5px solid var(--ln);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--acc)}
+button.p{background:var(--acc);border-color:var(--acc);color:var(--on)}
+button.p:hover{background:var(--acc-h)}
+button.ok{border-color:var(--ok);color:var(--ok)}
+button.danger{border-color:var(--err);color:var(--err)}
+input,select,textarea{border:1.5px solid var(--ln);border-radius:10px;padding:8px 11px;background:#13101c;width:100%}
+label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:8px 0 3px}
 
-input,select,textarea{
-  border:1px solid var(--ln);border-radius:11px;padding:8px 12px;
-  background:#0c101b;width:100%;transition:.15s;user-select:text;
-}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.2)}
-label{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.4px}
-.chip{font-size:10.5px;font-weight:700;border-radius:999px;padding:1.5px 7px;background:#0b0e17;color:var(--mut);border:1px solid var(--ln)}
+/* Ana Sahne ve Tasarım Modu Yan Yana Düzeni */
+.stage-grid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
+.stage-grid.design-active{grid-template-columns:1fr 390px}
+@media(max-width:1024px){.stage-grid.design-active{grid-template-columns:1fr}}
+
+canvas{width:100%;height:auto;display:block;border-radius:18px;border:1.5px solid var(--ln);background:#14111f;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.box{background:var(--card);border:1.5px solid var(--ln);border-radius:18px;padding:16px;margin-top:12px}
+#panel,#ap,#designSidebar{display:none}
+#panel.on,#designSidebar.on{display:block}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tabs button.on{background:var(--acc);color:var(--on);border-color:var(--acc)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{text-align:left;padding:9px 10px;border-bottom:1px solid var(--ln);vertical-align:middle}
+th{color:var(--mut);font-weight:700;font-size:11.5px;text-transform:uppercase}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}
+.bar{height:8px;border-radius:9px;background:var(--bg);margin:4px 0 9px;overflow:hidden;border:1px solid var(--ln)}
+.bar i{display:block;height:100%;border-radius:9px;background:var(--acc);transition:width .3s}
+.chip{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--bg);color:var(--mut);margin-left:5px;border:1px solid var(--ln);display:inline-block}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
+.mail-grid{display:grid;grid-template-columns:350px 1fr;gap:14px}
+@media(max-width:850px){.mail-grid{grid-template-columns:1fr}}
+.mail-list{max-height:480px;overflow-y:auto;border-right:1px solid var(--ln);padding-right:8px}
+.mail-item{padding:10px 12px;border-radius:12px;border:1px solid transparent;cursor:pointer;margin-bottom:7px;background:#13101d}
+.mail-item:hover,.mail-item.active{border-color:var(--acc);background:#1d182d}
+.mail-item.unread{border-left:4px solid var(--acc)}
+. mail-item.stuck{border-left:4px solid var(--err)}
 .note{font-size:12px;color:var(--mut)}
 .row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}
-
-/* ALT YÜZEN GÖREV KOMUT ÇUBUĞU VE İKİ SATIRLI PERSONEL SEÇİCİ */
-#cmdDock{
-  display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-  width:min(1180px,calc(100vw - 36px));z-index:20;
-  background:var(--card);backdrop-filter:blur(16px);
-  border:1px solid var(--ln);border-radius:18px;padding:10px 14px;
-  box-shadow:0 16px 48px rgba(0,0,0,.65);
-  grid-template-columns:270px 1fr auto;gap:10px;align-items:center;
-}
-#cmdDock.on{display:grid}
-@media(max-width:920px){#cmdDock.on{grid-template-columns:1fr}}
-
-.staff-picker-wrap{position:relative;width:100%}
-.staff-picker-btn{
-  width:100%;text-align:left;padding:7px 12px;border-radius:12px;
-  background:#0c101b;border:1px solid var(--ln);cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-}
-.staff-picker-btn:hover{border-color:var(--acc);background:var(--card-2)}
-.sp-info{display:flex;flex-direction:column;overflow:hidden;line-height:1.25}
-.sp-name{font-weight:700;font-size:13px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
-.sp-role{font-size:11px;color:var(--mut);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.staff-picker-menu{
-  display:none;position:absolute;bottom:calc(100% + 10px);left:0;width:340px;max-height:340px;
-  overflow-y:auto;background:var(--card);backdrop-filter:blur(18px);
-  border:1px solid var(--acc);border-radius:16px;padding:8px;
-  box-shadow:0 20px 50px rgba(0,0,0,.8);z-index:60;
-}
-.staff-picker-menu.open{display:block}
-.sp-item{
-  padding:9px 11px;border-radius:11px;cursor:pointer;transition:.14s;
-  border:1px solid transparent;margin-bottom:4px;
-}
-.sp-item:hover,.sp-item.active{background:var(--card-3);border-color:var(--acc)}
-.sp-item-top{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:13px;color:#fff}
-.sp-item-sub{font-size:11px;color:#cbd5e1;margin-top:2px;font-weight:600}
-.sp-item-skills{font-size:10.5px;color:var(--mut);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-
-/* SAĞ ÜST BİLDİRİM / ONAY UYARI KARTI */
-#ap{
-  display:none;position:fixed;top:76px;right:18px;z-index:24;
-  width:min(460px,calc(100vw - 36px));
-  background:var(--card);backdrop-filter:blur(16px);
-  border:1.5px solid var(--acc);border-radius:18px;padding:14px 16px;
-  box-shadow:0 16px 45px rgba(0,0,0,.65);
-}
-
-/* SOL ALT KARAKTER BİLGİ KARTI (HOVER HUD) */
-#hoverHud{
-  display:none;position:fixed;bottom:92px;left:18px;z-index:18;
-  background:var(--card);backdrop-filter:blur(12px);
-  border:1px solid var(--acc);border-radius:14px;padding:10px 14px;
-  pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.55);max-width:350px;
-}
-
-/* SAĞ ALT KAMERA YAKINLAŞTIRMA KONTROLLERİ */
-.cam-controls{
-  position:fixed;right:18px;bottom:92px;z-index:18;
-  display:flex;flex-direction:column;gap:6px;
-}
-.cam-controls button{
-  width:36px;height:36px;padding:0;justify-content:center;
-  border-radius:11px;background:var(--card);font-size:15px;
-}
-
-/* AÇILIR PENCERE (MODAL WINDOW) SİSTEMİ */
-.win-backdrop{
-  display:none;position:fixed;inset:0;z-index:40;
-  background:rgba(5,7,12,.58);backdrop-filter:blur(6px);
-  place-items:center;padding:20px;
-}
-.win-backdrop.open{display:grid}
-.win-box{
-  width:min(1220px,96vw);max-height:86vh;
-  background:var(--card);border:1px solid var(--ln);border-radius:22px;
-  box-shadow:0 25px 70px rgba(0,0,0,.78);
-  display:flex;flex-direction:column;overflow:hidden;
-  user-select:text;
-}
-.win-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 20px;border-bottom:1px solid var(--ln);background:var(--card-2);
-}
-.win-head h2{font:700 17px 'Space Grotesk',sans-serif;margin:0;display:flex;align-items:center;gap:8px}
-.win-body{padding:18px 20px;overflow-y:auto;flex:1}
-
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{text-align:left;padding:10px 11px;border-bottom:1px solid var(--ln);vertical-align:middle}
-th{color:var(--mut);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:rgba(15,23,42,.4)}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;flex-shrink:0}
-.bar{height:7px;border-radius:99px;background:#090c14;margin:4px 0;overflow:hidden;border:1px solid var(--ln)}
-.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--cyan));transition:width .35s}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.mail-grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
-@media(max-width:860px){.mail-grid{grid-template-columns:1fr}}
-.mail-list{max-height:60vh;overflow-y:auto;border-right:1px solid var(--ln);padding-right:10px}
-.mail-item{padding:10px 12px;border-radius:13px;border:1px solid var(--ln);cursor:pointer;margin-bottom:8px;background:var(--card-2);transition:.15s;position:relative}
-.mail-item:hover,.mail-item.active{border-color:var(--acc);background:var(--card-3)}
-.mail-item.unread{border-left:4px solid var(--acc)}
-textarea.code-editor{
-  background:var(--code-bg);color:var(--code-tx);padding:14px;border-radius:14px;
-  font:12.5px/1.6 'JetBrains Mono',monospace;min-height:42vh;width:100%;
-  border:1px solid var(--ln);resize:vertical;
-}
-.tier-card{background:var(--card-2);border:1px solid var(--ln);border-radius:15px;padding:14px}
-.approval-card{
-  background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(16,185,129,.08));
-  border:1px solid rgba(99,102,241,.4);border-radius:15px;padding:15px;margin-bottom:10px;
-}
-
-/* PERSONEL DÜZENLEME KÜÇÜK AÇILIR PENCERESİ */
-#card{
-  display:none;position:fixed;right:22px;bottom:92px;
-  width:min(440px,calc(100vw - 44px));max-height:80vh;overflow:auto;
-  z-index:55;background:var(--card);backdrop-filter:blur(16px);
-  border:1px solid var(--acc);border-radius:18px;padding:18px;
-  box-shadow:0 20px 60px rgba(0,0,0,.8);user-select:text;
-}
+pre.code{background:var(--code-bg);color:var(--code-tx);padding:12px;border-radius:12px;overflow-x:auto;font:12.5px/1.55 'JetBrains Mono',monospace;max-height:440px;white-space:pre-wrap;border:1px solid var(--ln)}
+#card{display:none;position:fixed;right:16px;bottom:16px;width:min(430px,calc(100vw - 32px));max-height:88vh;overflow:auto;z-index:50;box-shadow:0 15px 45px rgba(0,0,0,.7);border:1.5px solid var(--acc)}
+.item-card{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:#13101d;border:1px solid var(--ln);margin-bottom:6px;cursor:pointer}
+.item-card.selected{border-color:var(--acc);background:#211b36}
+footer{text-align:center;font-size:11.5px;color:var(--mut);margin:20px 0 6px}
 </style>
-<style id="ext-custom-css"></style>
 </head>
 <body>
-
-<!-- TAM EKRAN 2.5D İZOMETRİK OFİS -->
-<canvas id="cv" role="img" aria-label="Tonoz AI Company Tam Ekran 2.5D Ofis"></canvas>
-
-<!-- ÜST YÜZEN KURUMSAL BAR & AÇILIR PENCERE MENÜLERİ -->
-<header class="topbar">
-  <div class="top-left">
-    <div class="logo-mark">T</div>
-    <div class="brand-title">
-      <h1>TONOZ AI COMPANY</h1>
-      <span>Otonom Multi-Agent Şirketi</span>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Tonoz AI Ofisi</h1>
+      <span id="engBadge" class="badge">Bağlanıyor...</span>
+      <span id="modelBadge" class="badge">Modeller Taranıyor...</span>
+      <span id="coolBadge" class="badge" style="display:none"></span>
     </div>
-    <span id="engBadge" class="badge">Ziyaretçi Modu</span>
-    <span id="coolBadge" class="badge" style="display:none"></span>
-  </div>
+    <div class="row" style="margin:0">
+      <button id="designToggleBtn" onclick="toggleDesignStudio()">🛋️ Ofis Tasarım Modu</button>
+      <button id="bl" class="p">Yönetici Girişi</button>
+    </div>
+  </header>
 
-  <!-- ORTA ÜST MENÜ (SADECE YÖNETİCİ GİRİŞİNDE GÖRÜNÜR - HER BİRİ AÇILIR PENCERE AÇAR) -->
-  <nav class="top-center" id="topMenu" style="display:none"></nav>
+  <!-- CANLI SAHNE VE SAĞ TASARIM STÜDYOSU (YAN YANA) -->
+  <div id="stageGrid" class="stage-grid">
+    <div>
+      <canvas id="cv" width="1600" height="1060" role="img" aria-label="Tonoz AI Ofisi İzometrik Simülasyonu"></canvas>
+    </div>
 
-  <div class="top-right">
-    <div id="ext-header-menu"></div>
-    <div id="ext-top-right"></div>
-    <button onclick="resetCamera()" title="Kamera görünümünü ortala">🎯 Ortala</button>
-    <button id="bl" class="p">Yönetici Girişi</button>
-  </div>
-</header>
-
-<!-- YÖNETİCİ ONAY BİLDİRİM KUTUSU -->
-<div id="ap"></div>
-
-<!-- KARAKTER ÜZERİNE GELİNCE AÇILAN BİLGİ KARTI -->
-<div id="hoverHud"></div>
-
-<!-- SAĞ ALT KAMERA YAKINLAŞTIRMA BUTONLARI -->
-<div class="cam-controls">
-  <button onclick="camZoom=Math.min(2.2,camZoom*1.15)" title="Yakınlaş">+</button>
-  <button onclick="camZoom=Math.max(0.55,camZoom*0.85)" title="Uzaklaş">−</button>
-  <button onclick="resetCamera()" title="Görünümü Sıfırla">⟲</button>
-</div>
-
-<!-- ALT YÜZEN GÖREV KOMUT ÇUBUĞU (İKİ SATIRLI PERSONEL GÖSTERİMİ İLE) -->
-<section id="cmdDock">
-  <div class="staff-picker-wrap" id="staffPickerWrap">
-    <input type="hidden" id="targetAgent" value="">
-    <div class="staff-picker-btn" id="staffPickerBtn" onclick="toggleStaffPicker(event)">
-      <div class="sp-info">
-        <div class="sp-name" id="spSelectedName">Personel Seçin</div>
-        <div class="sp-role" id="spSelectedRole">Görev tanımı burada görünür</div>
+    <!-- OFİS TASARIM MODU PANELİ (KANVASIN HEMEN YANINDA AÇILIR) -->
+    <aside id="designSidebar" class="box" style="margin-top:0;max-height:530px;overflow-y:auto">
+      <div class="row" style="justify-content:space-between;margin-top:0">
+        <h3 style="margin:0">🛋️ Canlı Ofis Tasarım Modu</h3>
+        <button onclick="toggleDesignStudio()">Kapat</button>
       </div>
-      <span style="color:var(--mut);font-size:12px">▲</span>
+      <p class="note" style="margin-top:0">Kanvas üzerindeki kareleri görerek eşya ekleyin, tıklayıp taşıyın veya gizleyin. Değişiklikler doğrudan Firestore'a kaydedilir.</p>
+      
+      <div class="row">
+        <select id="newItemType" style="flex:1">
+          <option value="table">☕ Toplantı / Kahve Masası</option>
+          <option value="plant">🌿 Büyük Salon Bitkisi</option>
+          <option value="sofa">🛋️ Dinlenme Koltuğu</option>
+          <option value="server">🖥️ Sunucu & Veri Kabini</option>
+          <option value="board">📊 Proje Sunum Tahtası</option>
+          <option value="water">💧 Su Sebili</option>
+        </select>
+        <button class="p" onclick="addNewOfficeItem()">+ Ekle</button>
+      </div>
+
+      <div id="selectedItemEditor" style="display:none;padding:10px;border-radius:12px;background:#120f1c;border:1px solid var(--acc);margin:10px 0"></div>
+
+      <label>Firestore'daki Mevcut Ofis Eşyaları</label>
+      <div id="officeItemsList"></div>
+    </aside>
+  </div>
+
+  <div id="ap" class="box"></div>
+
+  <section id="panel">
+    <div class="box">
+      <div class="row" style="margin-top:0">
+        <select id="targetAgent" style="max-width:250px" title="Görevi ilk teslim alacak departman"></select>
+        <input id="ti" style="flex:1;min-width:240px" placeholder="Departmana görev verin (Örn: Haritacılık makalesi ve koordinat kodu hazırlayın)">
+        <button id="go" class="p">Görevi Başlat</button>
+        <button id="stepBtn" title="Bekleme süresini atlayıp sıradaki mesajı hemen işle">⚡ Şimdi İşlet</button>
+        <button id="unstickBtn" title="Takılan veya hata alan görevleri kurtar">🔧 Takılanları Kurtar</button>
+        <button id="resetProj" class="danger" title="Tüm yazışmaları ve dosyaları sıfırla">🗑️ Yeni Proje (Temizle)</button>
+        <button id="stop">Acil Durdur</button>
+      </div>
+      <div class="tabs" id="tabs"></div>
     </div>
-    <div class="staff-picker-menu" id="staffPickerMenu"></div>
-  </div>
+    <div id="pn" class="box"></div>
+  </section>
 
-  <input id="ti" placeholder="Ajanlara görevi, arşivdeki incelenecek dosyayı veya ofiste değiştirilecek/kaldırılacak eşyayı özgürce yazın...">
-  <div class="row" style="margin:0">
-    <button id="go" class="p">🚀 Görevi Başlat</button>
-    <button id="stepBtn" class="ok" title="Bekleyen sıradaki görevi hemen işlet">⚡ Şimdi İşlet</button>
-    <button id="stop" class="warn">⏸ Duraklat</button>
-    <button id="resetProj" class="danger" title="Yazışmaları ve dosyaları sıfırla">🗑️ Sıfırla</button>
-  </div>
-</section>
-
-<!-- GİZLİ DOSYA YÜKLEME INPUTU -->
-<input type="file" id="fileUploadInput" multiple style="display:none" onchange="handleLocalFileUpload(event)">
-
-<!-- AÇILIR PENCERE (MODAL) KAPSAYICISI -->
-<div class="win-backdrop" id="winBackdrop" onclick="if(event.target===this)closeWindow()">
-  <div class="win-box">
-    <div class="win-head">
-      <h2 id="winTitle">Pencere</h2>
-      <button class="danger" onclick="closeWindow()">✕ Kapat (ESC)</button>
-    </div>
-    <div class="win-body" id="winBody"></div>
-  </div>
+  <aside id="card" class="box" aria-live="polite"></aside>
+  <footer>Created by Tonoz · Firestore Gerçek Zamanlı Multi-Agent Mimarisi</footer>
 </div>
-
-<!-- PERSONEL EKLEME / DÜZENLEME MODALI -->
-<aside id="card" aria-live="polite"></aside>
-<div id="ext-floating-widget"></div>
 
 <script>
 /* ============================================================================
-   1. FIRESTORE YAPILANDIRMASI & KULLANICININ GERÇEK GEMINI KOTA TABLOSU
+   1. FIREBASE YAPILANDIRMASI VE AKILLI MODEL HAVUZU
    ============================================================================ */
 const FB = {
   apiKey: 'AIzaSyAoPd-gsCIEzXJ8_TOeZBvcSICNvHvW29Q',
@@ -321,227 +156,17 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const hhmm = () => new Date().toTimeString().slice(0, 5);
 const todayKey = () => new Date().toISOString().slice(0, 10);
-const currentHourKey = () => new Date().toISOString().slice(11, 13);
 
+// Arayüzde seçilen etiketlerin Google API'deki gerçek karşılıkları (Dinamik keşif ile güncellenir)
 const MODELS = [
-  { n: 'Gemini 3.5 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite', 'gemini-2.5-flash'], rpm: 15,  tpm: 250000, rph: 120,  l: 500,   u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.1 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite', 'gemini-2.5-flash'], rpm: 15,  tpm: 250000, rph: 120,  l: 500,   u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemma 4 31B',           cat: 'Diğer Modeller (Açık)', apis: ['gemma-3-27b-it', 'gemini-2.5-flash-lite'],   rpm: 30,  tpm: 16000,  rph: 1200, l: 14400, u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemma 4 26B',           cat: 'Diğer Modeller (Açık)', apis: ['gemma-3-27b-it', 'gemini-2.5-flash-lite'],   rpm: 30,  tpm: 16000,  rph: 1200, l: 14400, u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Yerçekimsiz (Ajan)',    cat: 'Ajanlar',               apis: ['gemini-2.5-flash'],                          rpm: 60,  tpm: 100000, rph: 50,   l: 100,   u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.8 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.6 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3 Flash',        cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 2.5 Flash',      cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 2.5 Flash Lite', cat: 'Metin Çıkış Modelleri', apis: ['gemini-2.5-flash-lite'],                     rpm: 10,  tpm: 250000, rph: 15,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini Robotics ER 2',  cat: 'Diğer Modeller',        apis: ['gemini-2.5-flash'],                          rpm: 5,   tpm: 250000, rph: 10,   l: 20,    u: 0, hu: 0, tu: 0, active: true },
-  { n: 'Gemini 3.8 Flash TTS',       cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 3.8 Flash Lite TTS',  cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 3.1 Flash TTS',       cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 2.5 Flash TTS',       cat: 'Çok Modlu (TTS)',   apis: ['gemini-2.5-flash-preview-tts'], rpm: 3,   tpm: 10000,   rph: 10,   l: 10,     u: 0, hu: 0, tu: 0, active: false },
-  { n: 'İkizler 3.5 Transkripsiyon', cat: 'Canlı API',         apis: ['gemini-2.5-flash'],             rpm: 3,   tpm: 10000,   rph: 15,   l: 25,     u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini Embedding 1',         cat: 'Embedding',         apis: ['text-embedding-004'],           rpm: 100, tpm: 30000,   rph: 500,  l: 1000,   u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini Embedding 2',         cat: 'Embedding',         apis: ['text-embedding-004'],           rpm: 100, tpm: 30000,   rph: 500,  l: 1000,   u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 2.5 Flash Ses Diyaloğu', cat: 'Canlı API',      apis: ['gemini-2.5-flash'],             rpm: 999, tpm: 1000000, rph: 9999, l: 999999, u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 3.8 Canlı Yayın',     cat: 'Canlı API',         apis: ['gemini-2.5-flash'],             rpm: 999, tpm: 65000,   rph: 9999, l: 999999, u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 3 Flash Canlı Yayın', cat: 'Canlı API',         apis: ['gemini-2.5-flash'],             rpm: 999, tpm: 65000,   rph: 9999, l: 999999, u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 2.5 Pro',             cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 3.1 Pro',             cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false },
-  { n: 'Gemini 2 Flash / Lite',      cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false },
-  { n: 'İkizler 4 Argon',            cat: 'Metin (Kota: 0)',   apis: [], rpm: 0, tpm: 0, rph: 0, l: 0, u: 0, hu: 0, tu: 0, active: false }
-];
-
-const ACTIVE_TEXT_MODELS = MODELS.filter(m => m.active && m.l > 0);
-const mdl = n => MODELS.find(m => m.n === n) || MODELS[0];
-
-/* ============================================================================
-   2. TÜM OFİS EŞYALARI KATALOĞU (FIRESTORE settings/office_mods İÇİNDE TUTULUR)
-   ============================================================================ */
-const DEFAULT_SCENE_ITEMS = [
-  {
-    id: 'duvarlar',
-    label: 'Ofis Ana Duvarları & Süpürgelikler',
-    depth: -25,
-    drawJs: `
-      poly([P(0, 0), P(0, 14), P(0, 14, 96), P(0, 0, 96)], '#171d30');
-      poly([P(0, 0), P(20, 0), P(20, 0, 96), P(0, 0, 96)], '#131829');
-      poly([P(0, 0), P(0, 14), P(0, 14, 6), P(0, 0, 6)], '#242c46');
-      poly([P(0, 0), P(20, 0), P(20, 0, 6), P(0, 0, 6)], '#1e253b');
-    `
-  },
-  {
-    id: 'pencereler',
-    label: 'Arka Duvar Pencereleri (5 Adet Panoramik Pencere)',
-    depth: -22,
-    drawJs: `
-      [[.5, 2.5], [4.5, 6.5], [8.5, 10.5], [12.5, 14.5], [16.5, 19.2]].forEach(w => {
-        poly([P(w[0] - .1, 0, 28), P(w[1] + .1, 0, 28), P(w[1] + .1, 0, 76), P(w[0] - .1, 0, 76)], '#232b44');
-        poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 72), P(w[0], 0, 72)], '#2d3a5e');
-        poly([P(w[0], 0, 32), P(w[1], 0, 32), P(w[1], 0, 48), P(w[0], 0, 48)], '#3b4d7a');
-      });
-    `
-  },
-  {
-    id: 'hq_tabela',
-    label: 'Sol Duvar TONOZ AI HQ Tabelası',
-    depth: -18,
-    drawJs: `
-      const lq = P(0, 6.5, 60);
-      rr(lq[0] - 62, lq[1] - 14, 124, 26, 7, 'rgba(15,23,42,.94)', '#6366f1');
-      cx.textAlign = 'center';
-      cx.font = '800 10.5px "Space Grotesk",sans-serif';
-      cx.fillStyle = '#e0e7ff';
-      cx.fillText('⚡ TONOZ AI HQ', lq[0], lq[1] + 2);
-    `
-  },
-  {
-    id: 'ortak_halilar',
-    label: 'Ortak Alan Halı Bölgeleri (Yemekhane, Toplantı, Dinlenme)',
-    depth: -15,
-    drawJs: `
-      poly([P(0.4, 4.4), P(4.8, 4.4), P(4.8, 8.6), P(0.4, 8.6)], 'rgba(245,158,11,.07)', 'rgba(245,158,11,.2)');
-      poly([P(6.2, 4.5), P(11.8, 4.5), P(11.8, 8.5), P(6.2, 8.5)], 'rgba(59,130,246,.08)', 'rgba(59,130,246,.22)');
-      poly([P(13.2, 4.4), P(17.5, 4.4), P(17.5, 8.6), P(13.2, 8.6)], 'rgba(236,72,153,.06)', 'rgba(236,72,153,.18)');
-    `
-  },
-  {
-    id: 'odalar_koltuk',
-    label: 'Personel Odaları Çalışma Koltukları (10 Oda)',
-    depth: 8,
-    drawJs: `
-      RM.forEach(r => {
-        box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
-        box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
-      });
-    `
-  },
-  {
-    id: 'odalar_masa',
-    label: 'Personel Odaları Çalışma Masaları (10 Oda)',
-    depth: 10,
-    drawJs: `
-      RM.forEach(r => {
-        const x = r.dx, y = r.dy;
-        box(x + .06, y + .1, .12, .8, 24, 0, DK);
-        box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
-        box(x, y, 2, 1, 5, 24, WOOD);
-      });
-    `
-  },
-  {
-    id: 'odalar_bilgisayar',
-    label: 'Personel Odaları Bilgisayar Monitörleri, Klavye ve Kupalar',
-    depth: 11,
-    drawJs: `
-      RM.forEach(r => {
-        const x = r.dx, y = r.dy, a = staff.find(s => s.room === r.i);
-        box(x + .85, y + .22, .3, .25, 4, 29, DK);
-        box(x + .52, y + .2, .96, .1, 18, 33, DK, a && a.mon ? '#10b981' : '#334155');
-        box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
-        box(x + 1.6, y + .6, .2, .2, 6, 29, COR);
-      });
-    `
-  },
-  {
-    id: 'odalar_bitki',
-    label: 'Personel Odaları Köşe Saksı Bitkileri',
-    depth: 12,
-    drawJs: `
-      RM.forEach(r => {
-        const px = r.x + r.w - 1, py = r.top ? 2 : 10;
-        box(px + .28, py + .28, .44, .44, 9, 0, [20, 50, 52]);
-        const q = P(px + .5, py + .5, 13);
-        [[0, -11, 7.5], [-6, -6, 6], [6, -6, 6], [0, -17, 5]].forEach(l =>
-          disc(q[0] + l[0] + Math.sin(T * 1.5 + px) * 1.2, q[1] + l[1], l[2], hs(GRN, 8 - l[1] * .35))
-        );
-      });
-    `
-  },
-  {
-    id: 'yemekhane_masalar',
-    label: 'Yemekhane Masaları ve Sandalyeleri (Sol Meydan)',
-    depth: 14,
-    drawJs: `
-      [5, 7].forEach(y => {
-        box(1, y, 3, 1, 5, 22, WOOD);
-        [1.1, 3.7].forEach(x => box(x, y + .1, .2, .8, 22, 0, DK));
-        [1.3, 2.1, 2.9].forEach(x => {
-          box(x, y + .4, .35, .3, 1.2, 27, WT);
-          box(x + .05, y - .5, .4, .4, 7, 0, CH);
-          box(x + .05, y + 1.1, .4, .4, 7, 0, CH);
-        });
-      });
-    `
-  },
-  {
-    id: 'toplanti_masasi',
-    label: 'Toplantı Salonu Büyük Masa, Laptop ve Koltuklar (Orta Meydan)',
-    depth: 15,
-    drawJs: `
-      box(7, 6, 4, 1.1, 5, 22, WOOD);
-      [7.1, 10.7].forEach(x => box(x, 6.1, .2, .8, 22, 0, DK));
-      [7.2, 8.1, 9.0, 9.9].forEach(x => { box(x, 5.2, .5, .5, 7, 0, BLU); box(x, 7.4, .5, .5, 7, 0, BLU); });
-      box(8.6, 6.35, .6, .4, 2, 27, WT);
-    `
-  },
-  {
-    id: 'dinlenme_koltuk',
-    label: 'Dinlenme Alanı Lounge Koltuğu (Sağ Meydan)',
-    depth: 20,
-    drawJs: `
-      box(14, 7, 3, 1, 10, 0, PNK); box(14, 7.75, 3, .25, 26, 0, PNK);
-      box(14, 7, .25, 1, 17, 0, PNK); box(16.75, 7, .25, 1, 17, 0, PNK);
-    `
-  },
-  {
-    id: 'kahve_bari',
-    label: 'Kahve Barı ve Kahve Makinesi',
-    depth: 22,
-    drawJs: `
-      box(18.1, 4.1, .8, .8, 34, 0, WOOD); box(18.2, 4.2, .6, .6, 8, 34, DK);
-      const q = P(18.5, 4.5, 46);
-      for (let i = 0; i < 3; i++) {
-        const o = (T * 18 + i * 11) % 22;
-        cx.fillStyle = 'rgba(226,232,240,' + (.5 - o / 46) + ')';
-        cx.fillRect(q[0] - 2 + Math.sin(T * 3 + i) * 2, q[1] - o, 2.5, 2.5);
-      }
-    `
-  },
-  {
-    id: 'ortak_arsiv',
-    label: 'Ortak Arşiv & Veri Merkezi Dolabı (Tıklanınca Dosyaları Açar)',
-    depth: 24,
-    drawJs: `
-      box(18.05, 5.05, .9, 1.9, 48, 0, DK);
-      [12, 24, 36].forEach(z => box(18.95, 5.2, .06, .6, 2, z, BLU));
-      box(18.2, 5.3, .5, .5, 4, 48, BLU); box(18.2, 6.2, .5, .5, 4, 48, YEL);
-    `
-  },
-  {
-    id: 'cam_duvarlar',
-    label: 'Oda Cam Duvarları, Ara Bölmeler ve Kapı Tabelaları',
-    depth: 42,
-    drawJs: `
-      RM.forEach(r => {
-        const y = r.wy + .4;
-        glass(r.x + 1, y, r.w - 1, .2, 34);
-        glass(r.x, y, .12, .2, 34);
-        drawRoomPlaque(r);
-      });
-      [3, 7, 11, 15].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
-    `
-  },
-  {
-    id: 'asili_tabelalar',
-    label: 'Yemekhane, Toplantı, Dinlenme ve Ortak Arşiv 2.5D Tabelaları',
-    depth: 48,
-    drawJs: `
-      drawSignboard25D(2.5, 6.0, 56, 'YEMEKHANE', 'Sosyal & Mola', '🍴', '#f59e0b');
-      drawSignboard25D(9.0, 6.0, 56, 'TOPLANTI ODASI', 'Planlama & Kurul', '📊', '#3b82f6');
-      drawSignboard25D(15.3, 7.6, 54, 'DİNLENME ALANI', 'Kahve & Lounge', '☕', '#ec4899');
-      drawSignboard25D(18.4, 5.6, 68, 'ORTAK ARŞİV', filesCount + ' Dosya (Tıkla Aç)', '🗄️', '#10b981');
-    `
-  }
+  { n: 'Gemini 3.8 Flash',      pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'Yönetici & Strateji (20/gün)' },
+  { n: 'Gemini 3.6 Flash',      pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'Planlama & Analiz (20/gün)' },
+  { n: 'Gemini 3 Flash',        pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'Kalite & Denetim (20/gün)' },
+  { n: 'Gemini 2.5 Flash',      pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'İK & Koordinasyon (20/gün)' },
+  { n: 'Gemini 3.5 Flash Lite', pref: ['gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-2.0-flash'], l: 500, u: 0, rpm: 15, desc: 'Hızlı Üretim (500/gün)' },
+  { n: 'Gemini 3.1 Flash Lite', pref: ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash'], l: 500, u: 0, rpm: 15, desc: 'Genel Üretim (500/gün)' },
+  { n: 'Gemma 4 31B',           pref: ['gemma-3-27b-it', 'gemini-2.0-flash', 'gemini-2.5-flash'], l: 14400, u: 0, rpm: 30, desc: 'Geniş Yedek Havuz (14.4K/gün)' },
+  { n: 'Gemma 4 26B',           pref: ['gemma-3-27b-it', 'gemini-2.0-flash', 'gemini-2.5-flash'], l: 14400, u: 0, rpm: 30, desc: 'Yedek Üretim Havuzu (14.4K/gün)' }
 ];
 
 const store = {
@@ -549,147 +174,144 @@ const store = {
   mails: [],
   tasks: [],
   files: [],
-  approvals: [],
+  items: [], // Firestore'dan çekilen dinamik ofis eşyaları
   log: [],
+  availableApiModels: [], // Google API'den canlı sorgulanan çalışan modeller
+  cooldownUntilByModel: {}, // 429 alan modelleri geçici dinlendiren harita
+  failCountByMail: {}, // Aynı mailde takılmayı önleyen sayaç
   selectedMailId: null,
   selectedFileId: null,
-  isCreatingFile: false,
+  selectedItemId: null,
+  designMode: false,
   geminiKey: '',
-  cooldownSec: 65,
-  maxChainDepth: 12,
-  officeMods: {
-    version: 1,
-    initializedLayout: false,
-    sceneMods: [...DEFAULT_SCENE_ITEMS],
-    uiMods: []
-  },
-  previewMods: null
+  cooldownSec: 65, // Dakikada 5 istek sınırına (RPM) takılmamak için güvenli mola
+  maxChainDepth: 12
 };
 
-function shortName(fullName) {
-  if (!fullName) return 'Ajan';
-  return String(fullName)
-    .replace(/\b(Hanım|Bey|Uzmanı|Yöneticisi|Müdürü|Dr\.|Prof\.)\b/gi, '')
-    .trim()
-    .split(/\s+/)[0] || fullName;
+/* ============================================================================
+   2. GOOGLE API CANLI MODEL KEŞFİ (404 HATALARINI KÖKTEN BİTİRİR)
+   ============================================================================ */
+async function discoverWorkingModels() {
+  if (!store.geminiKey) return;
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(store.geminiKey)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const valid = (data.models || [])
+      .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+      .map(m => m.name.replace('models/', ''));
+    
+    if (valid.length) {
+      store.availableApiModels = valid;
+      $('#modelBadge').className = 'badge live';
+      $('#modelBadge').textContent = `✓ ${valid.length} Aktif API Modeli Hazır`;
+      lg(`Google API tarandı: Hesabınızda çalışan ${valid.length} model doğrulandı.`);
+    }
+  } catch (e) {
+    console.warn('Model listesi alınamadı:', e);
+  }
 }
-function shortRole(role) {
-  if (!role) return 'UZMAN';
-  const r = role.toLowerCase();
-  if (r.includes('seo') || r.includes('strateji')) return 'STRATEJİ';
-  if (r.includes('plan')) return 'PLANLAMA';
-  if (r.includes('ik') || r.includes('insan') || r.includes('hr')) return 'İK & KOTA';
-  if (r.includes('kod') || r.includes('yazılım') || r.includes('dev')) return 'YAZILIM';
-  if (r.includes('tasarım') || r.includes('görsel') || r.includes('ui')) return 'TASARIM';
-  if (r.includes('metin') || r.includes('içerik') || r.includes('yazar')) return 'İÇERİK';
-  if (r.includes('kalite') || r.includes('denetim') || r.includes('qa')) return 'KALİTE';
-  return role.slice(0, 10).toUpperCase();
+
+// Ajanın model ismine göre Google API'de %100 çalışan ve 429 yememiş gerçek modeli bulur
+function resolveWorkingApiModel(agent) {
+  const now = Date.now();
+  const candidates = [agent.model, agent.backup, 'Gemini 3.5 Flash Lite', 'Gemini 2.5 Flash', 'Gemma 4 31B'];
+  
+  for (const label of candidates) {
+    const pool = MODELS.find(m => m.n === label);
+    if (!pool || pool.u >= pool.l) continue;
+
+    for (const apiName of pool.pref) {
+      // Eğer API'den canlı liste çekildiyse, sadece o listede gerçekten var olan modeli seç (404'ü engeller)
+      if (store.availableApiModels.length > 0 && !store.availableApiModels.includes(apiName)) {
+        continue;
+      }
+      // Bu model yakın zamanda 429 (Rate Limit) yediyse dinlenme süresi bitene kadar atla
+      if ((store.cooldownUntilByModel[apiName] || 0) > now) {
+        continue;
+      }
+      return { pool, apiName };
+    }
+  }
+
+  // Eğer listedeki tercihlerin hiçbiri eşleşmediyse, hesabın desteklediği ilk flash/gemma modelini seç
+  const fallbackApi = store.availableApiModels.find(m => /flash|gemma/i.test(m) && (store.cooldownUntilByModel[m] || 0) <= now)
+                      || 'gemini-2.5-flash';
+  return { pool: MODELS[4], apiName: fallbackApi };
 }
 
 /* ============================================================================
-   3. GENİŞLETİLMİŞ TAM EKRAN 2.5D İZOMETRİK OFİS MOTORU (20x14 GRID)
+   3. İZOMETRİK 2.5D OFİS & CANLI EŞYA TASARIM MOTORU
    ============================================================================ */
 const cv = $('#cv'), cx = cv.getContext('2d');
-const NX = 20, NY = 14, TW = 32, TH = 16, WL = 96;
-let camX = 0, camY = 0, camZoom = 1, isDragging = false, dragMoved = false, dragStartX = 0, dragStartY = 0;
+cx.scale(2, 2);
+const TW = 28, TH = 14, OX = 400, OY = 118, N = 14, WL = 90;
+const P = (x, y, z = 0) => [OX + (x - y) * TW, OY + (x + y) * TH - z];
+const hs = (c, d) => 'hsl(' + c[0] + ' ' + c[1] + '% ' + Math.max(4, Math.min(97, c[2] + d)) + '%)';
 
-function resizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  cv.width = window.innerWidth * dpr;
-  cv.height = window.innerHeight * dpr;
-  resetCamera();
+// Ekran koordinatından (Mouse tıklaması) İzometrik Grid (X, Y) koordinatına dönüşüm
+function screenToIsoGrid(sx, sy) {
+  const dx = (sx - OX) / TW;
+  const dy = (sy - OY) / TH;
+  const gx = Math.floor((dx + dy) / 2);
+  const gy = Math.floor((dy - dx) / 2);
+  return [Math.max(0, Math.min(N - 1, gx)), Math.max(0, Math.min(N - 1, gy))];
 }
-function resetCamera() {
-  const w = window.innerWidth, h = window.innerHeight;
-  camZoom = Math.min(w / 1180, h / 680) * 0.96;
-  camX = w * 0.44;
-  camY = h * 0.17;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
-cv.addEventListener('mousedown', e => {
-  isDragging = true;
-  dragMoved = false;
-  dragStartX = e.clientX - camX;
-  dragStartY = e.clientY - camY;
-});
-window.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  const nx = e.clientX - dragStartX, ny = e.clientY - dragStartY;
-  if (Math.hypot(nx - camX, ny - camY) > 4) dragMoved = true;
-  camX = nx;
-  camY = ny;
-});
-window.addEventListener('mouseup', () => { isDragging = false; });
-cv.addEventListener('wheel', e => {
-  e.preventDefault();
-  const factor = e.deltaY < 0 ? 1.08 : 0.92;
-  camZoom = Math.max(0.55, Math.min(2.2, camZoom * factor));
-}, { passive: false });
-
-const P = (x, y, z = 0) => [ (x - y) * TW, (x + y) * TH - z ];
-const screenToWorld = (sx, sy) => [ (sx - camX) / camZoom, (sy - camY) / camZoom ];
-const hs = (c, d) => 'hsl(' + c[0] + ' ' + c[1] + '% ' + Math.max(4, Math.min(96, c[2] + d)) + '%)';
-
-function poly(p, f, s, lw = 1) {
+function poly(p, f, s) {
   cx.beginPath();
   p.forEach((q, i) => i ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]));
   cx.closePath();
   cx.fillStyle = f; cx.fill();
-  if (s) { cx.strokeStyle = s; cx.lineWidth = lw; cx.stroke(); }
+  if (s) { cx.strokeStyle = s; cx.lineWidth = 1; cx.stroke(); }
 }
 function box(x, y, w, d, h, z, c, g) {
   const t = z + h;
   poly([P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x, y + d, t)], g || hs(c, -8));
-  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], hs(c, -18));
-  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], hs(c, 8));
+  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], hs(c, -17));
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], hs(c, 7));
 }
 function glass(x, y, w, d, h) {
   const t = h;
-  poly([P(x, y + d, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(148,163,184,.15)', 'rgba(148,163,184,.36)');
-  poly([P(x + w, y, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x + w, y, t)], 'rgba(148,163,184,.21)', 'rgba(148,163,184,.36)');
-  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(226,232,240,.34)');
+  poly([P(x, y + d, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.22)', 'rgba(160,140,220,.45)');
+  poly([P(x + w, y, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x + w, y, t)], 'rgba(200,190,240,.28)', 'rgba(160,140,220,.45)');
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.4)');
 }
 const disc = (x, y, r, c) => { cx.beginPath(); cx.arc(x, y, r, 0, 7); cx.fillStyle = c; cx.fill(); };
 const el = (x, y, a, b, c) => { cx.beginPath(); cx.ellipse(x, y, a, b, 0, 0, 7); cx.fillStyle = c; cx.fill(); };
-const rr = (x, y, w, h, r, c, s) => {
-  cx.beginPath(); cx.roundRect(x, y, w, h, r);
-  cx.fillStyle = c; cx.fill();
-  if (s) { cx.strokeStyle = s; cx.lineWidth = 1.2; cx.stroke(); }
-};
+const rr = (x, y, w, h, r, c) => { cx.beginPath(); cx.roundRect(x, y, w, h, r); cx.fillStyle = c; cx.fill(); };
 
-const WOOD = [30, 52, 58], DK = [222, 28, 26], WT = [220, 30, 92], COR = [14, 78, 62],
-      GRN = [145, 52, 42], BLU = [210, 75, 60], YEL = [42, 88, 62], PNK = [335, 60, 62], CH = [235, 45, 52];
+const WOOD = [32, 62, 62], DK = [28, 30, 32], WT = [260, 40, 90], COR = [12, 80, 65],
+      GRN = [140, 50, 45], BLU = [205, 70, 62], YEL = [45, 85, 65], PNK = [340, 55, 62], CH = [255, 40, 55];
 
 const RM = [
-  [0, 0, 3, 1],  [4, 0, 3, 1],  [8, 0, 3, 1],  [12, 0, 3, 1],  [16, 0, 4, 1],
-  [0, 10, 3, 0], [4, 10, 3, 0], [8, 10, 3, 0], [12, 10, 3, 0], [16, 10, 4, 0]
+  [0, 0, 3, 1], [4, 0, 3, 1], [8, 0, 3, 1],
+  [0, 10, 3, 0], [4, 10, 3, 0], [8, 10, 3, 0],
+  [12, 0, 2, 1], [12, 10, 2, 0]
 ].map((r, i) => ({
   i, x: r[0], y: r[1], w: r[2], top: r[3], wy: r[3] ? 3 : 9,
-  hue: [235, 325, 195, 155, 38, 12, 275, 175, 295, 95][i],
-  dx: r[0] + 1, dy: r[3] ? 0 : 12,
-  sx: r[0] + 1, sy: r[3] ? 1 : 11
+  hue: [265, 330, 200, 150, 45, 15, 285, 100][i],
+  dx: r[2] == 3 ? r[0] + 1 : r[0], dy: r[3] ? 0 : 12,
+  sx: r[2] == 3 ? r[0] + 1 : r[0], sy: r[3] ? 1 : 11
 }));
 
-const BL = Array.from({ length: NY }, () => Array(NX).fill(0));
+const BL = Array.from({ length: N }, () => Array(N).fill(0));
 const blk = (x, y, w = 1, d = 1) => {
-  for (let i = 0; i < w; i++) for (let j = 0; j < d; j++)
-    if (BL[y + j] && BL[y + j][x + i] !== undefined) BL[y + j][x + i] = 1;
+  for (let i = 0; i < w; i++) for (let j = 0; j < d; j++) {
+    if (y + j >= 0 && y + j < N && x + i >= 0 && x + i < N) BL[y + j][x + i] = 1;
+  }
 };
 RM.forEach(r => {
   blk(r.dx, r.dy, 2, 1);
   for (let x = r.x + 1; x < r.x + r.w; x++) blk(x, r.wy);
-  blk(r.x + r.w - 1, r.top ? 2 : 10);
 });
-[3, 7, 11, 15].forEach(x => { blk(x, 0, 1, 4); blk(x, 9, 1, 5); });
-blk(1, 5, 3, 1); blk(1, 7, 3, 1); blk(7, 6, 4, 1); blk(14, 7, 3, 1); blk(18, 4, 1, 1); blk(18, 5, 1, 2);
+[3, 7, 11].forEach(x => { blk(x, 0, 1, 4); blk(x, 9, 1, 5); });
 
 const SP = {
-  yemek: [[4, 6], [0, 6], [2, 6]],
-  toplanti: [[8, 5], [7, 7], [10, 7]],
-  mola: [[13, 7], [15, 8], [14, 5]],
-  arsiv: [[17, 5], [17, 6]]
+  yemek: [[4, 6], [0, 6], [1, 6]],
+  mola: [[10, 7], [12, 8], [10, 5]],
+  toplanti: [[7, 5], [6, 7], [8, 7]],
+  arsiv: [[12, 5], [12, 6]]
 };
 
 let busy = false, halt = false, OWN = false, T = 0;
@@ -701,7 +323,7 @@ function bfs(s, t) {
     if (c[0] == t[0] && c[1] == t[1]) break;
     for (const d of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const x = c[0] + d[0], y = c[1] + d[1];
-      if (x < 0 || y < 0 || x >= NX || y >= NY || BL[y][x] || pr[[x, y]]) continue;
+      if (x < 0 || y < 0 || x >= N || y >= N || BL[y][x] || pr[[x, y]]) continue;
       pr[[x, y]] = c; q.push([x, y]);
     }
   }
@@ -724,7 +346,7 @@ function upd(dt) {
   store.staff.forEach(a => {
     a.mv = 0;
     if (a.path.length) {
-      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.8 * dt;
+      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.6 * dt;
       a.mv = 1;
       if (d <= s) {
         a.ax = p[0]; a.ay = p[1]; a.path.shift();
@@ -734,186 +356,149 @@ function upd(dt) {
   });
 }
 
-function drawSignboard25D(gx, gy, gz, title, sub, icon, accentHex) {
-  const q = P(gx, gy, gz);
-  const x = q[0], y = q[1];
-  const w = 114, h = 28;
-
-  cx.strokeStyle = '#475569';
-  cx.lineWidth = 2;
-  cx.beginPath();
-  cx.moveTo(x - 28, y - h - 9); cx.lineTo(x - 28, y - h + 2);
-  cx.moveTo(x + 28, y - h - 9); cx.lineTo(x + 28, y - h + 2);
-  cx.stroke();
-  disc(x - 28, y - h - 9, 2.5, '#94a3b8');
-  disc(x + 28, y - h - 9, 2.5, '#94a3b8');
-
-  rr(x - w / 2 + 2, y - h + 3, w, h, 6, 'rgba(0,0,0,.55)');
-  rr(x - w / 2, y - h, w, h, 6, '#131826', accentHex);
-
-  rr(x - w / 2 + 3, y - h + 3, 22, h - 6, 4, accentHex);
-  cx.font = '12px sans-serif';
-  cx.textAlign = 'center';
-  cx.fillStyle = '#fff';
-  cx.fillText(icon, x - w / 2 + 14, y - h / 2 + 4);
-
-  cx.textAlign = 'left';
-  cx.font = '800 9.5px "Space Grotesk",sans-serif';
-  cx.fillStyle = '#f8fafc';
-  cx.fillText(title, x - w / 2 + 30, y - h + 12);
-
-  cx.font = '600 8px "Plus Jakarta Sans",sans-serif';
-  cx.fillStyle = '#94a3b8';
-  cx.fillText(sub, x - w / 2 + 30, y - h + 22);
-}
-
-function drawRoomPlaque(r) {
-  const occupant = store.staff.find(s => s.room === r.i);
-  const dept = occupant ? shortRole(occupant.role) : ('BOŞ ODA');
-  const num = String(r.i + 1).padStart(2, '0');
-  const q = P(r.x + r.w / 2, r.wy + 0.4, 38);
-  const w = 72, h = 15;
-  rr(q[0] - w / 2, q[1] - h / 2, w, h, 4, 'rgba(15,23,42,.92)', `hsl(${r.hue},70%,60%)`);
-  cx.textAlign = 'center';
-  cx.font = '700 8px "JetBrains Mono",monospace';
-  cx.fillStyle = `hsl(${r.hue},85%,75%)`;
-  cx.fillText(`${num}·${dept}`, q[0], q[1] + 2.8);
-}
-
-// Tüm ofis eşyalarını (ve varsa önizleme değişikliklerini/silmelerini) birleştirir
-function getActiveSceneMods() {
-  const baseList = (store.officeMods && Array.isArray(store.officeMods.sceneMods))
-    ? store.officeMods.sceneMods
-    : DEFAULT_SCENE_ITEMS;
-
-  let merged = [...baseList];
-  if (store.previewMods) {
-    const remIds = Array.isArray(store.previewMods.removeSceneIds) ? store.previewMods.removeSceneIds : [];
-    if (remIds.length) {
-      merged = merged.filter(item => !remIds.includes(item.id));
+// Odaların sabit çalışma masaları
+const BASE_OB = [];
+RM.forEach(r => {
+  BASE_OB.push({
+    k: r.dx + r.dy + 1.5,
+    f: () => {
+      const x = r.dx, y = r.dy, a = store.staff.find(s => s.room === r.i);
+      box(x + .06, y + .1, .12, .8, 24, 0, DK);
+      box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
+      box(x, y, 2, 1, 5, 24, WOOD);
+      box(x + .85, y + .22, .3, .25, 4, 29, DK);
+      box(x + .55, y + .2, .9, .1, 17, 33, DK, a && a.mon ? '#10b981' : '#3a3358');
+      box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
     }
-    const prevScene = Array.isArray(store.previewMods.sceneMods) ? store.previewMods.sceneMods : [];
-    prevScene.forEach(ps => {
-      if (!ps || !ps.drawJs) return;
-      const idx = merged.findIndex(x => x.id === ps.id);
-      if (idx >= 0) merged[idx] = ps;
-      else merged.push(ps);
-    });
-  }
-  return merged;
-}
-
-const compiledDrawCache = new Map();
-function collectDynamicSceneObjects() {
-  const mods = getActiveSceneMods();
-  const dyn = [];
-  mods.forEach((m, idx) => {
-    if (!m || !m.drawJs || m.hidden) return;
-    const depth = Number(m.depth) ?? 12;
-    let fn = compiledDrawCache.get(m.drawJs);
-    if (!fn) {
-      try {
-        fn = new Function('api', `const {box,disc,el,rr,poly,glass,P,hs,RM,T,cx,drawSignboard25D,drawRoomPlaque,staff,filesCount,WOOD,DK,WT,COR,GRN,BLU,YEL,PNK,CH}=api;\n` + m.drawJs);
-        compiledDrawCache.set(m.drawJs, fn);
-      } catch (e) {
-        return;
-      }
-    }
-    dyn.push({
-      k: depth + idx * 0.005,
-      f: () => {
-        try {
-          fn({
-            box, disc, el, rr, poly, glass, P, hs, RM, T, cx,
-            drawSignboard25D, drawRoomPlaque,
-            staff: store.staff, filesCount: store.files.length,
-            WOOD, DK, WT, COR, GRN, BLU, YEL, PNK, CH
-          });
-        } catch (err) {}
-      }
-    });
   });
-  return dyn;
+  BASE_OB.push({
+    k: r.sx + r.sy + .1,
+    f: () => {
+      box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
+      box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
+    }
+  });
+});
+
+// Firestore'dan gelen dinamik eşyaları çizen fonksiyon
+function drawCustomItem(item) {
+  if (item.hidden) return;
+  const x = Number(item.x || 5), y = Number(item.y || 5);
+  const h = Number(item.hue ?? 32);
+  const col = [h, 65, 58];
+  const isSel = store.designMode && store.selectedItemId === item.id;
+
+  // Seçili eşya vurgusu (Tasarım modunda)
+  if (isSel) {
+    poly([P(x, y), P(x + 1, y), P(x + 1, y + 1), P(x, y + 1)], 'rgba(124,92,239,.45)', '#10b981');
+  }
+
+  if (item.type === 'table') {
+    box(x, y, 2, 1, 4, 22, col);
+    box(x + .1, y + .1, .18, .8, 22, 0, DK);
+    box(x + 1.7, y + .1, .18, .8, 22, 0, DK);
+    box(x + .5, y + .3, .3, .3, 2, 26, WT);
+  } else if (item.type === 'plant') {
+    box(x + .25, y + .25, .5, .5, 12, 0, [22, 55, 50]);
+    const q = P(x + .5, y + .5, 16);
+    [[0, -14, 10], [-8, -8, 8], [8, -8, 8], [0, -23, 7]].forEach(l =>
+      disc(q[0] + l[0] + Math.sin(T * 1.5 + x) * 1.5, q[1] + l[1], l[2], hs([h || 140, 55, 45], 6))
+    );
+  } else if (item.type === 'sofa') {
+    box(x, y, 2, 1, 10, 0, col);
+    box(x, y + .75, 2, .25, 24, 0, col);
+    box(x, y, .25, 1, 16, 0, col);
+    box(x + 1.75, y, .25, 1, 16, 0, col);
+  } else if (item.type === 'server') {
+    box(x + .1, y + .1, .8, .8, 44, 0, DK);
+    [12, 24, 36].forEach(z => box(x + .88, y + .2, .06, .6, 3, z, [140, 80, 60]));
+  } else if (item.type === 'board') {
+    box(x + .1, y + .4, 1.8, .15, 36, 12, WT);
+    box(x + .2, y + .4, .1, .1, 12, 0, DK);
+    box(x + 1.7, y + .4, .1, .1, 12, 0, DK);
+  } else {
+    box(x + .2, y + .2, .6, .6, 32, 0, BLU);
+    box(x + .25, y + .25, .5, .5, 12, 32, WT);
+  }
+
+  // Tasarım modundaysa eşyanın adını üstünde göster
+  if (store.designMode) {
+    const q = P(x + .5, y + .5, 46);
+    cx.font = '700 10px Nunito,sans-serif'; cx.textAlign = 'center';
+    const w = cx.measureText(item.name || item.type).width + 10;
+    rr(q[0] - w / 2, q[1] - 8, w, 15, 6, isSel ? '#10b981' : 'rgba(0,0,0,.75)');
+    cx.fillStyle = '#fff'; cx.fillText(item.name || item.type, q[0], q[1] + 3);
+  }
 }
 
 function floor() {
-  for (let i = 0; i < NX; i++) for (let j = 0; j < NY; j++)
-    poly([P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)], (i + j) % 2 ? '#131828' : '#0f1320');
-  RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',55%,22%,.36)'));
-  poly([P(0, NY), P(NX, NY), P(NX, NY, -14), P(0, NY, -14)], '#192036');
-  poly([P(NX, 0), P(NX, NY), P(NX, NY, -14), P(NX, 0, -14)], '#111626');
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      poly(
+        [P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)],
+        (i + j) % 2 ? '#1a1628' : '#151221',
+        store.designMode ? 'rgba(124,92,239,.35)' : null
+      );
+    }
+  }
+  RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',45%,22%,.45)'));
+  poly([P(0, N), P(N, N), P(N, N, -12), P(0, N, -12)], '#211a33');
+  poly([P(N, 0), P(N, N), P(N, N, -12), P(N, 0, -12)], '#1b1428');
+}
+
+function walls() {
+  poly([P(0, 0), P(0, N), P(0, N, WL), P(0, 0, WL)], '#1e192b');
+  poly([P(0, 0), P(N, 0), P(N, 0, WL), P(0, 0, WL)], '#191524');
+  poly([P(0, 0), P(0, N), P(0, N, 6), P(0, 0, 6)], '#2a233d');
+  poly([P(0, 0), P(N, 0), P(N, 0, 6), P(0, 0, 6)], '#251f35');
+}
+
+function over() {
+  RM.forEach(r => { const y = r.wy + .4; glass(r.x + 1, y, r.w - 1, .2, 34); glass(r.x, y, .12, .2, 34); });
+  [3, 7, 11].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
 }
 
 function dAg(a) {
   const q = P(a.ax, a.ay, 0), sit = !a.mv && Math.hypot(a.ax - seat(a)[0] - .5, a.ay - seat(a)[1] - .5) < .06,
         b = a.mv ? Math.abs(Math.sin(T * 12 + a.ph)) * 2.5 : 0, x = q[0], y = q[1] + (sit ? -5 : 0) - b;
   el(q[0], q[1] + 1, 11, 5, 'rgba(0,0,0,.4)');
-  if (!sit) { cx.fillStyle = '#1e293b'; cx.fillRect(x - 6, y - 9, 4, 9); cx.fillRect(x + 2, y - 9, 4, 9); }
+  if (!sit) { cx.fillStyle = '#302845'; cx.fillRect(x - 6, y - 9, 4, 9); cx.fillRect(x + 2, y - 9, 4, 9); }
   rr(x - 8, y - 26, 16, 19, 6, a.c); rr(x - 11, y - 24, 4, 12, 2, a.c); rr(x + 7, y - 24, 4, 12, 2, a.c);
-  disc(x, y - 34, 10.5, '#fde68a'); cx.fillStyle = a.h; cx.beginPath(); cx.arc(x, y - 35, 11, Math.PI, 0); cx.fill();
-  const bl = (T + a.ph) % 4 < .12 ? .5 : 2.2;
-  el(x - 4, y - 33, 1.7, bl, '#0f172a'); el(x + 4, y - 33, 1.7, bl, '#0f172a');
+  disc(x, y - 34, 10.5, '#fbcfe8'); cx.fillStyle = a.h; cx.beginPath(); cx.arc(x, y - 35, 11, Math.PI, 0); cx.fill();
+  const bl = (T + a.ph) % 4 < .12 ? .5 : 2.4;
+  el(x - 4, y - 33, 1.8, bl, '#221a29'); el(x + 4, y - 33, 1.8, bl, '#221a29');
 }
 
-function drawAllAgentTagsAndBubbles() {
-  const placed = [];
-  store.staff.forEach(a => {
-    const q = P(a.ax, a.ay, 0);
-    let tx = q[0], ty = q[1] - 56;
-    placed.forEach(p => {
-      if (Math.abs(tx - p.x) < 48 && Math.abs(ty - p.y) < 18) ty = p.y - 19;
-    });
-    placed.push({ x: tx, y: ty });
-
-    const sName = shortName(a.name);
-    cx.font = '700 10px "Plus Jakarta Sans",sans-serif';
-    const w = cx.measureText(sName).width + 22;
-    const isWorking = a.mon || a.st === 'Çalışıyor';
-    const dotCol = isWorking ? '#10b981' : (a.mv ? '#f59e0b' : a.c);
-
-    rr(tx - w / 2, ty - 11, w, 17, 8.5, 'rgba(11,13,20,.92)', isWorking ? '#10b981' : 'rgba(148,163,184,.35)');
-    disc(tx - w / 2 + 8, ty - 2.5, 3, dotCol);
-    cx.textAlign = 'left';
-    cx.fillStyle = '#f8fafc';
-    cx.fillText(sName, tx - w / 2 + 14, ty + 1);
-
-    if (a.on && a.bt) {
-      const bt = a.bt.slice(0, 28);
-      cx.font = '700 9.5px "Plus Jakarta Sans",sans-serif';
-      const bw = cx.measureText(bt).width + 26;
-      const bx = tx, by = ty - 24;
-      rr(bx - bw / 2, by - 9, bw, 18, 9, '#1e1b4b', '#6366f1');
-      ic(a.bi, bx - bw / 2 + 11, by);
-      cx.fillStyle = '#e0e7ff';
-      cx.fillText(bt, bx - bw / 2 + 21, by + 3);
-    }
-  });
+// Oda tabelası yok; doğrudan personelin üzerinde İsim ve Unvan yazar
+function tag(a) {
+  const q = P(a.ax, a.ay, 0); cx.textAlign = 'center';
+  const label = `${a.name} · ${a.role}`;
+  cx.font = '700 10px Nunito,sans-serif';
+  const w = cx.measureText(label).width + 12;
+  rr(q[0] - w / 2, q[1] - 66, w, 17, 8, 'rgba(18,14,28,.92)');
+  cx.fillStyle = '#f0ecff'; cx.fillText(label, q[0], q[1] - 54);
 }
 
-function ic(t, x, y) {
-  cx.strokeStyle = cx.fillStyle = '#818cf8'; cx.lineWidth = 1.4; cx.beginPath();
-  if (t == 'mail') { cx.rect(x - 5, y - 3.5, 10, 7); cx.moveTo(x - 5, y - 3.5); cx.lineTo(x, y + 1); cx.lineTo(x + 5, y - 3.5); cx.stroke(); }
-  else if (t == 'cup') { cx.rect(x - 4, y - 3, 7, 6); cx.moveTo(x + 3, y - 1); cx.arc(x + 3.5, y + 1, 1.8, -1.6, 1.6); cx.stroke(); }
-  else if (t == 'doc') { cx.rect(x - 3.5, y - 4.5, 7, 9); cx.moveTo(x - 1.5, y - 1); cx.lineTo(x + 1.5, y - 1); cx.stroke(); }
-  else for (let i = -1; i < 2; i++) { cx.beginPath(); cx.arc(x + i * 4, y, 1.4, 0, 7); cx.fill(); }
+function dBub(a) {
+  if (!a.on) return;
+  const q = P(a.ax, a.ay, 0), t = a.bt ? a.bt.slice(0, 42) : '';
+  cx.font = '700 10.5px Nunito,sans-serif'; cx.textAlign = 'center';
+  const w = cx.measureText(t).width + 18, x = Math.max(w / 2 + 4, Math.min(796 - w / 2, q[0])), y = q[1] - 86;
+  cx.fillStyle = '#181523'; cx.strokeStyle = '#10b981'; cx.lineWidth = 1.5;
+  cx.beginPath(); cx.roundRect(x - w / 2, y - 10, w, 20, 9); cx.fill(); cx.stroke();
+  cx.fillStyle = '#10b981'; cx.fillText(t, x, y + 4);
 }
 
 function draw() {
-  const dpr = window.devicePixelRatio || 1;
-  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  cx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  cx.translate(camX, camY);
-  cx.scale(camZoom, camZoom);
-
-  floor();
-  const dynObjs = collectDynamicSceneObjects();
-  dynObjs
-    .concat(store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) })))
-    .sort((p, q) => p.k - q.k)
-    .forEach(o => o.f());
-  drawAllAgentTagsAndBubbles();
+  cx.clearRect(0, 0, 800, 530);
+  floor(); walls();
+  const dynItems = store.items.map(it => ({ k: Number(it.x || 5) + Number(it.y || 5) + 1.2, f: () => drawCustomItem(it) }));
+  const agents = store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) }));
+  BASE_OB.concat(dynItems).concat(agents).sort((p, q) => p.k - q.k).forEach(o => o.f());
+  over();
+  store.staff.forEach(tag);
+  store.staff.forEach(dBub);
 }
-
 let lt = 0;
 function frame(ts) {
   const dt = Math.min(.05, (ts - lt) / 1000 || 0); lt = ts; T = ts / 1000;
@@ -922,44 +507,134 @@ function frame(ts) {
 requestAnimationFrame(frame);
 
 /* ============================================================================
-   4. PERSONEL YÖNETİMİ VE İKİ SATIRLI GÖREV SEÇİCİ
+   4. CANLI OFİS TASARIM STÜDYOSU (EKLE, GÖR, TAŞI, GİZLE, SİL)
+   ============================================================================ */
+function toggleDesignStudio() {
+  if (!OWN) return alert('Tasarım modunu kullanmak için Yönetici Girişi yapmalısınız.');
+  store.designMode = !store.designMode;
+  $('#stageGrid').classList.toggle('design-active', store.designMode);
+  $('#designSidebar').classList.toggle('on', store.designMode);
+  $('#designToggleBtn').className = store.designMode ? 'p' : '';
+  renderDesignSidebar();
+}
+
+function renderDesignSidebar() {
+  if (!store.designMode) return;
+  const listEl = $('#officeItemsList');
+  const edEl = $('#selectedItemEditor');
+  const sel = store.items.find(x => x.id === store.selectedItemId);
+
+  if (sel) {
+    edEl.style.display = 'block';
+    edEl.innerHTML = `
+      <div class="row" style="justify-content:space-between;margin-top:0">
+        <b>✏️ Seçili: ${esc(sel.name)}</b>
+        <span class="chip">Konum: X:${sel.x}, Y:${sel.y}</span>
+      </div>
+      <label>Eşya Adı</label>
+      <input id="edItemName" value="${esc(sel.name)}" oninput="updateSelectedItemField('name', this.value)">
+      <div class="row">
+        <div style="flex:1">
+          <label>X Koordinatı (0-13)</label>
+          <input type="number" min="0" max="13" value="${sel.x}" onchange="updateSelectedItemField('x', +this.value)">
+        </div>
+        <div style="flex:1">
+          <label>Y Koordinatı (0-13)</label>
+          <input type="number" min="0" max="13" value="${sel.y}" onchange="updateSelectedItemField('y', +this.value)">
+        </div>
+        <div style="flex:1">
+          <label>Renk Tonu (0-360)</label>
+          <input type="number" min="0" max="360" step="15" value="${sel.hue || 32}" onchange="updateSelectedItemField('hue', +this.value)">
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:0">
+        <button onclick="updateSelectedItemField('hidden', !${!!sel.hidden})">${sel.hidden ? '👁️ Göster' : '🙈 Gizle'}</button>
+        <button class="danger" onclick="deleteSelectedItem('${sel.id}')">🗑️ Eşyayı Sil</button>
+      </div>
+      <div class="note" style="margin-top:6px">💡 İpucu: Eşyayı taşımak için doğrudan sol taraftaki kanvas üzerinde istediğiniz kareye de tıklayabilirsiniz!</div>
+    `;
+  } else {
+    edEl.style.display = 'none';
+  }
+
+  listEl.innerHTML = store.items.length ? store.items.map(it => `
+    <div class="item-card ${it.id === store.selectedItemId ? 'selected' : ''}" onclick="store.selectedItemId='${it.id}';renderDesignSidebar()">
+      <div>
+        <b>${esc(it.name || it.type)}</b>
+        <div class="note">Tür: ${esc(it.type)} · Kare: (${it.x}, ${it.y}) ${it.hidden ? '· [GİZLİ]' : ''}</div>
+      </div>
+      <button onclick="event.stopPropagation();toggleItemVisibility('${it.id}')">${it.hidden ? 'Göster' : 'Gizle'}</button>
+    </div>
+  `).join('') : '<p class="note">Henüz kayıtlı eşya yok. Yukarıdan yeni eşya ekleyin.</p>';
+}
+
+function addNewOfficeItem() {
+  const type = $('#newItemType').value;
+  const names = { table: 'Toplantı Masası', plant: 'Salon Bitkisi', sofa: 'Dinlenme Koltuğu', server: 'Sunucu Kabini', board: 'Proje Tahtası', water: 'Su Sebili' };
+  const newItem = {
+    id: 'it_' + Date.now(),
+    type,
+    name: names[type] || 'Ofis Eşyası',
+    x: 6, y: 6,
+    hue: Math.floor(Math.random() * 360),
+    hidden: false
+  };
+  store.items.push(newItem);
+  store.selectedItemId = newItem.id;
+  saveOfficeItemsToFirestore();
+  renderDesignSidebar();
+}
+
+function updateSelectedItemField(field, val) {
+  const it = store.items.find(x => x.id === store.selectedItemId);
+  if (!it) return;
+  it[field] = val;
+  saveOfficeItemsToFirestore();
+  renderDesignSidebar();
+}
+
+function toggleItemVisibility(id) {
+  const it = store.items.find(x => x.id === id);
+  if (!it) return;
+  it.hidden = !it.hidden;
+  saveOfficeItemsToFirestore();
+  renderDesignSidebar();
+}
+
+function deleteSelectedItem(id) {
+  store.items = store.items.filter(x => x.id !== id);
+  if (store.selectedItemId === id) store.selectedItemId = null;
+  saveOfficeItemsToFirestore();
+  renderDesignSidebar();
+}
+
+function saveOfficeItemsToFirestore() {
+  if (!CONN || !OWN) return;
+  db.doc('public/office').set({
+    updatedAt: FV().serverTimestamp(),
+    items: store.items
+  }, { merge: true }).catch(e => lg('Eşya kayıt hatası: ' + e.message));
+}
+
+/* ============================================================================
+   5. PERSONEL SENKRONİZASYONU (SADECE FIRESTORE'DAN ÇEKİLİR)
    ============================================================================ */
 const PAL = [
-  ['#6366f1', '#312e81'], ['#ec4899', '#831843'], ['#10b981', '#064e3b'], ['#f59e0b', '#78350f'],
-  ['#3b82f6', '#1e3a8a'], ['#8b5cf6', '#4c1d95'], ['#06b6d4', '#164e63'], ['#f43f5e', '#881337'],
-  ['#14b8a6', '#134e4a'], ['#a855f7', '#581c87']
+  ['#8b5cf6', '#4c1d95'], ['#ec4899', '#831843'], ['#10b981', '#064e3b'], ['#f59e0b', '#78350f'],
+  ['#3b82f6', '#1e3a8a'], ['#6366f1', '#312e81'], ['#14b8a6', '#134e4a'], ['#f43f5e', '#881337']
 ];
 let sid = 0;
 
 function mkAgent(o) {
-  const p = PAL[(sid++) % PAL.length];
-  const roomIdx = (o.room != null && o.room >= 0 && o.room < RM.length) ? o.room : 0;
-  const r = RM[roomIdx];
+  const p = PAL[(sid++) % 8], r = RM[o.room] || RM[0];
   const a = {
-    id: o.id || ('s' + sid),
-    name: o.name,
-    role: o.role,
-    room: roomIdx,
-    model: o.model || 'Gemini 3.5 Flash Lite',
-    backup: o.backup || 'Gemma 4 31B',
-    skills: o.skills || '',
-    tasks: [],
-    used: o.usedToday || 0,
-    c: o.color || p[0],
-    h: o.hair || p[1],
-    ax: r.sx + .5,
-    ay: r.sy + .5,
-    path: [],
-    mon: 0,
-    act: false,
-    bt: '',
-    bi: '',
-    on: 0,
-    st: o.status || 'Odasında',
-    ph: Math.random() * 6,
-    alive: true,
-    by: o.createdBy || 'owner',
-    saved: false
+    id: o.id || ('s' + sid), name: o.name, role: o.role, room: o.room || 0,
+    model: o.model || 'Gemini 3.5 Flash Lite', backup: o.backup || 'Gemma 4 31B',
+    skills: o.skills || '', used: o.usedToday || 0,
+    c: o.color || p[0], h: o.hair || p[1],
+    ax: r.sx + .5, ay: r.sy + .5, path: [], mon: 0, act: false,
+    bt: '', bi: '', on: 0, st: o.status || 'Görev Bekliyor', ph: Math.random() * 6,
+    alive: true, by: o.createdBy || 'owner', saved: true
   };
   store.staff.push(a);
   life(a);
@@ -967,39 +642,29 @@ function mkAgent(o) {
 }
 
 async function life(a) {
-  await sleep(rnd(1200, 3800));
+  await sleep(rnd(1200, 4500));
   while (a.alive) {
     if (busy || halt || a.act) { await sleep(900); continue; }
     a.act = true;
     const r = Math.random();
-    if (r < .58) {
-      a.st = 'Masasında'; a.mon = 1; say(a, 'type', 'Veri inceliyor');
-      await sleep(rnd(6500, 11000)); a.mon = 0;
+    if (r < .55) {
+      a.st = 'Masasında'; a.mon = 1;
+      await sleep(rnd(7000, 12000)); a.mon = 0;
     } else if (r < .82) {
       const k = ['yemek', 'mola', 'toplanti'][Math.floor(Math.random() * 3)];
-      const sp = SP[k][Math.floor(Math.random() * SP[k].length)];
-      a.st = k == 'yemek' ? 'Yemekhanede' : k == 'mola' ? 'Kahve Molasında' : 'Toplantı Odasında';
+      const sp = SP[k][Math.floor(Math.random() * 3)];
+      a.st = k == 'yemek' ? 'Yemekhanede' : k == 'mola' ? 'Kahve Molasında' : 'Toplantı Alanında';
       hush(a); await walk(a, sp[0], sp[1]);
-      say(a, k == 'toplanti' ? 'type' : 'cup', a.st);
-      await sleep(rnd(5500, 9000)); hush(a);
+      await sleep(rnd(6000, 10000));
     } else {
-      a.st = 'Ortak Arşivde'; hush(a);
-      const sp = SP.arsiv[Math.floor(Math.random() * SP.arsiv.length)];
-      await walk(a, sp[0], sp[1]); say(a, 'doc', 'Arşivi tarıyor');
-      await sleep(3200);
+      a.st = 'Ortak Klasörde'; hush(a);
+      const sp = SP.arsiv[Math.floor(Math.random() * 2)];
+      await walk(a, sp[0], sp[1]);
+      await sleep(3500);
     }
-    hush(a); a.st = 'Odasına dönüyor'; await goHome(a); a.st = 'Odasında'; a.act = false;
-    await sleep(rnd(4000, 7000));
+    hush(a); await goHome(a); a.st = 'Hazır'; a.act = false;
+    await sleep(rnd(4000, 8000));
   }
-}
-
-function addStaff(o) {
-  const room = o.room != null ? o.room : RM.findIndex(r => !store.staff.some(s => s.room === r.i));
-  if (room < 0) { alert('Ofiste boş oda kalmadı (Maksimum 10 Oda).'); return null; }
-  const a = mkAgent({ ...o, room, id: (CONN && OWN) ? db.collection('staff').doc().id : undefined });
-  fbSaveStaff(a);
-  updateTargetSelect();
-  return a;
 }
 
 function syncStaff(list) {
@@ -1013,757 +678,150 @@ function syncStaff(list) {
     else {
       const rc = a.room !== room;
       Object.assign(a, {
-        name: x.name,
-        role: x.role,
-        model: x.model || a.model,
-        backup: x.backup || a.backup,
-        skills: x.skills || '',
-        used: x.usedToday || a.used,
-        room
+        name: x.name, role: x.role, model: x.model || a.model,
+        backup: x.backup || a.backup, skills: x.skills || '',
+        used: x.usedToday || a.used, room
       });
       if (rc) { a.act = true; goHome(a).then(() => a.act = false); }
     }
-    a.saved = true;
   });
-  updateTargetSelect();
-}
-
-function toggleStaffPicker(e) {
-  if (e) e.stopPropagation();
-  const menu = $('#staffPickerMenu');
-  if (menu) menu.classList.toggle('open');
-}
-window.addEventListener('click', e => {
-  const wrap = $('#staffPickerWrap');
-  if (wrap && !wrap.contains(e.target)) {
-    $('#staffPickerMenu')?.classList.remove('open');
-  }
-});
-
-function selectTargetStaff(id) {
-  const inp = $('#targetAgent');
-  if (inp) inp.value = id;
-  $('#staffPickerMenu')?.classList.remove('open');
   updateTargetSelect();
 }
 
 function updateTargetSelect() {
-  const inp = $('#targetAgent');
-  const nameEl = $('#spSelectedName');
-  const roleEl = $('#spSelectedRole');
-  const menuEl = $('#staffPickerMenu');
-  if (!inp || !nameEl || !roleEl || !menuEl) return;
-
-  if (!store.staff.length) {
-    inp.value = '';
-    nameEl.innerHTML = 'Önce Personel Ekleyin';
-    roleEl.textContent = 'Üst menüden personel ekleyebilirsiniz';
-    menuEl.innerHTML = '<div class="note" style="padding:8px">Kayıtlı personel yok.</div>';
-    return;
-  }
-
-  let curId = inp.value;
-  let sel = store.staff.find(a => a.id === curId);
-  if (!sel) {
-    sel = store.staff.find(a => /plan|strateji|seo|ik/i.test(a.role)) || store.staff[0];
-    inp.value = sel.id;
-  }
-
-  nameEl.innerHTML = `<span class="dot" style="background:${sel.c}"></span>${esc(sel.name)}`;
-  roleEl.textContent = `${sel.role}${sel.skills ? ' · ' + sel.skills.slice(0, 45) : ''}`;
-
-  menuEl.innerHTML = store.staff.map(a => `
-    <div class="sp-item ${a.id === sel.id ? 'active' : ''}" onclick="selectTargetStaff('${esc(a.id)}')">
-      <div class="sp-item-top">
-        <span style="display:flex;align-items:center"><span class="dot" style="background:${a.c}"></span>${esc(a.name)}</span>
-        <span class="chip">Oda 0${a.room + 1}</span>
-      </div>
-      <div class="sp-item-sub">${esc(a.role)}</div>
-      ${a.skills ? `<div class="sp-item-skills">${esc(a.skills)}</div>` : ''}
-    </div>
-  `).join('');
+  const sel = $('#targetAgent');
+  if (!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">${esc(a.name)} · ${esc(a.role)}</option>`).join('');
+  if (cur && store.staff.some(a => a.id === cur)) sel.value = cur;
 }
 
 function lg(t) {
   store.log.unshift(hhmm() + ' · ' + t);
-  if (store.log.length > 100) store.log.length = 100;
-  if (activeWin === 'tasks') renderWindowContent();
-}
-
-cv.addEventListener('mousemove', e => {
-  if (isDragging) return;
-  const [wx, wy] = screenToWorld(e.clientX, e.clientY);
-  let best = null, bd = 28;
-  store.staff.forEach(a => {
-    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - wx, q[1] - 24 - wy);
-    if (d < bd) { bd = d; best = a; }
-  });
-
-  // Ortak Arşiv dolabı veya tabelası üzerine gelince bilgi göster
-  const archivePt = P(18.5, 5.8, 35);
-  const nearArchive = Math.hypot(archivePt[0] - wx, archivePt[1] - wy) < 62;
-
-  const hud = $('#hoverHud');
-  if (best) {
-    cv.style.cursor = 'pointer';
-    hud.style.display = 'block';
-    hud.innerHTML = `
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-        <span class="dot" style="background:${best.c};margin:0"></span>
-        <b>${esc(best.name)}</b>
-        <span class="chip">Oda 0${best.room + 1}</span>
-      </div>
-      <div class="note" style="color:#cbd5e1;font-weight:600">${esc(best.role)}</div>
-      <div class="note" style="margin-top:4px">🤖 Ana: <b>${esc(best.model)}</b> · Yedek: <b>${esc(best.backup)}</b></div>
-      <div class="note">⚡ Durum: <b>${esc(best.st)}</b> · Bugün: ${best.used || 0} istek</div>
-    `;
-  } else if (nearArchive && OWN) {
-    cv.style.cursor = 'pointer';
-    hud.style.display = 'block';
-    hud.innerHTML = `
-      <b>🗄️ ORTAK ARŞİV & KOD MERKEZİ</b>
-      <div class="note" style="color:#cbd5e1;margin-top:3px">Toplam <b>${store.files.length}</b> dosya kayıtlı.</div>
-      <div class="note" style="color:#34d399;font-weight:700;margin-top:4px">👉 Tıklayarak Ortak Klasör ve Örnek Kod Panelini açın</div>
-    `;
-  } else {
-    cv.style.cursor = isDragging ? 'grabbing' : 'grab';
-    hud.style.display = 'none';
-  }
-});
-
-cv.addEventListener('click', e => {
-  if (!OWN || dragMoved) return;
-  const [wx, wy] = screenToWorld(e.clientX, e.clientY);
-
-  // 1. Ortak Arşiv dolabına veya tabelasına tıklandıysa doğrudan Ortak Klasör penceresini aç
-  const archivePt = P(18.5, 5.8, 35);
-  if (Math.hypot(archivePt[0] - wx, archivePt[1] - wy) < 62) {
-    openWindow('files');
-    return;
-  }
-
-  // 2. Bir personele tıklandıysa düzenleme kartını aç
-  let best = null, bd = 28;
-  store.staff.forEach(a => {
-    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - wx, q[1] - 24 - wy);
-    if (d < bd) { bd = d; best = a; }
-  });
-  if (best) openAgentModal(best.id);
-});
-/* ============================================================================
-   5. CANLI OFİS EŞYALARI, ONAY KUTUSU VE ARAYÜZ YAMALARI MOTORU (FIRESTORE)
-   ============================================================================ */
-let activeUIIntervals = [];
-function renderActiveUIMods() {
-  activeUIIntervals.forEach(id => clearInterval(id));
-  activeUIIntervals = [];
-
-  const topSlot = $('#ext-top-right');
-  const menuSlot = $('#ext-header-menu');
-  const floatSlot = $('#ext-floating-widget');
-  const cssSlot = $('#ext-custom-css');
-  if (!topSlot || !menuSlot || !floatSlot || !cssSlot) return;
-
-  topSlot.innerHTML = '';
-  menuSlot.innerHTML = '';
-  floatSlot.innerHTML = '';
-  cssSlot.textContent = '';
-
-  const baseUI = (store.officeMods && Array.isArray(store.officeMods.uiMods)) ? store.officeMods.uiMods : [];
-  const prevUI = (store.previewMods && Array.isArray(store.previewMods.uiMods)) ? store.previewMods.uiMods : [];
-  const allUI = [...baseUI, ...prevUI];
-
-  let combinedCSS = '';
-  allUI.forEach((mod, i) => {
-    if (mod.css) combinedCSS += `\n/* Mod: ${mod.title || i} */\n` + mod.css;
-    const wrapper = document.createElement('div');
-    wrapper.className = 'ext-widget-item';
-    wrapper.style.display = 'inline-flex';
-    wrapper.style.alignItems = 'center';
-    wrapper.innerHTML = mod.html || '';
-
-    const slot = String(mod.slot || 'top-right').toLowerCase();
-    if (slot.includes('menu') || slot.includes('header')) menuSlot.appendChild(wrapper);
-    else if (slot.includes('float')) floatSlot.appendChild(wrapper);
-    else topSlot.appendChild(wrapper);
-
-    if (mod.js) {
-      try {
-        const registerInterval = (fn, ms) => { const id = setInterval(fn, ms); activeUIIntervals.push(id); return id; };
-        const fn = new Function('setInterval', mod.js);
-        fn(registerInterval);
-      } catch (err) {}
-    }
-  });
-  cssSlot.textContent = combinedCSS;
-}
-
-async function saveOfficeModsToFirestore() {
-  if (!CONN || !OWN) return;
-  try {
-    await db.doc('settings/office_mods').set({
-      version: store.officeMods.version || 1,
-      initializedLayout: true,
-      sceneMods: store.officeMods.sceneMods || [],
-      uiMods: store.officeMods.uiMods || [],
-      updatedAt: FV().serverTimestamp()
-    });
-    pub();
-  } catch (e) {
-    console.error('Ofis tasarım kayıt hatası:', e);
-  }
-}
-
-async function applyApprovalToOffice(approvalId) {
-  const ap = store.approvals.find(x => x.id === approvalId);
-  if (!ap) return;
-
-  const remIds = Array.isArray(ap.removeSceneIds) ? ap.removeSceneIds : [];
-  const newScene = Array.isArray(ap.sceneMods) ? ap.sceneMods : [];
-  const newUI = Array.isArray(ap.uiMods) ? ap.uiMods : [];
-
-  let mergedScene = [...(store.officeMods.sceneMods || DEFAULT_SCENE_ITEMS)];
-  if (remIds.length) {
-    mergedScene = mergedScene.filter(item => !remIds.includes(item.id));
-  }
-  newScene.forEach(ns => {
-    if (!ns || !ns.drawJs) return;
-    const id = ns.id || ('sc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5));
-    const idx = mergedScene.findIndex(x => x.id === id);
-    if (idx >= 0) mergedScene[idx] = { ...ns, id };
-    else mergedScene.push({ ...ns, id });
-  });
-
-  const mergedUI = [...(store.officeMods.uiMods || [])];
-  newUI.forEach(nu => {
-    if (!nu || (!nu.html && !nu.css && !nu.js)) return;
-    const id = nu.id || ('ui_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5));
-    const idx = mergedUI.findIndex(x => x.id === id);
-    if (idx >= 0) mergedUI[idx] = { ...nu, id };
-    else mergedUI.push({ ...nu, id });
-  });
-
-  store.officeMods = {
-    version: (store.officeMods.version || 1) + 1,
-    initializedLayout: true,
-    sceneMods: mergedScene,
-    uiMods: mergedUI
-  };
-  store.previewMods = null;
-  ap.status = 'approved';
-
-  renderActiveUIMods();
-  await saveOfficeModsToFirestore();
-
-  if (CONN && OWN) {
-    await db.collection('approvals').doc(ap.id).set({
-      status: 'approved',
-      approvedAt: FV().serverTimestamp()
-    }, { merge: true }).catch(() => {});
-  }
-
-  lg(`✅ Onaylandı ve ofis tasarımı Firestore'da güncellendi: ${ap.title}`);
-  renderApprovalBanner();
-  renderAll();
-}
-
-async function deleteSingleApproval(approvalId) {
-  store.approvals = store.approvals.filter(x => x.id !== approvalId);
-  if (store.previewMods && store.previewMods._apId === approvalId) {
-    store.previewMods = null;
-    renderActiveUIMods();
-  }
-  if (CONN && OWN) {
-    await db.collection('approvals').doc(approvalId).delete().catch(() => {});
-  }
-  renderApprovalBanner();
-  renderAll();
-}
-
-async function removeSingleMod(kind, modId) {
-  if (kind === 'scene') {
-    store.officeMods.sceneMods = (store.officeMods.sceneMods || []).filter(x => x.id !== modId);
-  } else {
-    store.officeMods.uiMods = (store.officeMods.uiMods || []).filter(x => x.id !== modId);
-  }
-  store.officeMods.version = (store.officeMods.version || 1) + 1;
-  renderActiveUIMods();
-  await saveOfficeModsToFirestore();
-  lg(`🗑️ Ofis bileşeni Firestore'dan kaldırıldı: ${modId}`);
-  renderAll();
-}
-
-async function editSceneItemCode(modId) {
-  const item = (store.officeMods.sceneMods || []).find(x => x.id === modId);
-  if (!item) return;
-  const newCode = prompt(`"${item.label || item.id}" için 2.5D JS Çizim Kodu:`, item.drawJs);
-  if (newCode === null) return;
-  item.drawJs = newCode;
-  compiledDrawCache.clear();
-  store.officeMods.version = (store.officeMods.version || 1) + 1;
-  await saveOfficeModsToFirestore();
-  renderAll();
-}
-
-async function resetOfficeToDefault() {
-  if (!confirm('Ofisteki tüm masa, bilgisayar, duvar, pencere, arşiv ve tabelalar varsayılan fabrika tasarımına döndürülsün mü?')) return;
-  store.officeMods = {
-    version: (store.officeMods.version || 1) + 1,
-    initializedLayout: true,
-    sceneMods: JSON.parse(JSON.stringify(DEFAULT_SCENE_ITEMS)),
-    uiMods: []
-  };
-  store.previewMods = null;
-  compiledDrawCache.clear();
-  renderActiveUIMods();
-  await saveOfficeModsToFirestore();
-  lg('🔄 Tüm 2.5D ofis eşyaları varsayılan tasarıma döndürüldü.');
-  renderAll();
+  if (store.log.length > 80) store.log.length = 80;
+  if (tab === 'tasks') render();
 }
 
 /* ============================================================================
-   6. GEMINI ÇOKLU MODEL MOTORU, ZAMAN AŞIMI KORUMASI VE VERİTABANI GÜNCELLEYİCİ
+   6. GERÇEK GEMINI MOTORU (TAKILMA ÖNLEYİCİ & 429/404 KORUMALI)
    ============================================================================ */
 let nextAllowedCallTime = 0;
 
-function getCandidateModelsForAgent(agent) {
-  const list = [];
-  const primary = MODELS.find(m => m.n === agent.model);
-  const backup = MODELS.find(m => m.n === agent.backup);
-  if (primary) list.push(primary);
-  if (backup) list.push(backup);
-
-  const fallbackOrder = [
-    'Gemini 3.5 Flash Lite',
-    'Gemini 3.1 Flash Lite',
-    'Gemini 2.5 Flash Lite',
-    'Gemini 2.5 Flash',
-    'Gemma 4 31B',
-    'Gemma 4 26B'
-  ];
-  fallbackOrder.forEach(fn => {
-    const fm = MODELS.find(m => m.n === fn);
-    if (fm && !list.includes(fm)) list.push(fm);
-  });
-
-  const unique = [];
-  list.forEach(m => {
-    if (m && m.active && m.u < m.l && m.hu < m.rph && !unique.some(u => u.n === m.n)) {
-      unique.push(m);
-    }
-  });
-  return unique;
-}
-
-async function incrementModelQuota(modelObj, agent, tokensUsed = 1200) {
-  modelObj.u++;
-  modelObj.hu++;
-  modelObj.tu = (modelObj.tu || 0) + tokensUsed;
+async function incrementModelQuota(poolObj, agent) {
+  if (poolObj) poolObj.u++;
   agent.used = (agent.used || 0) + 1;
-
   if (CONN && OWN) {
     const dayRef = db.collection('usage').doc(todayKey());
-    const hKey = currentHourKey();
-    const poolsUpdate = {}, hourlyUpdate = {}, tokensUpdate = {};
-    MODELS.forEach(m => {
-      if (m.u > 0) poolsUpdate[m.n] = m.u;
-      if (m.hu > 0) hourlyUpdate[`${m.n}_${hKey}`] = m.hu;
-      if (m.tu > 0) tokensUpdate[m.n] = m.tu;
-    });
-    await dayRef.set({
-      updatedAt: FV().serverTimestamp(),
-      pools: poolsUpdate,
-      hourly: hourlyUpdate,
-      tokens: tokensUpdate
-    }, { merge: true }).catch(() => {});
-    await fbSaveStaff(agent);
-  }
-}
-
-function findStaffSmart(query) {
-  if (!query) return null;
-  const tr = s => String(s || '').toLocaleLowerCase('tr-TR').trim();
-  const q = tr(query);
-  if (!q) return null;
-
-  let found = store.staff.find(s => s.id === query || tr(s.id) === q);
-  if (found) return found;
-
-  found = store.staff.find(s => tr(s.name) === q || tr(s.role) === q || tr(shortName(s.name)) === q);
-  if (found) return found;
-
-  if (q.length >= 2) {
-    found = store.staff.find(s => tr(s.name).includes(q) || q.includes(tr(shortName(s.name))));
-    if (found) return found;
-  }
-
-  if (q.length >= 3) {
-    found = store.staff.find(s => tr(s.role).includes(q) || q.includes(tr(s.role)));
-    if (found) return found;
-  }
-
-  const words = q.split(/\s+/).filter(w => w.length >= 3);
-  if (words.length) {
-    let best = null, bestScore = 0;
-    for (const s of store.staff) {
-      const hay = tr(s.name + ' ' + s.role + ' ' + (s.skills || ''));
-      let score = 0;
-      for (const w of words) {
-        if (tr(s.name).includes(w) || tr(s.role).includes(w)) score += 3;
-        else if (hay.includes(w)) score += 1;
-      }
-      if (score > bestScore) { bestScore = score; best = s; }
-    }
-    if (bestScore >= 2) return best;
-  }
-  return null;
-}
-
-function parseJsonSafe(rawText) {
-  if (!rawText) return {};
-  let cleaned = String(rawText).trim();
-  cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
-  const firstBrace = cleaned.indexOf('{');
-  const lastBrace = cleaned.lastIndexOf('}');
-  if (firstBrace >= 0 && lastBrace > firstBrace) {
-    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
-  }
-  return JSON.parse(cleaned);
-}
-
-async function fetchWithTimeout(url, options, timeoutMs = 25000) {
-  const ctrl = new AbortController();
-  const id = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    return await fetch(url, { ...options, signal: ctrl.signal });
-  } finally {
-    clearTimeout(id);
+    const poolsUpdate = {};
+    MODELS.forEach(m => { poolsUpdate[m.n] = m.u; });
+    await dayRef.set({ updatedAt: FV().serverTimestamp(), pools: poolsUpdate }, { merge: true }).catch(() => {});
+    await db.collection('staff').doc(agent.id).set({ usedToday: agent.used, lastActionAt: FV().serverTimestamp() }, { merge: true }).catch(() => {});
   }
 }
 
 async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
   const apiKey = store.geminiKey;
-  if (!apiKey) throw new Error('Firestore settings/secret belgesinde apiKey bulunamadı.');
+  if (!apiKey) throw new Error('Firestore settings/secret belgesinde apiKey bulunamadı!');
 
-  const candidates = getCandidateModelsForAgent(agent);
-  if (!candidates.length) throw new Error(`${agent.name} için uygun saatlik/günlük model kotası kalmadı!`);
+  const { pool, apiName } = resolveWorkingApiModel(agent);
 
   const companyDirectory = store.staff.map(s =>
-    `- ID: "${s.id}" | Mevcut İsim: "${s.name}" | Unvan/Rol: "${s.role}" | Oda No: ${s.room} (Oda ${s.room + 1}) | Ana Model: "${s.model}" | Yedek Model: "${s.backup}" | Bugünkü Kullanım: ${s.used || 0}\n  Mevcut Uzmanlık/Skills: "${s.skills || ''}"`
+    `- ID: "${s.id}" | İsim: ${s.name} (${s.role}) | Uzmanlık: ${s.skills || ''}`
   ).join('\n');
 
-  const quotaTableText = ACTIVE_TEXT_MODELS.map(m =>
-    `- ${m.n} (${m.cat}): Günlük ${m.u}/${m.l} RPD | Saatlik ${m.hu}/${m.rph} RPH | Dakikalık Limit: ${m.rpm} RPM | Token Limit: ${(m.tpm / 1000)}K TPM`
-  ).join('\n');
-
-  const sceneInventoryText = (store.officeMods.sceneMods || []).map(item =>
-    `- Eşya ID: "${item.id}" | Açıklama: "${item.label || item.id}" | Derinlik (depth): ${item.depth}`
-  ).join('\n');
-
-  const historyText = threadMails.slice(-6).map(m =>
-    `[${m.f} (${m.fRole || ''}) -> ${m.t} (${m.type})]: ${m.subj}\n${m.body}`
+  const historyText = threadMails.slice(-4).map(m =>
+    `[${m.f} -> ${m.t} (${m.type})]: ${m.subj}\n${m.body}`
   ).join('\n---\n');
 
-  // Mesajda adı geçen dosyaya öncelik ver ve tüm ortak klasör dosyalarını ajana sun
-  const msgLower = ((incomingMail.subj || '') + ' ' + (incomingMail.body || '')).toLocaleLowerCase('tr-TR');
-  const sortedFiles = [...relatedFiles]
-    .filter(f => !String(f.path || '').startsWith('onaylanan-yama-') && !String(f.path || '').startsWith('yama-'))
-    .sort((a, b) => {
-      const aMatch = msgLower.includes(String(a.path || '').toLocaleLowerCase('tr-TR')) ? 1 : 0;
-      const bMatch = msgLower.includes(String(b.path || '').toLocaleLowerCase('tr-TR')) ? 1 : 0;
-      return bMatch - aMatch;
-    });
-
-  const filesOverview = sortedFiles.slice(0, 8).map((f, idx) =>
-    `Dosya ID: "${f.id}" | Dosya Adı: "${f.path}" (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, idx === 0 ? 12000 : 3500)}`
+  const filesOverview = relatedFiles.slice(0, 4).map(f =>
+    `Dosya: ${f.path} (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, 2800)}`
   ).join('\n===\n') || 'Ortak klasör boş.';
 
-  const systemInstruction = `Sen "TONOZ AI COMPANY" şirketinde çalışan "${agent.name}", unvanın "${agent.role}".
-Senin Uzmanlığın: ${agent.skills || ''}
+  const systemInstruction = `Sen "Tonoz AI Ofisi" şirketinde çalışan "${agent.name}", unvanın "${agent.role}".
+Uzmanlığın: ${agent.skills || ''}
 
-1) CANLI FIRESTORE VERİTABANI - PERSONEL KADROSU ("staff" koleksiyonu):
+KURALLAR:
+1. Resmi, kurumsal İstanbul Türkçesi (Bey/Hanım) kullan.
+2. Görev atarken SADECE aşağıdaki personel listesindeki ID'leri ("toAgentId") kullan:
 ${companyDirectory}
-- Şirket Sahibi / Yönetici ID: "owner" (Burak Bey).
-
-2) CANLI FIRESTORE VERİTABANI - 2.5D OFİS EŞYALARI VE MİMARİ ENVANTERİ ("settings/office_mods.sceneMods"):
-${sceneInventoryText}
-
-3) CANLI GEMINI API MODEL VE KOTA SINIRLARI:
-${quotaTableText}
-Mevcut Güvenli Mola Süresi: ${store.cooldownSec} saniye.
-
-KURALLAR VE YETKİLER:
-1. Kurumsal İstanbul Türkçesi (Bey/Hanım) kullan.
-2. ORTAK ARŞİV / KOD DOSYASI ANALİZİ:
-   - Burak Bey senden Ortak Arşivdeki (Ortak Klasördeki) bir dosyaya veya örnek koda bakmanı, yorumlamanı, SEO analizini yapmanı ya da geliştirmeni istediğinde aşağıda verilen "ORTAK KLASÖR DOSYALARI" bölümündeki dosya içeriğini satır satır incele ve cevabını/kodunu buna göre üret.
-3. PERSONEL VE VERİTABANI GÜNCELLEME YETKİSİ ("hrUpdates"):
-   - Burak Bey açıkça bir personelin adını ("name"), uzmanlık/yeteneklerini ("skills"), unvanını ("role") veya modelini ("model"/"backup") güncellemeni istediğinde "hrUpdates.staffUpdates" dizisini doldur (ASLA ".json" dosyası olarak "fileToSave" içine kaydetme!).
-4. 2.5D OFİS EŞYASI KALDIRMA, DEĞİŞTİRME VEYA YENİ EŞYA/MENÜ EKLEME ("officePatch"):
-   - Tüm ofis eşyaları (masalar, bilgisayarlar, pencereler, duvarlar, yemekhane, toplantı masası, arşiv dolabı, tabelalar) Firestore'da yukarıdaki Eşya ID'leri ile kayıtlıdır.
-   - Burak Bey ofisteki mevcut bir eşyayı KALDIRMAK istediğinde: "officePatch.hasPatch": true yap ve kaldırılacak eşyanın ID'sini "officePatch.removeSceneIds" dizisine yaz (örn: ["odalar_bitki"] veya ["pencereler"]).
-   - Burak Bey mevcut bir eşyayı DEĞİŞTİRMEK istediğinde: "officePatch.hasPatch": true yap ve "officePatch.sceneMods" içine aynı Eşya ID'si ile yeni "drawJs" çizim kodunu yaz.
-   - Burak Bey YENİ bir eşya veya sağ üst/üst menü özelliği istediğinde: "officePatch.hasPatch": true yap ve "sceneMods" veya "uiMods" içine ekle.
-   - Bu tasarım değişiklikleri Burak Bey'e ONAY PAKETİ olarak sunulur; Burak Bey onayladığında Firestore'daki mevcut tasarım değişir!
-   - 2.5D Sahne Çizim API'si ("sceneMods[].drawJs"):
-     * Koordinatlar: x (0..20), y (0..14), z (0..90). Odalar: RM (10 oda: r.x, r.y, r.w, r.top, r.dx, r.dy, r.sx, r.sy). Zaman: T.
-     * Fonksiyonlar: box(x,y,w,d,h,z,[H,S,L],optHex), P(x,y,z)->[px,py], disc(px,py,r,color), el(px,py,rx,ry,color), rr(px,py,w,h,rad,fill,stroke), glass(x,y,w,d,h), drawSignboard25D(x,y,z,title,sub,icon,hex).
-5. SADECE aşağıdaki geçerli JSON formatında yanıt ver:
+- Şirket Sahibi ID: "owner" (Burak Bey). Sadece son sunum/onay aşamasında "owner"a rapor gönder.
+3. İşini hemen yap, dosya üretiyorsan "fileToSave" içine tam içeriği yaz ve bir sonraki departmana ilet.
+4. SADECE geçerli bir JSON döndür:
 {
-  "canvasBubble": "Kısa durum",
-  "hrUpdates": {
-    "cooldownSec": 0,
-    "staffUpdates": [
-      {
-        "action": "update | create | delete",
-        "agentId": "Personel ID veya mevcut adı/unvanı",
-        "name": "Yeni adı",
-        "role": "Yeni unvanı",
-        "skills": "Güncellenmiş tam uzmanlık metni",
-        "model": "",
-        "backup": "",
-        "room": -1
-      }
-    ]
+  "canvasBubble": "Kısa durum (Örn: Kodları yazıyor)",
+  "fileToSave": {
+    "path": "Dosya adı (Örn: makale.md veya script.js) - yoksa ''",
+    "kind": "md | code | svg | json",
+    "content": "Dosya içeriği"
   },
   "outgoingMails": [
-    { "toAgentId": "Alıcı ID veya owner", "subject": "", "body": "", "type": "görev | rapor | onay" }
+    {
+      "toAgentId": "Alıcı ID",
+      "subject": "Mesaj konusu",
+      "body": "Kurumsal talimat veya rapor",
+      "type": "görev | rapor | onay"
+    }
   ],
-  "fileToSave": { "path": "", "kind": "md | code", "content": "" },
-  "officePatch": {
-    "hasPatch": false,
-    "title": "",
-    "summary": "",
-    "removeSceneIds": [],
-    "sceneMods": [ { "id": "", "label": "", "depth": 12, "drawJs": "" } ],
-    "uiMods": [ { "id": "", "slot": "top-right", "title": "", "html": "", "css": "", "js": "" } ]
+  "submitFinalApproval": {
+    "ready": false,
+    "summary": "Tüm süreç bittiyse Burak Bey için özet"
   }
 }`;
 
-  const userPrompt = `GÖREV / MESAJ:
-Gönderen: ${incomingMail.f} (${incomingMail.fRole || 'Yönetici'})
+  const userPrompt = `GELEN GÖREV / MESAJ:
+Gönderen: ${incomingMail.f}
 Konu: ${incomingMail.subj}
 İçerik: ${incomingMail.body}
 
 ÖNCEKİ YAZIŞMALAR:
 ${historyText}
 
-ORTAK KLASÖR DOSYALARI ("files" koleksiyonu - Arşivdeki Kod ve Belgeler):
+ORTAK KLASÖR:
 ${filesOverview}`;
 
-  let lastErr = null;
-  for (const modelObj of candidates) {
-    for (const apiId of modelObj.apis) {
-      try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${apiId}:generateContent?key=${encodeURIComponent(apiKey)}`;
-        const isGemma = apiId.startsWith('gemma');
-        const payload = isGemma
-          ? {
-              contents: [{ role: 'user', parts: [{ text: systemInstruction + '\n\n' + userPrompt }] }],
-              generationConfig: { temperature: 0.3 }
-            }
-          : {
-              systemInstruction: { parts: [{ text: systemInstruction }] },
-              contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-              generationConfig: { temperature: 0.3, responseMimeType: 'application/json' }
-            };
+  const isGemma = apiName.startsWith('gemma');
+  const bodyPayload = isGemma ? {
+    contents: [{ role: 'user', parts: [{ text: systemInstruction + '\n\n' + userPrompt }] }],
+    generationConfig: { temperature: 0.4 }
+  } : {
+    systemInstruction: { parts: [{ text: systemInstruction }] },
+    contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+    generationConfig: { temperature: 0.4, responseMimeType: 'application/json' }
+  };
 
-        const res = await fetchWithTimeout(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }, 25000);
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${apiName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bodyPayload)
+  });
 
-        if (!res.ok) {
-          const errTxt = await res.text();
-          lastErr = new Error(`${modelObj.n} (${apiId} - ${res.status}): ${errTxt.slice(0, 140)}`);
-          continue;
-        }
-
-        const data = await res.json();
-        const tokensUsed = data?.usageMetadata?.totalTokenCount || 1200;
-        await incrementModelQuota(modelObj, agent, tokensUsed);
-        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-        return parseJsonSafe(rawText);
-      } catch (e) {
-        lastErr = e;
-      }
-    }
-    lg(`🔄 ${shortName(agent.name)}: ${modelObj.n} meşgul/zaman aşımı, yedek modele geçiliyor...`);
-  }
-  throw lastErr || new Error('Gemini API yanıt vermedi.');
-}
-
-async function applyDatabaseAndHrUpdates(decision, actingAgent) {
-  const summaryLines = [];
-  const hr = decision.hrUpdates || decision.dbActions || {};
-
-  let extraStaffUpdates = [];
-  if (Array.isArray(decision.staffUpdates)) extraStaffUpdates.push(...decision.staffUpdates);
-  if (decision.fileToSave && decision.fileToSave.content) {
-    const fPath = String(decision.fileToSave.path || '').toLowerCase();
-    const fContent = String(decision.fileToSave.content || '').trim();
-    if (fPath.endsWith('.json') || decision.fileToSave.kind === 'json' || (fContent.startsWith('{') && fContent.endsWith('}'))) {
-      try {
-        const parsed = JSON.parse(fContent);
-        if (parsed && typeof parsed === 'object') {
-          if (Array.isArray(parsed.staffUpdates)) {
-            extraStaffUpdates.push(...parsed.staffUpdates);
-            decision.fileToSave = null;
-          } else if (parsed.hrUpdates && Array.isArray(parsed.hrUpdates.staffUpdates)) {
-            extraStaffUpdates.push(...parsed.hrUpdates.staffUpdates);
-            decision.fileToSave = null;
-          } else if (parsed.agentId || parsed.newName || (parsed.skills && (parsed.name || parsed.role))) {
-            extraStaffUpdates.push(parsed);
-            decision.fileToSave = null;
-          }
-        }
-      } catch (e) {}
-    }
+  if (res.status === 429) {
+    // Bu model RPM/Kota sınırına takıldı -> 3 dakika dinlendir
+    store.cooldownUntilByModel[apiName] = Date.now() + 180000;
+    throw new Error(`Model (${apiName}) dakika/günlük kota sınırına ulaştı (429). Yedek modele geçiliyor ve görev 90 sn ertelendi.`);
   }
 
-  const newCool = Number(hr.cooldownSec || decision.cooldownSec || 0);
-  if (newCool >= 10 && newCool <= 3600 && newCool !== store.cooldownSec) {
-    store.cooldownSec = newCool;
-    if (CONN && OWN) {
-      await db.doc('settings/guard').set({ cooldownSec: store.cooldownSec }, { merge: true }).catch(() => {});
-    }
-    const msg = `Güvenli mola süresi ${store.cooldownSec} sn olarak Firestore'a işlendi.`;
-    summaryLines.push(msg);
-    lg(`⚖️ ${msg}`);
+  if (res.status === 404) {
+    // Bu model hesaba kapalı -> listeden çıkar
+    store.availableApiModels = store.availableApiModels.filter(m => m !== apiName);
+    throw new Error(`Model (${apiName}) bu API anahtarında desteklenmiyor (404). Otomatik devre dışı bırakıldı.`);
   }
 
-  const allStaffUpdates = [
-    ...(Array.isArray(hr.staffUpdates) ? hr.staffUpdates : []),
-    ...extraStaffUpdates
-  ];
-
-  for (const su of allStaffUpdates) {
-    if (!su || typeof su !== 'object') continue;
-    const action = String(su.action || 'update').toLowerCase();
-
-    if (action === 'create' || action === 'add') {
-      const newName = String(su.name || su.newName || '').trim().slice(0, 48);
-      const newRole = String(su.role || su.newRole || 'Uzman').trim().slice(0, 75);
-      if (!newName) continue;
-      const created = addStaff({
-        name: newName,
-        role: newRole,
-        room: (su.room != null && su.room >= 0 && su.room < RM.length) ? Number(su.room) : undefined,
-        model: su.model || 'Gemini 3.5 Flash Lite',
-        backup: su.backup || 'Gemma 4 31B',
-        skills: su.skills || ''
-      });
-      if (created) {
-        await fbSaveStaff(created);
-        const msg = `Yeni personel Firestore'a eklendi: ${created.name} (${created.role})`;
-        summaryLines.push(msg);
-        lg(`➕ ${msg}`);
-      }
-      continue;
-    }
-
-    const lookupKey = su.agentId || su.id || su.target || su.currentName || su.oldName || su.targetRole || su.role || su.name;
-    const stf = findStaffSmart(lookupKey);
-    if (!stf) continue;
-
-    if (action === 'delete' || action === 'remove') {
-      const oldName = stf.name;
-      stf.alive = false;
-      store.staff = store.staff.filter(s => s !== stf);
-      await fbDelStaff(stf.id);
-      updateTargetSelect();
-      const msg = `${oldName} Firestore kadrosundan silindi.`;
-      summaryLines.push(msg);
-      lg(`🗑️ ${msg}`);
-      continue;
-    }
-
-    if (actingAgent && actingAgent.id !== stf.id) {
-      const d = door(stf);
-      actingAgent.st = `${shortName(stf.name)} kaydını güncelliyor`;
-      await walk(actingAgent, d[0], d[1]);
-      say(actingAgent, 'doc', `${shortName(stf.name)} güncelleniyor`);
-    }
-
-    const oldName = stf.name;
-    const changes = [];
-
-    const candidateName = su.newName || su.name;
-    if (candidateName && String(candidateName).trim()) {
-      const cleanName = String(candidateName).trim().slice(0, 48);
-      if (cleanName !== stf.name && cleanName.toLocaleLowerCase('tr-TR') !== String(stf.role).toLocaleLowerCase('tr-TR')) {
-        stf.name = cleanName;
-        changes.push(`Adı: "${oldName}" → "${stf.name}"`);
-      }
-    }
-
-    const candidateRole = su.newRole || su.role;
-    if (candidateRole && String(candidateRole).trim()) {
-      const cleanRole = String(candidateRole).trim().slice(0, 75);
-      if (cleanRole !== stf.role) {
-        stf.role = cleanRole;
-        changes.push(`Unvanı: "${stf.role}"`);
-      }
-    }
-
-    const candidateSkills = su.newSkills || su.skills || su.appendSkills;
-    if (candidateSkills && String(candidateSkills).trim()) {
-      const cleanSkills = String(candidateSkills).trim();
-      if (su.appendSkills || su.skillsMode === 'append') {
-        if (!stf.skills.includes(cleanSkills)) {
-          stf.skills = (stf.skills ? stf.skills.replace(/\.?\s*$/, '. ') : '') + cleanSkills;
-        }
-      } else {
-        stf.skills = cleanSkills;
-      }
-      changes.push(`Uzmanlık (Skills) güncellendi`);
-    }
-
-    if (su.model && ACTIVE_TEXT_MODELS.some(m => m.n === su.model) && su.model !== stf.model) {
-      stf.model = su.model;
-      changes.push(`Ana Model: ${stf.model}`);
-    }
-    if (su.backup && ACTIVE_TEXT_MODELS.some(m => m.n === su.backup) && su.backup !== stf.backup) {
-      stf.backup = su.backup;
-      changes.push(`Yedek Model: ${stf.backup}`);
-    }
-
-    if (su.room != null && Number(su.room) >= 0 && Number(su.room) < RM.length && Number(su.room) !== stf.room) {
-      stf.room = Math.floor(Number(su.room));
-      stf.act = true;
-      goHome(stf).then(() => stf.act = false);
-      changes.push(`Oda: ${stf.room + 1}`);
-    }
-
-    await fbSaveStaff(stf);
-    updateTargetSelect();
-    renderAll();
-
-    const changeDesc = changes.length ? changes.join(' | ') : 'Bilgileri Firestore üzerinde güncellendi';
-    summaryLines.push(`${oldName}: ${changeDesc}`);
-    lg(`✅ Firestore Güncellendi (${stf.name}): ${changeDesc}`);
-    await sleep(900);
+  if (!res.ok) {
+    const errTxt = await res.text();
+    throw new Error(`API Hatası (${res.status}): ${errTxt.slice(0, 180)}`);
   }
 
-  return summaryLines;
+  await incrementModelQuota(pool, agent);
+  const data = await res.json();
+  let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  rawText = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+  return JSON.parse(rawText);
 }
 
 async function processNextPendingMail(forceNow = false) {
-  if (forceNow) {
-    if (halt) {
-      halt = false;
-      $('#stop').textContent = '⏸ Duraklat';
-    }
-    if (busy) {
-      lg('ℹ️ Mevcut işlem zaten çalışıyor, lütfen birkaç saniye bekleyin...');
-      return;
-    }
-  }
-  if (busy || halt) return;
-  if (!store.geminiKey) {
-    if (forceNow) alert('Firestore settings/secret içinde apiKey bulunamadı.');
-    return;
-  }
+  if (busy || halt || !store.geminiKey) return;
 
   const now = Date.now();
   if (!forceNow && now < nextAllowedCallTime) return;
@@ -1771,652 +829,186 @@ async function processNextPendingMail(forceNow = false) {
   const pending = [...store.mails].reverse().find(m =>
     !m.processed && m.toId && m.toId !== 'owner' && (!m.notBeforeMs || m.notBeforeMs <= now || forceNow)
   );
-  if (!pending) {
-    if (forceNow) lg('ℹ️ Kuyrukta bekleyen işlenmemiş görev bulunmuyor.');
-    return;
-  }
+  if (!pending) return;
 
-  const agent = findStaffSmart(pending.toId) || findStaffSmart(pending.t);
-  if (!agent) { await markMailProcessed(pending.id); return; }
-
-  const threadMails = store.mails.filter(m => m.threadId === pending.threadId);
-  if (threadMails.length >= store.maxChainDepth) {
+  const agent = store.staff.find(s => s.id === pending.toId || s.name === pending.t);
+  if (!agent) {
+    lg(`⚠️ Alıcı ajan bulunamadı (${pending.t}), mesaj kapatıldı.`);
     await markMailProcessed(pending.id);
     return;
   }
 
   busy = true;
-  updateEngineBadges(`⚡ Çalışıyor: ${shortName(agent.name)}`);
+  updateEngineBadges(`Çalışıyor: ${agent.name}`);
 
   try {
     agent.act = true;
     await goHome(agent);
     agent.mon = 1;
     agent.st = 'Çalışıyor';
-    say(agent, 'think', 'Analiz ediyor...');
-    renderAll();
+    say(agent, 'think', 'Görev üzerinde çalışıyor...');
+    render();
 
+    const threadMails = store.mails.filter(m => m.threadId === pending.threadId);
     const decision = await callGeminiAgent(agent, pending, threadMails, store.files);
-    if (decision.canvasBubble) say(agent, 'type', decision.canvasBubble);
 
-    const dbChanges = await applyDatabaseAndHrUpdates(decision, agent);
+    if (decision.canvasBubble) say(agent, 'type', decision.canvasBubble);
 
     if (decision.fileToSave && decision.fileToSave.path && decision.fileToSave.content) {
       const sp = SP.arsiv[0];
-      agent.st = 'Arşive dosya yüklüyor';
+      agent.st = 'Ortak Klasöre dosya yüklüyor';
       await walk(agent, sp[0], sp[1]);
-      say(agent, 'doc', decision.fileToSave.path);
-      await saveSharedFile(
-        decision.fileToSave.path,
-        decision.fileToSave.content,
-        decision.fileToSave.kind || 'md',
-        `${agent.name} (${shortRole(agent.role)})`
-      );
-      lg(`📁 ${shortName(agent.name)} ortak klasöre kaydetti: ${decision.fileToSave.path}`);
-      await sleep(900);
+      say(agent, 'doc', decision.fileToSave.path + ' yüklendi');
+      await saveSharedFile(decision.fileToSave.path, decision.fileToSave.content, decision.fileToSave.kind || 'md', `${agent.name} · ${agent.role}`);
+      lg(`📁 ${agent.name} ortak klasöre dosya kaydetti: ${decision.fileToSave.path}`);
+      await sleep(1400);
     }
 
     const outList = Array.isArray(decision.outgoingMails) ? decision.outgoingMails : [];
-    if (dbChanges.length && !outList.some(o => o.toAgentId === 'owner')) {
-      outList.push({
-        toAgentId: 'owner',
-        subject: 'Firestore Veritabanı Güncelleme Raporu',
-        body: `Sayın Burak Bey,\n\nTalimatınız doğrultusunda Firestore veritabanında aşağıdaki güncellemeler uygulanmıştır:\n- ${dbChanges.join('\n- ')}`,
-        type: 'rapor'
-      });
-    }
-
     for (let i = 0; i < outList.length; i++) {
       const out = outList[i];
       if (!out.toAgentId || !out.body) continue;
 
-      const target = (out.toAgentId === 'owner' || String(out.toAgentId).toLowerCase().includes('burak'))
-        ? { id: 'owner', name: 'Burak Bey (Yönetici)', role: 'Şirket Sahibi' }
-        : findStaffSmart(out.toAgentId);
+      const target = out.toAgentId === 'owner'
+        ? { id: 'owner', name: 'Sen (Burak Bey)', role: 'Şirket Sahibi' }
+        : (store.staff.find(s => s.id === out.toAgentId || s.name === out.toAgentId) || null);
 
       if (!target) continue;
 
       if (target.id !== 'owner') {
         const d = door(target);
-        agent.st = shortName(target.name) + ' ile görüşüyor';
+        agent.st = target.name + ' ile görüşüyor';
         await walk(agent, d[0], d[1]);
-        say(agent, 'mail', shortName(target.name) + ' ile görüşüyor');
+        say(agent, 'mail', target.name + ' odasında');
       } else {
-        say(agent, 'doc', 'Rapor sunuyor');
+        say(agent, 'doc', 'Yöneticiye sunuyor');
       }
 
       const delayMs = (i + 1) * (store.cooldownSec * 1000);
       await createInternalMail({
-        fromId: agent.id, fromName: agent.name, fromRole: agent.role,
-        toId: target.id, toName: target.name,
+        fromId: agent.id, fromName: `${agent.name} · ${agent.role}`,
+        toId: target.id, toName: `${target.name}${target.role ? ' · ' + target.role : ''}`,
         subject: out.subject || ('Görev: ' + pending.subj),
         body: out.body,
         type: ['görev', 'rapor', 'soru', 'bilgi', 'onay'].includes(out.type) ? out.type : 'görev',
         threadId: pending.threadId || pending.id,
         notBeforeMs: Date.now() + delayMs
       });
-      lg(`✉️ ${shortName(agent.name)} → ${shortName(target.name)}: ${out.subject}`);
-      await sleep(900);
+      lg(`✉️ ${agent.name} → ${target.name}: ${out.subject}`);
+      await sleep(1400);
     }
 
-    // SADECE gerçek bir 2.5D ofis veya arayüz değişikliği (officePatch) varsa onay kutusuna sun (Otomatik yama.json spam'i yapma!)
-    const op = decision.officePatch || {};
-    const hasSceneOrUiChanges = (Array.isArray(op.sceneMods) && op.sceneMods.some(s => s && s.drawJs))
-      || (Array.isArray(op.uiMods) && op.uiMods.some(u => u && (u.html || u.css || u.js)))
-      || (Array.isArray(op.removeSceneIds) && op.removeSceneIds.length > 0);
-
-    if (op.hasPatch && hasSceneOrUiChanges) {
-      await createApprovalItem({
-        title: op.title || pending.subj,
-        summary: op.summary || 'Ekip istediğiniz ofis/arayüz değişikliğini hazırladı ve onayınıza sunar.',
-        createdBy: `${agent.name} (${shortRole(agent.role)})`,
-        hasPatch: true,
-        removeSceneIds: Array.isArray(op.removeSceneIds) ? op.removeSceneIds : [],
-        sceneMods: Array.isArray(op.sceneMods) ? op.sceneMods.filter(s => s && s.drawJs) : [],
-        uiMods: Array.isArray(op.uiMods) ? op.uiMods.filter(u => u && (u.html || u.css || u.js)) : [],
-        threadId: pending.threadId || pending.id
-      });
+    if (decision.submitFinalApproval && decision.submitFinalApproval.ready) {
+      showApprovalBox(pending.subj, decision.submitFinalApproval.summary || 'Çalışma tamamlandı.');
     }
 
     await markMailProcessed(pending.id);
     agent.mon = 0; hush(agent);
     await goHome(agent);
-    agent.st = 'Odasında';
+    agent.st = 'Hazır';
     agent.act = false;
 
     nextAllowedCallTime = Date.now() + (store.cooldownSec * 1000);
   } catch (err) {
     console.error(err);
-    lg(`❌ Hata (${shortName(agent.name)}): ${err.message}`);
+    const fails = (store.failCountByMail[pending.id] || 0) + 1;
+    store.failCountByMail[pending.id] = fails;
+
+    lg(`⚠️ ${agent.name} (${fails}/3 deneme): ${err.message}`);
+
+    if (fails >= 3) {
+      lg(`🛑 "${pending.subj}" görevi 3 kez hata aldığı için kuyruğu tıkamaması adına kapatıldı.`);
+      await markMailProcessed(pending.id);
+    } else {
+      // Hata alan maili Firestore'da 90 saniye ileri ertele ki anında tekrar çarpıp kotayı bitirmesin
+      await postponeMail(pending.id, Date.now() + 90000);
+    }
+
     agent.mon = 0; agent.act = false; hush(agent);
-    nextAllowedCallTime = Date.now() + 15000;
+    nextAllowedCallTime = Date.now() + 25000;
   } finally {
     busy = false;
-    renderAll();
+    render();
   }
+}
+
+// Takılan tüm görevlerin süresini sıfırlayıp kurtaran fonksiyon
+async function unstickAllTasks() {
+  store.failCountByMail = {};
+  store.cooldownUntilByModel = {};
+  nextAllowedCallTime = 0;
+  const pending = store.mails.filter(m => !m.processed && m.toId !== 'owner');
+  for (const m of pending) {
+    await postponeMail(m.id, Date.now());
+  }
+  lg(`🔧 Takılan ${pending.length} görev sıfırlandı, motor yeniden tetikleniyor...`);
+  processNextPendingMail(true);
 }
 
 setInterval(() => {
   const coolEl = $('#coolBadge');
   const rem = Math.ceil((nextAllowedCallTime - Date.now()) / 1000);
   if (rem > 0 && !busy) {
-    coolEl.style.display = 'inline-flex';
+    coolEl.style.display = 'inline-block';
     coolEl.className = 'badge wait';
-    coolEl.textContent = `⏳ Mola (${rem} sn)`;
+    coolEl.textContent = `☕ Güvenli Mola (${rem} sn)`;
   } else {
     coolEl.style.display = 'none';
   }
   if (!busy && !halt && OWN) {
     processNextPendingMail(false);
   }
-}, 2000);
+}, 3000);
 
 function updateEngineBadges(stateText) {
   const b = $('#engBadge');
-  if (!OWN) { b.className = 'badge'; b.textContent = '👁️ Ziyaretçi Modu'; return; }
+  if (!OWN) { b.className = 'badge'; b.textContent = 'Ziyaretçi Modu'; return; }
   b.className = 'badge live';
-  b.textContent = stateText || (halt ? '⏸ Duraklatıldı' : '🟢 Çevrimiçi (Sayfa Kapalıyken GitHub Devralır)');
+  b.textContent = stateText || (halt ? '⏸ Duraklatıldı' : '🟢 Otonom Motor Aktif');
 }
 
 /* ============================================================================
-   7. ÜST MENÜ VE AÇILIR PENCERE (MODAL WINDOW) YÖNETİMİ
+   7. FIRESTORE İŞLEMLERİ
    ============================================================================ */
-let activeWin = null;
-const WINDOWS = [
-  ['mail',      '✉️ İç Yazışmalar'],
-  ['staff',     '👥 Personel & Kadro'],
-  ['quotas',    '📊 Model Kotaları'],
-  ['files',     '📁 Ortak Klasör & Kod Arşivi'],
-  ['approvals', '✅ Onay & Ofis Eşyaları'],
-  ['tasks',     '📡 Görev & Kayıtlar']
-];
-
-function openWindow(winId) {
-  activeWin = winId;
-  $('#winBackdrop').classList.add('open');
-  renderTopMenu();
-  renderWindowContent();
-}
-
-function closeWindow() {
-  activeWin = null;
-  store.isCreatingFile = false;
-  $('#winBackdrop').classList.remove('open');
-  renderTopMenu();
-}
-
-window.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeWindow();
-    $('#card').style.display = 'none';
-  }
-});
-
-function renderTopMenu() {
-  const nav = $('#topMenu');
-  if (!nav) return;
-  if (!OWN) { nav.style.display = 'none'; return; }
-  nav.style.display = 'flex';
-
-  const unread = store.mails.filter(m => !m.processed && m.toId !== 'owner').length;
-  const pendAp = store.approvals.filter(a => a.status === 'pending').length;
-
-  nav.innerHTML = WINDOWS.map(w => {
-    let badge = '';
-    if (w[0] === 'mail') badge = `<span class="chip">${store.mails.length}${unread ? '·' + unread : ''}</span>`;
-    else if (w[0] === 'staff') badge = `<span class="chip">${store.staff.length}</span>`;
-    else if (w[0] === 'files') badge = `<span class="chip">${store.files.length}</span>`;
-    else if (w[0] === 'approvals' && pendAp) badge = `<span class="chip" style="border-color:var(--ok);color:#34d399">🔔 ${pendAp}</span>`;
-    return `<button class="${activeWin === w[0] ? 'active-win' : ''}" onclick="openWindow('${w[0]}')">${w[1]} ${badge}</button>`;
-  }).join('');
-}
-
-function renderAll() {
-  if (!OWN) return;
-  renderTopMenu();
-  updateEngineBadges();
-  renderApprovalBanner();
-  if (activeWin) renderWindowContent();
-}
-
-function renderWindowContent() {
-  if (!activeWin) return;
-  const titleObj = WINDOWS.find(w => w[0] === activeWin);
-  $('#winTitle').textContent = titleObj ? titleObj[1] : 'Pencere';
-  const p = $('#winBody');
-
-  if (activeWin === 'mail') {
-    const sel = store.mails.find(m => m.id === store.selectedMailId) || store.mails[0];
-    if (sel) store.selectedMailId = sel.id;
-
-    p.innerHTML = `
-      <div class="mail-grid">
-        <div class="mail-list">
-          <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Yazışmalar (${store.mails.length})</b>
-            <button class="sm danger" onclick="deleteProcessedMails()">🧹 İşlenenleri Sil</button>
-          </div>
-          ${store.mails.length ? store.mails.map(m => `
-            <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${esc(m.id)}';renderWindowContent()">
-              <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
-                <b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b>
-                <div style="display:flex;align-items:center;gap:6px">
-                  <span class="note">${esc(m.time)}</span>
-                  <button class="sm danger" title="Bu yazışmayı sil" onclick="deleteSingleMail('${esc(m.id)}', event)">🗑️</button>
-                </div>
-              </div>
-              <div style="font-weight:700;margin:4px 0">${esc(m.subj)}</div>
-              <div class="note" style="display:flex;justify-content:space-between">
-                <span>${esc(m.type.toUpperCase())}</span>
-                <span>${m.processed ? '✓ İşlendi' : '⏳ Sırada'}</span>
-              </div>
-            </div>
-          `).join('') : '<p class="note">Henüz yazışma yok.</p>'}
-        </div>
-        <div>
-          ${sel ? `
-            <div class="row" style="justify-content:space-between;margin-top:0;border-bottom:1px solid var(--ln);padding-bottom:10px">
-              <div>
-                <h3 style="margin:0">${esc(sel.subj)}</h3>
-                <div class="note">Gönderen: <b>${esc(sel.f)}</b> (${esc(sel.fRole || 'Uzman')}) → Alıcı: <b>${esc(sel.t)}</b></div>
-              </div>
-              <div class="row" style="margin:0">
-                <span class="chip">${sel.processed ? 'Tamamlandı' : 'Kuyrukta'}</span>
-                <button class="sm danger" onclick="deleteSingleMail('${esc(sel.id)}')">🗑️ Yazışmayı Sil</button>
-              </div>
-            </div>
-            <div style="white-space:pre-wrap;line-height:1.7;margin:14px 0;padding:16px;background:var(--card-2);border-radius:14px;border:1px solid var(--ln);max-height:42vh;overflow-y:auto">${esc(sel.body)}</div>
-            <div class="row">
-              <input id="replyTxt" style="flex:1" placeholder="Bu yazışmaya yönetici talimatı ekle...">
-              <button class="p" onclick="replyToMail('${esc(sel.id)}')">Talimat Gönder</button>
-            </div>
-          ` : '<p class="note">Detayları görmek için soldan bir yazışma seçin.</p>'}
-        </div>
-      </div>`;
-  }
-  else if (activeWin === 'staff') {
-    p.innerHTML = `
-      <div class="row" style="margin-top:0;justify-content:space-between">
-        <button class="p" onclick="openAgentModal()">+ Yeni Personel / İK Ajanı Ekle</button>
-        <span class="note">Tüm personel Firestore <code>staff</code> koleksiyonundan anlık çekilir. Güvenli Mola: <b>${store.cooldownSec} sn</b></span>
-      </div>
-      <table>
-        <tr><th>Personel</th><th>Departman / Unvan</th><th>Uzmanlık Tanımı</th><th>Ana & Yedek Model</th><th>Durum</th><th>İşlem</th></tr>
-        ${store.staff.length ? store.staff.map(s => `
-          <tr>
-            <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b></td>
-            <td><b>${esc(s.role)}</b><br><span class="note">Oda ${String(s.room + 1).padStart(2, '0')}</span></td>
-            <td><span class="note">${esc((s.skills || '').slice(0, 110))}${(s.skills || '').length > 110 ? '...' : ''}</span></td>
-            <td><b>${esc(s.model)}</b><br><span class="note">Yedek: ${esc(s.backup)} · Bugün: ${s.used || 0}</span></td>
-            <td><span class="chip">${esc(s.st)}</span></td>
-            <td>
-              <div class="row" style="margin:0">
-                <button class="sm" onclick="openAgentModal('${esc(s.id)}')">✏️ Düzenle</button>
-                <button class="sm danger" onclick="delAgent('${esc(s.id)}')">🗑️ Sil</button>
-              </div>
-            </td>
-          </tr>
-        `).join('') : '<tr><td colspan="6" class="note">Firestore\'da kayıtlı personel bulunamadı. Yukarıdan yeni personel ekleyebilirsiniz.</td></tr>'}
-      </table>`;
-  }
-  else if (activeWin === 'quotas') {
-    p.innerHTML = `
-      <div class="row" style="justify-content:space-between;margin-top:0">
-        <div>
-          <h3 style="margin:0">📊 AI Studio Tüm Model Limitleri, Saatlik (RPH), Dakikalık (RPM/TPM) ve Günlük (RPD) Analiz (${todayKey()})</h3>
-          <span class="note">İK Ajanı bu tabloyu canlı okuyarak hangi personele hangi modelin atanacağını ve mola süresini (${store.cooldownSec} sn) optimize eder.</span>
-        </div>
-      </div>
-      <table>
-        <tr>
-          <th>Model</th>
-          <th>Kategori</th>
-          <th>Dakikalık (RPM)</th>
-          <th>Token (TPM)</th>
-          <th>Saatlik Kullanım / Limit</th>
-          <th>Günlük Kullanım / RPD</th>
-          <th>Atanan Personeller</th>
-        </tr>
-        ${MODELS.map(m => {
-          const assigned = store.staff.filter(s => s.model === m.n);
-          const pct = m.l > 0 && m.l < 900000 ? Math.min(100, (m.u / m.l) * 100) : 0;
-          const rpdTxt = m.l >= 900000 ? 'Sınırsız' : (m.l === 0 ? '0 / 0 (Kapalı)' : `${m.u} / ${m.l}`);
-          const rphTxt = m.rph >= 9000 ? 'Sınırsız' : (m.rph === 0 ? '0 / 0' : `${m.hu} / ${m.rph}`);
-          return `
-            <tr style="${m.l === 0 ? 'opacity:.48' : ''}">
-              <td><b>${esc(m.n)}</b></td>
-              <td><span class="chip">${esc(m.cat)}</span></td>
-              <td><b>${m.rpm >= 900 ? 'Sınırsız' : m.rpm + ' RPM'}</b></td>
-              <td><span class="note">${m.tpm ? (m.tpm >= 1000000 ? '1M' : (m.tpm / 1000) + 'K') : '0'} TPM</span></td>
-              <td><b>${rphTxt}</b></td>
-              <td style="min-width:160px">
-                <div style="display:flex;justify-content:space-between;font-size:12px"><b>${rpdTxt}</b></div>
-                ${m.l > 0 && m.l < 900000 ? `<div class="bar"><i style="width:${pct}%"></i></div>` : ''}
-              </td>
-              <td>${assigned.length ? assigned.map(x => `<span class="chip" style="border-color:var(--acc);color:#c7d2fe">${esc(shortName(x.name))}</span>`).join(' ') : '<span class="note">-</span>'}</td>
-            </tr>`;
-        }).join('')}
-      </table>`;
-  }
-  else if (activeWin === 'files') {
-    const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
-    if (sf && !store.isCreatingFile) store.selectedFileId = sf.id;
-    const hasYamaSpam = store.files.some(f => String(f.path || '').startsWith('onaylanan-yama-') || String(f.path || '').startsWith('yama-'));
-
-    p.innerHTML = `
-      <div class="mail-grid">
-        <div class="mail-list">
-          <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Ortak Arşiv (${store.files.length})</b>
-            <div class="row" style="margin:0;gap:5px">
-              <button class="sm p" onclick="store.isCreatingFile=true;renderWindowContent()">+ Kod / Dosya Ekle</button>
-              <button class="sm ok" onclick="$('#fileUploadInput').click()">📤 Yükle</button>
-              ${hasYamaSpam ? `<button class="sm danger" onclick="cleanupYamaSpamFiles()" title="Eski yama v1..v16 dosyalarını topluca sil">🧹 Yamaları Sil</button>` : ''}
-            </div>
-          </div>
-          ${store.files.length ? store.files.map(f => `
-            <div class="mail-item ${(!store.isCreatingFile && f.id === store.selectedFileId) ? 'active' : ''}" onclick="store.isCreatingFile=false;store.selectedFileId='${esc(f.id)}';renderWindowContent()">
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <b>📄 ${esc(f.path)}</b>
-                <button class="sm danger" title="Dosyayı sil" onclick="deleteSingleFile('${esc(f.id)}', event)">🗑️</button>
-              </div>
-              <div class="note">Yazan: ${esc(f.owner)} · v${f.version || 1}</div>
-            </div>
-          `).join('') : '<p class="note">Henüz dosya yok. Yukarıdan örnek kod yapıştırabilir veya bilgisayarınızdan dosya yükleyebilirsiniz.</p>'}
-        </div>
-        <div>
-          ${store.isCreatingFile ? `
-            <div style="background:var(--card-2);padding:16px;border-radius:16px;border:1px solid var(--acc)">
-              <h3 style="margin:0 0 8px">📝 Ortak Arşive Yeni Dosya veya Örnek Kod Ekle</h3>
-              <p class="note" style="margin:0 0 12px">Buraya eklediğiniz kodları veya metinleri tüm ajanlar doğrudan okuyup analiz edebilir (Örn: SEO uzmanına "Arşivdeki ornek.html dosyasına bak" diyebilirsiniz).</p>
-              <label>Dosya Adı</label>
-              <input id="newFileName" placeholder="Örn: ornek-kod.js, anasayfa.html, seo-verileri.md">
-              <label>Dosya / Kod İçeriği</label>
-              <textarea id="newFileContent" class="code-editor" placeholder="Örnek kodunuzu veya metninizi buraya yapıştırın..."></textarea>
-              <div class="row" style="margin-top:12px;margin-bottom:0">
-                <button class="p" onclick="saveNewFileFromPanel()">💾 Arşive Kaydet</button>
-                <button onclick="store.isCreatingFile=false;renderWindowContent()">İptal</button>
-              </div>
-            </div>
-          ` : (sf ? `
-            <div class="row" style="justify-content:space-between;margin-top:0">
-              <div>
-                <h3 style="margin:0">${esc(sf.path)} <span class="chip">v${sf.version || 1}</span></h3>
-                <span class="note">Yazan: <b>${esc(sf.owner)}</b> · Ajanlara <code>"${esc(sf.path)}" dosyasına bak</code> diyerek analiz ettirebilirsiniz.</span>
-              </div>
-              <div class="row" style="margin:0">
-                <button class="p" onclick="saveEditedFileContent('${esc(sf.id)}')">💾 Değişiklikleri Kaydet</button>
-                <button onclick="downloadFile('${esc(sf.id)}')">📥 İndir</button>
-                <button onclick="navigator.clipboard.writeText($('#editFileArea').value);alert('Kopyalandı!')">📋 Kopyala</button>
-                <button class="danger" onclick="deleteSingleFile('${esc(sf.id)}')">🗑️ Sil</button>
-              </div>
-            </div>
-            <textarea id="editFileArea" class="code-editor" style="margin-top:10px">${esc(sf.content)}</textarea>
-          ` : '<p class="note">Görüntülemek veya düzenlemek için soldan bir dosya seçin ya da "+ Kod / Dosya Ekle" butonuna tıklayın.</p>')}
-        </div>
-      </div>`;
-  }
-  else if (activeWin === 'approvals') {
-    const activeScene = store.officeMods.sceneMods || [];
-    const activeUI = store.officeMods.uiMods || [];
-    p.innerHTML = `
-      <div class="row" style="justify-content:space-between;margin-top:0">
-        <div>
-          <h3 style="margin:0">✅ Yönetici Onay Kutusu & Firestore 2.5D Ofis Eşyaları Envanteri</h3>
-          <span class="note">Ofisteki tüm masa, bilgisayar, pencere, duvar, arşiv ve tabelalar Firestore'da tutulur. Ajanların sunduğu değişiklikler siz onayladığınızda uygulanır.</span>
-        </div>
-        <button class="warn" onclick="resetOfficeToDefault()">🔄 Tüm Ofis Eşyalarını Varsayılana Döndür</button>
-      </div>
-
-      <h3 style="margin-top:14px">📋 Onay Bekleyen & Geçmiş Sunumlar (${store.approvals.length})</h3>
-      ${store.approvals.length ? store.approvals.map(ap => `
-        <div class="approval-card" style="${ap.status === 'approved' ? 'opacity:.68;border-color:var(--ln)' : ''}">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-            <div>
-              <b>${esc(ap.title)}</b> <span class="chip">${ap.status === 'pending' ? '⏳ ONAY BEKLİYOR' : '✓ ONAYLANDI'}</span>
-              <div class="note" style="margin-top:4px">${esc(ap.summary)}</div>
-              <div class="note">Sunan: ${esc(ap.createdBy)} · ${ap.sceneMods?.length || 0} Eşya Ekleme/Değiştirme · ${ap.removeSceneIds?.length || 0} Eşya Kaldırma · ${ap.uiMods?.length || 0} Arayüz</div>
-            </div>
-            <div class="row" style="margin:0">
-              ${(ap.sceneMods?.length || ap.uiMods?.length || ap.removeSceneIds?.length) ? `<button class="warn" onclick="previewApprovalMods('${esc(ap.id)}')">👁️ Canlı Önizle</button>` : ''}
-              ${ap.status === 'pending' ? `<button class="p" onclick="applyApprovalToOffice('${esc(ap.id)}')">✅ Onayla & Uygula</button>` : ''}
-              <button onclick="askRevision('${esc(ap.id)}')">↩️ Revize İste</button>
-              <button class="danger" onclick="deleteSingleApproval('${esc(ap.id)}')">🗑️ Sil</button>
-            </div>
-          </div>
-        </div>
-      `).join('') : '<p class="note">Henüz onay bekleyen çalışma yok.</p>'}
-
-      <div class="cols" style="margin-top:18px">
-        <div class="tier-card">
-          <b>🏢 Firestore'da Kayıtlı 2.5D Ofis Eşyaları & Mimari (${activeScene.length})</b>
-          <div class="note" style="margin-bottom:8px">İstediğiniz eşyayı buradan tek tıkla kaldırabilir, kodunu düzenleyebilir veya ajanlara söyleyip değiştirebilirsiniz.</div>
-          <div style="max-height:36vh;overflow-y:auto">
-            ${activeScene.map(s => `
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln);gap:8px">
-                <div>
-                  <b>${esc(s.label || s.id)}</b>
-                  <span class="chip">${esc(s.id)}</span>
-                </div>
-                <div class="row" style="margin:0;gap:5px">
-                  <button class="sm" onclick="editSceneItemCode('${esc(s.id)}')">✏️ Kodu</button>
-                  <button class="sm danger" onclick="removeSingleMod('scene','${esc(s.id)}')">🗑️ Kaldır</button>
-                </div>
-              </div>
-            `).join('') || '<p class="note">Kayıtlı sahne eşyası yok.</p>'}
-          </div>
-        </div>
-        <div class="tier-card">
-          <b>🧩 Aktif Arayüz/Menü Özellikleri (${activeUI.length})</b>
-          <div style="margin-top:8px">
-            ${activeUI.map(u => `
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln)">
-                <span>✓ <b>${esc(u.title || u.id)}</b> <span class="chip">${esc(u.slot || 'top-right')}</span></span>
-                <button class="sm danger" onclick="removeSingleMod('ui','${esc(u.id)}')">🗑️ Kaldır</button>
-              </div>
-            `).join('') || '<p class="note">Aktif özel arayüz bileşeni yok.</p>'}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  else if (activeWin === 'tasks') {
-    const pendingMails = store.mails.filter(m => !m.processed && m.toId !== 'owner');
-    const doneMails = store.mails.filter(m => m.processed);
-    p.innerHTML = `
-      <div class="cols">
-        <div>
-          <h3>⏳ Sırada Bekleyen Görevler (${pendingMails.length})</h3>
-          ${pendingMails.map(m => `
-            <div style="padding:11px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:var(--card-2);display:flex;justify-content:space-between;align-items:center">
-              <div><b>${esc(shortName(m.t))}</b> <span class="note">← ${esc(shortName(m.f))}</span><br><span>${esc(m.subj)}</span></div>
-              <button class="sm danger" onclick="deleteSingleMail('${esc(m.id)}')">🗑️</button>
-            </div>
-          `).join('') || '<span class="note">Bekleyen görev yok.</span>'}
-        </div>
-        <div>
-          <h3>✅ Tamamlanan Adımlar (${doneMails.length})</h3>
-          ${doneMails.slice(0, 15).map(m => `
-            <div style="padding:9px;border-bottom:1px solid var(--ln);display:flex;justify-content:space-between;align-items:center">
-              <div><b>${esc(shortName(m.f))} → ${esc(shortName(m.t))}</b><br><span class="note">${esc(m.subj)}</span></div>
-              <button class="sm danger" onclick="deleteSingleMail('${esc(m.id)}')">🗑️</button>
-            </div>
-          `).join('') || '<span class="note">Henüz tamamlanan adım yok.</span>'}
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <h3>📡 Canlı Sistem Kayıtları</h3>
-            <button class="sm" onclick="store.log=[];renderWindowContent()">Temizle</button>
-          </div>
-          <div class="note" style="max-height:48vh;overflow-y:auto;line-height:1.75;background:var(--card-2);padding:12px;border-radius:12px">
-            ${store.log.map(esc).join('<br>') || 'Kayıt yok.'}
-          </div>
-        </div>
-      </div>`;
-  }
-}
-
-/* ============================================================================
-   8. FIRESTORE İŞLEMLERİ, TEKİL SİLME FONKSİYONLARI VE CANLI SENKRONİZASYON
-   ============================================================================ */
-let db = null, auth = null, CONN = false, vt = 0, hbTimer = 0, un = [], pt = 0;
+let db = null, auth = null, CONN = false, vt = 0, un = [];
 const FV = () => firebase.firestore.FieldValue;
 
-const nm = id => id === 'owner' ? 'Burak Bey (Yönetici)' : (store.staff.find(s => s.id === id) || { name: id }).name;
+const nm = id => {
+  if (id === 'owner') return 'Sen (Burak Bey)';
+  const s = store.staff.find(x => x.id === id || x.name === id);
+  return s ? `${s.name} · ${s.role}` : id;
+};
 const tm = t => t && t.toDate ? t.toDate().toTimeString().slice(0, 5) : hhmm();
 
-async function createInternalMail({ fromId, fromName, fromRole, toId, toName, subject, body, type, threadId, notBeforeMs }) {
-  const cleanSubj = String(subject || 'Görev').slice(0, 290);
-  const cleanBody = String(body || '').slice(0, 39000);
-  const cleanType = ['görev', 'rapor', 'soru', 'bilgi', 'onay'].includes(type) ? type : 'görev';
-  const thId = threadId || ('th_' + Date.now());
-  const nbMs = notBeforeMs || Date.now();
-
+async function createInternalMail({ fromId, fromName, toId, toName, subject, body, type, threadId, notBeforeMs }) {
   if (CONN && OWN) {
     const ts = FV().serverTimestamp();
     const tid = db.collection('tasks').doc().id;
     if (toId !== 'owner') {
       await db.collection('tasks').doc(tid).set({
-        title: cleanSubj,
-        description: cleanBody.slice(0, 1500),
-        owner: toId,
-        createdBy: fromId,
-        status: 'bekliyor',
-        priority: 1,
-        createdAt: ts,
-        updatedAt: ts
+        title: subject, description: body.slice(0, 1500),
+        owner: toId, createdBy: fromId, status: 'bekliyor',
+        priority: 1, createdAt: ts, updatedAt: ts
       }).catch(() => {});
     }
     await db.collection('mails').add({
-      from: fromId,
-      to: toId,
-      subject: cleanSubj,
-      body: cleanBody,
-      type: cleanType,
-      taskId: tid,
-      threadId: thId,
+      from: fromId, to: toId, subject, body, type: type || 'görev',
+      taskId: tid, threadId: threadId || ('th_' + Date.now()),
       processed: toId === 'owner',
-      notBefore: firebase.firestore.Timestamp.fromMillis(nbMs),
+      notBefore: firebase.firestore.Timestamp.fromMillis(notBeforeMs || Date.now()),
       createdAt: ts
     });
-  } else {
-    store.mails.unshift({
-      id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-      fromId, toId, f: fromName, fRole: fromRole || 'Uzman', t: toName,
-      subj: cleanSubj, body: cleanBody, type: cleanType,
-      threadId: thId, processed: toId === 'owner', notBeforeMs: nbMs, time: hhmm()
-    });
-    renderAll();
   }
 }
 
-async function deleteSingleMail(mailId, ev) {
-  if (ev) ev.stopPropagation();
-  store.mails = store.mails.filter(m => m.id !== mailId);
-  if (store.selectedMailId === mailId) {
-    store.selectedMailId = store.mails[0] ? store.mails[0].id : null;
-  }
-  if (CONN && OWN) {
-    await db.collection('mails').doc(mailId).delete().catch(() => {});
-  }
-  renderAll();
-}
-
-async function deleteProcessedMails() {
-  const toDel = store.mails.filter(m => m.processed);
-  if (!toDel.length) return;
-  store.mails = store.mails.filter(m => !m.processed);
-  if (CONN && OWN) {
-    const batch = db.batch();
-    toDel.forEach(m => batch.delete(db.collection('mails').doc(m.id)));
-    await batch.commit().catch(() => {});
-  }
-  renderAll();
-}
-
-async function createApprovalItem(item) {
-  const payload = {
-    title: item.title || 'Yönetici Onayı Bekleyen Çalışma',
-    summary: item.summary || '',
-    createdBy: item.createdBy || 'Tonoz AI Ekibi',
-    status: 'pending',
-    hasPatch: !!item.hasPatch,
-    removeSceneIds: item.removeSceneIds || [],
-    sceneMods: item.sceneMods || [],
-    uiMods: item.uiMods || [],
-    time: hhmm()
-  };
-
-  if (CONN && OWN) {
-    await db.collection('approvals').add({
-      ...payload,
-      createdAt: FV().serverTimestamp()
+async function postponeMail(mailId, newTimeMs) {
+  const m = store.mails.find(x => x.id === mailId);
+  if (m) m.notBeforeMs = newTimeMs;
+  if (CONN && OWN && !String(mailId).startsWith('m_')) {
+    await db.collection('mails').doc(mailId).update({
+      notBefore: firebase.firestore.Timestamp.fromMillis(newTimeMs)
     }).catch(() => {});
-  } else {
-    store.approvals.unshift({ ...payload, id: 'ap_' + Date.now() });
-    renderApprovalBanner();
-    renderAll();
   }
-}
-
-function previewApprovalMods(approvalId) {
-  const ap = store.approvals.find(x => x.id === approvalId);
-  if (!ap) return;
-  if (store.previewMods && store.previewMods._apId === approvalId) {
-    store.previewMods = null;
-  } else {
-    store.previewMods = {
-      _apId: approvalId,
-      removeSceneIds: ap.removeSceneIds || [],
-      sceneMods: ap.sceneMods || [],
-      uiMods: ap.uiMods || []
-    };
-  }
-  renderActiveUIMods();
-  renderApprovalBanner();
-  renderAll();
-}
-
-function renderApprovalBanner() {
-  const e = $('#ap');
-  if (!e) return;
-  const pendingList = store.approvals.filter(a => a.status === 'pending');
-  if (!pendingList.length || !OWN) {
-    e.style.display = 'none';
-    return;
-  }
-  const latest = pendingList[0];
-  const isPrev = store.previewMods && store.previewMods._apId === latest.id;
-  e.style.display = 'block';
-  e.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <div class="badge live">🔔 ONAY BEKLEYEN TASARIM (${pendingList.length})</div>
-      <button class="sm danger" onclick="deleteSingleApproval('${esc(latest.id)}')" title="Bu bildirimi sil">✕ Reddet / Sil</button>
-    </div>
-    <h3 style="margin:0 0 4px;font:700 15px 'Space Grotesk',sans-serif">${esc(latest.title)}</h3>
-    <div class="note" style="color:#e2e8f0">${esc(latest.summary)}</div>
-    <div class="note" style="margin-top:4px">Sunan: <b>${esc(latest.createdBy)}</b></div>
-    <div class="row" style="margin-top:10px;margin-bottom:0">
-      <button class="warn" onclick="previewApprovalMods('${esc(latest.id)}')">${isPrev ? '🙈 Önizlemeyi Kapat' : '👁️ Canlı Önizle'}</button>
-      <button class="p" onclick="applyApprovalToOffice('${esc(latest.id)}')">✅ Onayla & Uygula</button>
-      <button onclick="askRevision('${esc(latest.id)}')">↩️ Revize</button>
-    </div>
-  `;
-}
-
-async function askRevision(approvalId) {
-  const ap = store.approvals.find(x => x.id === approvalId);
-  const note = prompt('Ekibe iletilecek revize talimatınızı yazın:');
-  if (!note) return;
-  if (ap) ap.status = 'revised';
-  if (CONN && OWN && ap) {
-    await db.collection('approvals').doc(ap.id).set({ status: 'revised' }, { merge: true }).catch(() => {});
-  }
-  store.previewMods = null;
-  renderActiveUIMods();
-  renderApprovalBanner();
-  $('#ti').value = `REVİZE (${ap ? ap.title : ''}): ${note}`;
-  $('#go').click();
 }
 
 async function markMailProcessed(mailId) {
@@ -2430,89 +1022,16 @@ async function markMailProcessed(mailId) {
 }
 
 async function saveSharedFile(path, content, kind, ownerName) {
-  const cleanPath = String(path || 'dosya.md').trim().slice(0, 240);
-  const cleanContent = String(content || '').slice(0, 900000);
-  const existing = store.files.find(f => f.path === cleanPath);
+  const existing = store.files.find(f => f.path === path);
   if (CONN && OWN) {
     const ts = FV().serverTimestamp();
     const docId = existing ? existing.id : db.collection('files').doc().id;
     const ver = existing ? (existing.version || 1) + 1 : 1;
     await db.collection('files').doc(docId).set({
-      path: cleanPath, content: cleanContent, owner: ownerName, kind: kind || ' code',
+      path, content, owner: ownerName, kind: kind || 'md',
       version: ver, createdAt: ts, updatedAt: ts
     }, { merge: true });
-    store.selectedFileId = docId;
-  } else {
-    if (existing) {
-      existing.content = cleanContent; existing.version++; existing.owner = ownerName; existing.time = hhmm();
-      store.selectedFileId = existing.id;
-    } else {
-      const nid = 'f_' + Date.now();
-      store.files.unshift({ id: nid, path: cleanPath, content: cleanContent, kind, owner: ownerName, version: 1, time: hhmm() });
-      store.selectedFileId = nid;
-    }
   }
-}
-
-async function saveNewFileFromPanel() {
-  const name = $('#newFileName')?.value.trim();
-  const content = $('#newFileContent')?.value;
-  if (!name) return alert('Lütfen dosya adını yazın (örn: ornek-kod.js).');
-  if (!content) return alert('Lütfen dosya veya örnek kod içeriğini girin.');
-  await saveSharedFile(name, content, 'code', 'Burak Bey (Yönetici)');
-  store.isCreatingFile = false;
-  lg(`📄 Arşive yeni dosya eklendi: ${name}`);
-  renderAll();
-}
-
-async function saveEditedFileContent(fileId) {
-  const f = store.files.find(x => x.id === fileId);
-  const newContent = $('#editFileArea')?.value;
-  if (!f || newContent == null) return;
-  await saveSharedFile(f.path, newContent, f.kind || 'code', f.owner || 'Burak Bey (Yönetici)');
-  lg(`💾 Dosya güncellendi: ${f.path}`);
-  alert(`"${f.path}" başarıyla güncellendi!`);
-  renderAll();
-}
-
-async function handleLocalFileUpload(ev) {
-  const files = Array.from(ev.target.files || []);
-  for (const file of files) {
-    const text = await file.text();
-    await saveSharedFile(file.name, text, 'code', 'Burak Bey (Yüklenen Dosya)');
-    lg(`📤 Bilgisayardan dosya yüklendi: ${file.name}`);
-  }
-  ev.target.value = '';
-  store.isCreatingFile = false;
-  renderAll();
-}
-
-async function deleteSingleFile(fileId, ev) {
-  if (ev) ev.stopPropagation();
-  const f = store.files.find(x => x.id === fileId);
-  if (!f) return;
-  store.files = store.files.filter(x => x.id !== fileId);
-  if (store.selectedFileId === fileId) {
-    store.selectedFileId = store.files[0] ? store.files[0].id : null;
-  }
-  if (CONN && OWN) {
-    await db.collection('files').doc(fileId).delete().catch(() => {});
-  }
-  lg(`🗑️ Dosya silindi: ${f.path}`);
-  renderAll();
-}
-
-async function cleanupYamaSpamFiles() {
-  const spam = store.files.filter(f => String(f.path || '').startsWith('onaylanan-yama-') || String(f.path || '').startsWith('yama-'));
-  if (!spam.length) return;
-  store.files = store.files.filter(f => !spam.includes(f));
-  if (CONN && OWN) {
-    const batch = db.batch();
-    spam.forEach(f => batch.delete(db.collection('files').doc(f.id)));
-    await batch.commit().catch(() => {});
-  }
-  lg(`🧹 ${spam.length} adet eski yama yedek dosyası temizlendi.`);
-  renderAll();
 }
 
 function downloadFile(fileId) {
@@ -2527,24 +1046,214 @@ function downloadFile(fileId) {
 }
 
 async function resetProject() {
-  if (!confirm('Mevcut yazışmalar, görevler ve ortak klasör dosyaları sıfırlanacak. Onaylıyor musunuz?')) return;
+  if (!confirm('Tüm yazışmalar, görevler ve ortak dosyalar silinecek (Personeller ve ofis eşyaları korunur). Emin misiniz?')) return;
   if (CONN && OWN) {
-    try {
-      const batch = db.batch();
-      const mSnap = await db.collection('mails').get();
-      mSnap.forEach(d => batch.delete(d.ref));
-      const tSnap = await db.collection('tasks').get();
-      tSnap.forEach(d => batch.delete(d.ref));
-      const fSnap = await db.collection('files').get();
-      fSnap.forEach(d => batch.delete(d.ref));
-      await batch.commit();
-      lg('🗑️ Proje yazışma ve dosyaları temizlendi.');
-    } catch (e) {
-      alert('Sıfırlama hatası: ' + e.message);
-    }
-  } else {
-    store.mails = []; store.tasks = []; store.files = []; store.log = [];
-    renderAll();
+    const batch = db.batch();
+    const mSnap = await db.collection('mails').get();
+    mSnap.forEach(d => batch.delete(d.ref));
+    const tSnap = await db.collection('tasks').get();
+    tSnap.forEach(d => batch.delete(d.ref));
+    const fSnap = await db.collection('files').get();
+    fSnap.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    store.failCountByMail = {};
+    lg('🗑️ Proje sıfırlandı: Tüm mesajlar ve dosyalar temizlendi.');
+  }
+}
+
+function showApprovalBox(title, summary) {
+  const e = $('#ap');
+  e.style.display = 'block';
+  e.innerHTML = `
+    <h3>✅ Yönetici Onay Kutusu</h3>
+    <p style="margin:0 0 10px"><b>Konu:</b> ${esc(title)}<br><span class="note">${esc(summary)}</span></p>
+    <div class="row">
+      <button class="p" id="okBtn">Onayla</button>
+      <button id="revBtn">Revize İste</button>
+    </div>`;
+  $('#okBtn').onclick = () => { e.style.display = 'none'; lg('Burak Bey çalışmayı onayladı.'); };
+  $('#revBtn').onclick = () => {
+    const note = prompt('Revize talebinizi yazın:');
+    if (note) { $('#ti').value = 'REVİZE: ' + note; $('#go').click(); }
+    e.style.display = 'none';
+  };
+}
+
+/* ============================================================================
+   8. YÖNETİM PANELİ SEKMELERİ
+   ============================================================================ */
+let tab = 'mail';
+const TABS = [
+  ['mail',  '✉️ Yazışmalar'],
+  ['staff', '👥 Personel & Kotalar'],
+  ['tasks', '📋 Görev Kuyruğu & Log'],
+  ['files', '📁 Ortak Klasör']
+];
+
+function tabsUI() {
+  const unread = store.mails.filter(m => !m.processed && m.toId !== 'owner').length;
+  $('#tabs').innerHTML = TABS.map(t =>
+    `<button class="${tab == t[0] ? 'on' : ''}" onclick="tab='${t[0]}';tabsUI();render()">${t[1]}${
+      t[0] == 'mail' ? `<span class="chip">${store.mails.length}${unread ? ' · ' + unread + ' sırada' : ''}</span>` :
+      t[0] == 'files' ? `<span class="chip">${store.files.length}</span>` : ''
+    }</button>`
+  ).join('');
+}
+
+const poolOf = n => store.staff.filter(s => s.model === n);
+
+function render() {
+  if (!OWN) return;
+  tabsUI();
+  updateEngineBadges();
+  renderDesignSidebar();
+  const p = $('#pn');
+
+  if (tab === 'mail') {
+    const sel = store.mails.find(m => m.id === store.selectedMailId) || store.mails[0];
+    if (sel) store.selectedMailId = sel.id;
+
+    p.innerHTML = `
+      <div class="mail-grid">
+        <div class="mail-list">
+          <div class="row" style="justify-content:space-between;margin-top:0">
+            <b>Kurum İçi Yazışma Akışı</b>
+            <span class="note">${store.mails.filter(m => !m.processed && m.toId !== 'owner').length} sırada</span>
+          </div>
+          ${store.mails.length ? store.mails.map(m => `
+            <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${m.id}';render()">
+              <div style="display:flex;justify-content:space-between;font-size:11.5px">
+                <b>${esc(m.f)} → ${esc(m.t)}</b>
+                <span class="note">${esc(m.time)}</span>
+              </div>
+              <div style="font-weight:700;margin:3px 0">${esc(m.subj)}</div>
+              <div class="note" style="display:flex;justify-content:space-between">
+                <span>${esc(m.type.toUpperCase())}</span>
+                <span>${m.processed ? '✓ İşlendi' : '⏳ Sırada'}</span>
+              </div>
+            </div>
+          `).join('') : '<p class="note">Henüz yazışma yok.</p>'}
+        </div>
+        <div>
+          ${sel ? `
+            <div class="row" style="justify-content:space-between;margin-top:0;border-bottom:1px solid var(--ln);padding-bottom:10px">
+              <div>
+                <h3 style="margin:0">${esc(sel.subj)}</h3>
+                <div class="note">Gönderen: <b>${esc(sel.f)}</b> → Alıcı: <b>${esc(sel.t)}</b></div>
+              </div>
+              <div class="row" style="margin:0">
+                ${!sel.processed ? `<button class="ok" onclick="postponeMail('${sel.id}', Date.now());processNextPendingMail(true)">⚡ Hemen İşle</button>` : ''}
+                <span class="chip">${sel.processed ? 'Tamamlandı' : 'Sırada'}</span>
+              </div>
+            </div>
+            <div style="white-space:pre-wrap;line-height:1.65;margin:12px 0;padding:14px;background:#13101d;border-radius:12px;border:1px solid var(--ln)">${esc(sel.body)}</div>
+            <div class="row">
+              <input id="replyTxt" style="flex:1" placeholder="Bu yazışmaya müdahale et / talimat ekle...">
+              <button class="p" onclick="replyToMail('${sel.id}')">Gönder</button>
+            </div>
+          ` : '<p class="note">Detay için soldan bir yazışma seçin.</p>'}
+        </div>
+      </div>`;
+  }
+  else if (tab === 'staff') {
+    p.innerHTML = `
+      <div class="row" style="margin-top:0">
+        <button class="p" onclick="openAgentModal()">+ Yeni Ajan / Personel Ekle</button>
+      </div>
+      <table>
+        <tr><th>Personel & Unvan</th><th>Uzmanlık (Skills)</th><th>Atanan Model</th><th>Durum</th><th>İşlem</th></tr>
+        ${store.staff.map(s => `
+          <tr>
+            <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b><br><span class="note">${esc(s.role)} · Oda ${s.room + 1}</span></td>
+            <td><span class="note">${esc((s.skills || '').slice(0, 100))}...</span></td>
+            <td><b>${esc(s.model)}</b><br><span class="note">Yedek: ${esc(s.backup)} · Bugün: ${s.used || 0}</span></td>
+            <td><span class="chip">${esc(s.st)}</span></td>
+            <td><button onclick="openAgentModal('${s.id}')">Düzenle</button></td>
+          </tr>
+        `).join('')}
+      </table>
+      <h3 style="margin-top:18px">Günlük Model Havuzları (${todayKey()})</h3>
+      ${MODELS.map(m => {
+        const w = poolOf(m.n);
+        const pct = Math.min(100, (m.u / m.l) * 100);
+        return `
+          <div style="display:flex;justify-content:space-between;font-size:12.5px">
+            <span><b>${m.n}</b> <span class="note">(${m.desc})</span> ${w.length ? `<span class="chip">${w.map(x => esc(x.name)).join(', ')}</span>` : ''}</span>
+            <span><b>${m.u} / ${m.l}</b></span>
+          </div>
+          <div class="bar"><i style="width:${pct}%"></i></div>`;
+      }).join('')}`;
+  }
+  else if (tab === 'tasks') {
+    const pendingMails = store.mails.filter(m => !m.processed && m.toId !== 'owner');
+    const doneMails = store.mails.filter(m => m.processed);
+    p.innerHTML = `
+      <div class="cols">
+        <div>
+          <h3>⏳ Sırada Bekleyen Görevler (${pendingMails.length})</h3>
+          ${pendingMails.map(m => {
+            const waitSec = Math.max(0, Math.ceil(((m.notBeforeMs || 0) - Date.now()) / 1000));
+            return `
+            <div style="padding:10px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:#13101d">
+              <b>${esc(m.t)}</b> <span class="note">← ${esc(m.f)}</span><br>
+              <span>${esc(m.subj)}</span>
+              <div class="row" style="justify-content:space-between;margin-bottom:0;margin-top:6px">
+                <span class="note">${waitSec > 0 ? `⏱ ${waitSec} sn sonra çalışacak` : '🟢 Sırası geldi'}</span>
+                <button onclick="markMailProcessed('${m.id}')">Atla / Kapat</button>
+              </div>
+            </div>`;
+          }).join('') || '<span class="note">Bekleyen görev yok.</span>'}
+        </div>
+        <div>
+          <h3>✅ Tamamlanan Adımlar (${doneMails.length})</h3>
+          ${doneMails.slice(0, 8).map(m => `
+            <div style="padding:8px;border-bottom:1px solid var(--ln)">
+              <b>${esc(m.f)} → ${esc(m.t)}</b><br><span class="note">${esc(m.subj)}</span>
+            </div>
+          `).join('') || '<span class="note">Tamamlanan adım yok.</span>'}
+        </div>
+        <div>
+          <h3>📡 Canlı Sistem & Kota Logları</h3>
+          <div class="note" style="max-height:360px;overflow-y:auto;line-height:1.65">
+            ${store.log.map(esc).join('<br>') || 'Kayıt yok.'}
+          </div>
+        </div>
+      </div>`;
+  }
+  else if (tab === 'files') {
+    const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
+    if (sf) store.selectedFileId = sf.id;
+
+    p.innerHTML = `
+      <div class="mail-grid">
+        <div class="mail-list">
+          <div class="row" style="justify-content:space-between;margin-top:0">
+            <b>Ortak Klasör Dosyaları</b>
+            <button onclick="newFilePrompt()">+ Dosya Ekle</button>
+          </div>
+          ${store.files.length ? store.files.map(f => `
+            <div class="mail-item ${f.id === store.selectedFileId ? 'active' : ''}" onclick="store.selectedFileId='${f.id}';render()">
+              <b>📄 ${esc(f.path)}</b>
+              <div class="note">Yazan: ${esc(f.owner)} · v${f.version || 1}</div>
+            </div>
+          `).join('') : '<p class="note">Dosya bulunmuyor.</p>'}
+        </div>
+        <div>
+          ${sf ? `
+            <div class="row" style="justify-content:space-between;margin-top:0">
+              <div>
+                <h3 style="margin:0">${esc(sf.path)} <span class="chip">v${sf.version || 1}</span></h3>
+                <span class="note">Yazan: <b>${esc(sf.owner)}</b></span>
+              </div>
+              <div class="row" style="margin:0">
+                <button class="p" onclick="downloadFile('${sf.id}')">📥 İndir</button>
+                <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">Kopyala</button>
+              </div>
+            </div>
+            <pre class="code">${esc(sf.content)}</pre>
+          ` : '<p class="note">Dosya seçin.</p>'}
+        </div>
+      </div>`;
   }
 }
 
@@ -2552,47 +1261,53 @@ function replyToMail(mailId) {
   const m = store.mails.find(x => x.id === mailId);
   const txt = $('#replyTxt')?.value.trim();
   if (!m || !txt) return;
-  const target = findStaffSmart(m.fromId) || findStaffSmart(m.f) || store.staff[0];
+  const target = store.staff.find(s => s.id === m.fromId || s.name === m.f) || store.staff[0];
   if (!target) return;
   createInternalMail({
-    fromId: 'owner', fromName: 'Burak Bey (Yönetici)', fromRole: 'Şirket Sahibi',
-    toId: target.id, toName: target.name,
+    fromId: 'owner', fromName: 'Sen (Burak Bey)',
+    toId: target.id, toName: `${target.name} · ${target.role}`,
     subject: 'RE: ' + m.subj, body: txt,
     type: 'görev', threadId: m.threadId, notBeforeMs: Date.now()
   });
-  lg(`Sen → ${shortName(target.name)}: ${txt}`);
   $('#replyTxt').value = '';
+}
+
+function newFilePrompt() {
+  const path = prompt('Dosya adı (örn: notlar.md):');
+  if (!path) return;
+  const content = prompt('İçerik:');
+  if (content == null) return;
+  saveSharedFile(path.trim(), content, 'md', 'Sen (Burak Bey)');
 }
 
 function openAgentModal(id) {
   const a = id ? store.staff.find(s => s.id == id) : null, c = $('#card');
   c.style.display = 'block';
-  const opt = sel => ACTIVE_TEXT_MODELS.map(m => `<option value="${esc(m.n)}" ${m.n === sel ? 'selected' : ''}>${esc(m.n)} (${m.l} RPD · ${m.rpm} RPM)</option>`).join('');
-  const free = RM.filter(r => !store.staff.some(s => s.room === r.i) || (a && a.room === r.i));
+  const opt = sel => MODELS.map(m => `<option ${m.n === sel ? 'selected' : ''}>${m.n}</option>`).join('');
   c.innerHTML = `
-    <h3 style="margin:0 0 8px">${a ? '👤 Personeli Düzenle' : '+ Yeni Personel Ekle'}</h3>
+    <h3>${a ? 'Personeli Düzenle' : 'Yeni Ajan Ekle'}</h3>
     <label>İsim</label>
-    <input id="modalName" value="${esc(a ? a.name : '')}" placeholder="Örn: Zeynep Hanım">
+    <input id="modalName" value="${esc(a ? a.name : '')}" placeholder="Kaan Bey">
     <label>Unvan / Departman</label>
-    <input id="modalRole" value="${esc(a ? a.role : '')}" placeholder="Örn: İK & Kota Analisti">
-    <label>Oda Numarası</label>
-    <select id="modalRoom">${free.map(r => `<option value="${r.i}" ${a && a.room === r.i ? 'selected' : ''}>Oda ${String(r.i + 1).padStart(2, '0')}</option>`).join('')}</select>
-    <label>Ana Model (Birincil)</label>
+    <input id="modalRole" value="${esc(a ? a.role : '')}" placeholder="İnsan Kaynakları Uzmanı">
+    <label>Oda (1-8)</label>
+    <select id="modalRoom">${RM.map(r => `<option value="${r.i}" ${a && a.room === r.i ? 'selected' : ''}>Oda ${r.i + 1}</option>`).join('')}</select>
+    <label>Ana Model</label>
     <select id="modalModel">${opt(a ? a.model : 'Gemini 3.5 Flash Lite')}</select>
     <label>Yedek Model</label>
     <select id="modalBackup">${opt(a ? a.backup : 'Gemma 4 31B')}</select>
-    <label>Uzmanlık ve Görev Tanımı (Skills)</label>
-    <textarea id="modalSkills" rows="3">${esc(a ? a.skills : '')}</textarea>
-    <div class="row" style="margin-top:14px;margin-bottom:0">
-      <button class="p" onclick="saveAgentData('${a ? a.id : ''}')">💾 Kaydet</button>
+    <label>Uzmanlık (Skills)</label>
+    <textarea id="modalSkills" rows="4">${esc(a ? a.skills : '')}</textarea>
+    <div class="row">
+      <button class="p" onclick="saveAgentData('${a ? a.id : ''}')">Kaydet</button>
       ${a ? `<button class="danger" onclick="delAgent('${a.id}')">Sil</button>` : ''}
       <button onclick="$('#card').style.display='none'">Kapat</button>
     </div>`;
 }
 
 function saveAgentData(id) {
-  const name = $('#modalName').value.trim().slice(0, 48);
-  const role = $('#modalRole').value.trim().slice(0, 75);
+  const name = $('#modalName').value.trim();
+  const role = $('#modalRole').value.trim();
   if (!name || !role) return alert('İsim ve unvan zorunludur.');
   const room = +$('#modalRoom').value;
   const model = $('#modalModel').value;
@@ -2601,177 +1316,90 @@ function saveAgentData(id) {
 
   if (id) {
     const a = store.staff.find(s => s.id == id);
-    Object.assign(a, { name, role, model, backup, skills });
-    if (room !== a.room) { a.room = room; a.act = true; goHome(a).then(() => a.act = false); }
+    Object.assign(a, { name, role, room, model, backup, skills });
     fbSaveStaff(a);
   } else {
-    const a = addStaff({ name, role, room, model, backup, skills });
-    if (a) lg('Yeni personel kadroya katıldı: ' + name);
+    const newId = db.collection('staff').doc().id;
+    const a = mkAgent({ id: newId, name, role, room, model, backup, skills });
+    fbSaveStaff(a);
   }
   $('#card').style.display = 'none';
   updateTargetSelect();
-  renderAll();
+  render();
 }
 
 function delAgent(id) {
   const a = store.staff.find(s => s.id == id);
-  if (!a || !confirm(a.name + ' kadrodan çıkarılsın mı?')) return;
+  if (!a || !confirm(a.name + ' silinsin mi?')) return;
   a.alive = false;
   store.staff = store.staff.filter(s => s !== a);
-  fbDelStaff(id);
+  if (CONN && OWN) db.collection('staff').doc(id).delete();
   $('#card').style.display = 'none';
   updateTargetSelect();
-  renderAll();
+  render();
 }
 
-function stfData(a) {
-  const roomInt = Number.isFinite(Number(a.room)) ? Math.max(0, Math.min(15, Math.floor(Number(a.room)))) : 0;
-  const o = {
-    name: String(a.name || 'Ajan').trim().slice(0, 48),
-    role: String(a.role || 'Uzman').trim().slice(0, 75),
-    room: roomInt,
-    model: a.model || 'Gemini 3.5 Flash Lite',
-    backup: a.backup || 'Gemma 4 31B',
-    skills: String(a.skills || ''),
-    color: a.c || '#6366f1',
-    hair: a.h || '#312e81',
-    active: true,
-    status: a.st || 'Odasında',
-    usedToday: a.used || 0,
-    createdBy: a.by || 'owner',
-    updatedAt: FV().serverTimestamp()
-  };
-  if (!a.saved) o.createdAt = FV().serverTimestamp();
-  return o;
-}
+// Kanvas Tıklaması: Tasarım modundaysa seçili eşyayı tıklanan kareye taşır, değilse personeli açar
+cv.addEventListener('click', e => {
+  if (!OWN) return;
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 800, y = (e.clientY - r.top) / r.height * 530;
 
-async function fbSaveStaff(a) {
-  if (!CONN || !OWN) return;
-  try {
-    await db.collection('staff').doc(a.id).set(stfData(a), { merge: true });
-    a.saved = true;
-    pub();
-  } catch (e) {
-    console.error('Firestore personel kayıt hatası:', e);
-    lg('❌ Firestore personel güncellenemedi: ' + e.message);
+  if (store.designMode && store.selectedItemId) {
+    const [gx, gy] = screenToIsoGrid(x, y);
+    updateSelectedItemField('x', gx);
+    updateSelectedItemField('y', gy);
+    return;
   }
-}
 
-async function fbDelStaff(id) {
+  let best = null, bd = 26;
+  store.staff.forEach(a => {
+    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - x, q[1] - 24 - y);
+    if (d < bd) { bd = d; best = a; }
+  });
+  if (best) openAgentModal(best.id);
+});
+
+/* ============================================================================
+   9. FIREBASE AUTH VE CANLI DINLEYICILER
+   ============================================================================ */
+function fbSaveStaff(a) {
   if (!CONN || !OWN) return;
-  try {
-    await db.collection('staff').doc(id).delete();
-    pub();
-  } catch (e) {
-    console.error('Firestore personel silme hatası:', e);
-  }
+  db.collection('staff').doc(a.id).set({
+    name: a.name, role: a.role, room: a.room,
+    model: a.model, backup: a.backup, skills: a.skills || '',
+    color: a.c, hair: a.h, active: true, status: a.st || 'Hazır',
+    usedToday: a.used || 0, createdBy: a.by || 'owner'
+  }, { merge: true });
 }
 
-function pub() {
-  if (!CONN || !OWN) return;
-  clearTimeout(pt);
-  pt = setTimeout(() => db.doc('public/office').set({
-    updatedAt: FV().serverTimestamp(),
-    paused: halt,
-    officeMods: store.officeMods,
-    staff: store.staff.map(a => ({ id: a.id, name: a.name, role: a.role, room: a.room, color: a.c, hair: a.h, state: 'work' }))
-  }, { merge: true }).catch(() => {}), 1000);
-}
-
-function stopOwnerListeners() {
-  un.forEach(f => f());
-  un = [];
-  clearInterval(hbTimer);
-}
-
-function sendBrowserHeartbeat() {
-  if (!CONN || !OWN) return;
-  db.doc('settings/guard').set({
-    lastBrowserHeartbeat: FV().serverTimestamp()
-  }, { merge: true }).catch(() => {});
-}
+function stopOwnerListeners() { un.forEach(f => f()); un = []; }
 
 async function startOwnerListeners() {
-  clearInterval(vt);
-  stopOwnerListeners();
-  sendBrowserHeartbeat();
-  hbTimer = setInterval(sendBrowserHeartbeat, 45000);
+  clearInterval(vt); stopOwnerListeners();
 
   try {
     const secretDoc = await db.doc('settings/secret').get();
     if (secretDoc.exists && secretDoc.data().apiKey) {
       store.geminiKey = secretDoc.data().apiKey;
+      await discoverWorkingModels();
     }
   } catch (e) {}
 
-  un.push(db.doc('settings/guard').onSnapshot(doc => {
-    if (doc.exists && doc.data().cooldownSec) {
-      store.cooldownSec = doc.data().cooldownSec;
-      renderAll();
-    }
-  }));
-
-  // Tüm 2.5D ofis eşyalarını Firestore settings/office_mods üzerinden canlı dinle (ilk kez açılıyorsa varsayılan eşyaları kaydet)
-  un.push(db.doc('settings/office_mods').onSnapshot(async doc => {
-    if (doc.exists) {
-      const d = doc.data();
-      if (!d.initializedLayout) {
-        const existingCustom = Array.isArray(d.sceneMods) ? d.sceneMods : [];
-        const merged = [...DEFAULT_SCENE_ITEMS];
-        existingCustom.forEach(cs => {
-          if (!cs || !cs.drawJs) return;
-          const idx = merged.findIndex(x => x.id === cs.id);
-          if (idx >= 0) merged[idx] = cs;
-          else merged.push(cs);
-        });
-        store.officeMods = {
-          version: (d.version || 1) + 1,
-          initializedLayout: true,
-          sceneMods: merged,
-          uiMods: Array.isArray(d.uiMods) ? d.uiMods : []
-        };
-        await saveOfficeModsToFirestore();
-      } else {
-        store.officeMods = {
-          version: d.version || 1,
-          initializedLayout: true,
-          sceneMods: Array.isArray(d.sceneMods) ? d.sceneMods : [...DEFAULT_SCENE_ITEMS],
-          uiMods: Array.isArray(d.uiMods) ? d.uiMods : []
-        };
-      }
-      compiledDrawCache.clear();
-      renderActiveUIMods();
-      renderAll();
-    } else {
-      store.officeMods = {
-        version: 1,
-        initializedLayout: true,
-        sceneMods: [...DEFAULT_SCENE_ITEMS],
-        uiMods: []
-      };
-      await saveOfficeModsToFirestore();
-    }
-  }));
-
-  un.push(db.collection('usage').doc(todayKey()).onSnapshot(doc => {
-    if (doc.exists) {
-      const d = doc.data();
-      const pools = d.pools || {};
-      const hourly = d.hourly || {};
-      const tokens = d.tokens || {};
-      const hKey = currentHourKey();
-      MODELS.forEach(m => {
-        m.u = pools[m.n] || 0;
-        m.hu = hourly[`${m.n}_${hKey}`] || 0;
-        m.tu = tokens[m.n] || 0;
-      });
-      renderAll();
+  // Eşyaları Firestore public/office belgesinden canlı dinle
+  un.push(db.doc('public/office').onSnapshot(d => {
+    if (d.exists && Array.isArray(d.data().items)) {
+      store.items = d.data().items.map((it, idx) =>
+        typeof it === 'string'
+          ? { id: 'it_' + idx, type: 'table', name: it, x: 9, y: 4, hue: 32, hidden: false }
+          : it
+      );
+      renderDesignSidebar();
     }
   }));
 
   un.push(db.collection('staff').onSnapshot(q => {
-    syncStaff(q.docs.map(d => ({ ...d.data(), id: d.id })));
-    renderAll();
+    syncStaff(q.docs.map(d => ({ id: d.id, ...d.data() })));
+    render();
   }));
 
   un.push(db.collection('mails').orderBy('createdAt', 'desc').limit(80).onSnapshot(q => {
@@ -2779,26 +1407,27 @@ async function startOwnerListeners() {
       const m = d.data();
       return {
         id: d.id, fromId: m.from, toId: m.to,
-        f: nm(m.from), fRole: m.fromRole || 'Uzman', t: nm(m.to),
+        f: nm(m.from), t: nm(m.to),
         subj: m.subject, body: m.body, type: m.type || 'görev',
         threadId: m.threadId || d.id, processed: !!m.processed,
         notBeforeMs: m.notBefore && m.notBefore.toMillis ? m.notBefore.toMillis() : 0,
         time: tm(m.createdAt)
       };
     });
-    renderAll();
+    render();
   }));
 
-  un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(60).onSnapshot(q => {
-    store.files = q.docs.map(d => ({ ...d.data(), id: d.id, time: tm(d.updatedAt) }));
-    renderAll();
+  un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(50).onSnapshot(q => {
+    store.files = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.updatedAt) }));
+    render();
   }));
 
-  // DİKKAT: id: d.id en sonda yazılarak belge içindeki eski 'ap_...' id alanının gerçek Firestore ID'sini ezmesi engellendi!
-  un.push(db.collection('approvals').orderBy('createdAt', 'desc').limit(30).onSnapshot(q => {
-    store.approvals = q.docs.map(d => ({ ...d.data(), id: d.id, time: tm(d.createdAt) }));
-    renderApprovalBanner();
-    renderAll();
+  un.push(db.collection('usage').doc(todayKey()).onSnapshot(d => {
+    if (d.exists && d.data().pools) {
+      const p = d.data().pools;
+      MODELS.forEach(m => { if (p[m.n] != null) m.u = p[m.n]; });
+      render();
+    }
   }));
 }
 
@@ -2806,87 +1435,75 @@ async function pollPublic() {
   try {
     const d = await db.doc('public/office').get(), o = d.exists ? d.data() : {};
     if (o.staff && o.staff.length) syncStaff(o.staff);
-    if (o.officeMods) {
-      store.officeMods = o.officeMods;
-      compiledDrawCache.clear();
-      renderActiveUIMods();
+    if (Array.isArray(o.items)) {
+      store.items = o.items.map((it, idx) => typeof it === 'string' ? { id: 'it_' + idx, type: 'table', name: it, x: 9, y: 4 } : it);
     }
   } catch (e) {}
 }
 
 function setOwner(b) {
   OWN = b;
-  $('#cmdDock').classList.toggle('on', b);
-  if (!b) closeWindow();
+  $('#panel').classList.toggle('on', b);
   $('#bl').textContent = b ? 'Çıkış Yap' : 'Yönetici Girişi';
   $('#bl').className = b ? '' : 'p';
   updateEngineBadges();
-  renderApprovalBanner();
-  renderAll();
+  render();
 }
 
 $('#bl').onclick = () => {
   if (CONN && !OWN) return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert('Giriş hatası: ' + e.message));
   if (CONN && OWN) return auth.signOut();
-  setOwner(!OWN);
 };
 
 $('#go').onclick = async () => {
-  const rawTxt = $('#ti').value.trim();
-  if (!rawTxt) return alert('Lütfen yapılacak görevi veya eklemek istediğiniz özelliği yazın.');
+  const txt = $('#ti').value.trim();
+  if (!txt) return alert('Lütfen görev konusunu yazın.');
   const targetId = $('#targetAgent').value;
   const target = store.staff.find(s => s.id === targetId) || store.staff[0];
-  if (!target) return alert('Önce personel ekleyin.');
+  if (!target) return alert('Firestore\'da personel bulunamadı.');
 
   $('#ti').value = '';
-  const subj = rawTxt.length > 56 ? rawTxt.slice(0, 56) + '...' : rawTxt;
-
+  const subj = txt.length > 52 ? txt.slice(0, 52) + '...' : txt;
   await createInternalMail({
-    fromId: 'owner', fromName: 'Burak Bey (Yönetici)', fromRole: 'Şirket Sahibi',
-    toId: target.id, toName: target.name,
-    subject: subj, body: rawTxt,
+    fromId: 'owner', fromName: 'Sen (Burak Bey)',
+    toId: target.id, toName: `${target.name} · ${target.role}`,
+    subject: subj, body: txt,
     type: 'görev', threadId: 'th_' + Date.now(), notBeforeMs: Date.now()
   });
-  lg(`🚀 Görev başlatıldı → ${shortName(target.name)}: ${subj}`);
+  lg(`Sen → ${target.name}: ${subj}`);
   processNextPendingMail(true);
 };
 
 $('#stepBtn').onclick = () => processNextPendingMail(true);
+$('#unstickBtn').onclick = unstickAllTasks;
 $('#resetProj').onclick = resetProject;
 
 $('#stop').onclick = () => {
   halt = !halt;
-  $('#stop').textContent = halt ? '▶️ Devam Et' : '⏸ Duraklat';
-  if (CONN && OWN) {
-    db.doc('settings/guard').set({ paused: halt }, { merge: true }).catch(() => {});
-  }
+  $('#stop').textContent = halt ? 'Devam Et' : 'Acil Durdur';
   updateEngineBadges();
 };
 
 async function fbLoad() {
-  try {
-    for (const u of ['app', 'auth', 'firestore']) {
-      await new Promise((r, j) => {
-        const s = document.createElement('script');
-        s.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-' + u + '-compat.js';
-        s.onload = r; s.onerror = j; document.head.appendChild(s);
-      });
-    }
-    firebase.initializeApp(FB);
-    db = firebase.firestore(); auth = firebase.auth(); CONN = true;
-    auth.onAuthStateChanged(async u => {
-      if (!u) { setOwner(false); pollPublic(); vt = setInterval(pollPublic, 30000); return; }
-      try {
-        await db.doc('settings/guard').get();
-        setOwner(true); startOwnerListeners();
-      } catch (e) {
-        setOwner(false); await auth.signOut();
-        alert('Bu hesap yönetici yetkisine sahip değil (buraktonoz@gmail.com gerekli).');
-      }
+  for (const u of ['app', 'auth', 'firestore']) {
+    await new Promise((r, j) => {
+      const s = document.createElement('script');
+      s.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-' + u + '-compat.js';
+      s.onload = r; s.onerror = j; document.head.appendChild(s);
     });
-  } catch (e) {
-    CONN = false; setOwner(true);
   }
+  firebase.initializeApp(FB);
+  db = firebase.firestore(); auth = firebase.auth(); CONN = true;
+  auth.onAuthStateChanged(async u => {
+    if (!u) { setOwner(false); pollPublic(); vt = setInterval(pollPublic, 30000); return; }
+    try {
+      await db.doc('settings/guard').get();
+      setOwner(true); startOwnerListeners();
+    } catch (e) {
+      setOwner(false); await auth.signOut();
+      alert('Yönetici yetkisi doğrulanamadı.');
+    }
+  });
 }
 fbLoad();
 </script>
