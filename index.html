@@ -3,143 +3,302 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tonoz AI Ofisi · Otonom Multi-Agent & Tasarım Stüdyosu</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>TONOZ AI · Otonom Şirket & Komuta Merkezi</title>
+<!-- Favicon 404 hatasını kesin olarak önleyen gömülü SVG ikon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%236366f1'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0f0d16;--card:#181523;--tx:#f0ecff;--mut:#8e82b0;--ln:#2c2542;
-  --acc:#7c5cef;--acc-h:#6845db;--on:#fff;--ok:#10b981;--warn:#f59e0b;--err:#ef4444;
-  --code-bg:#0a0810;--code-tx:#dcd6ff;
+:root {
+  --bg: #090b10;
+  --panel: #11151f;
+  --panel-2: #171c29;
+  --border: #232a3d;
+  --tx: #f1f5f9;
+  --mut: #8b98b1;
+  --acc: #6366f1;
+  --acc-h: #4f46e5;
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --err: #ef4444;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.55 'Nunito',sans-serif}
-.wrap{max-width:1420px;margin:0 auto;padding:14px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-h1{font:600 22px 'Fredoka',sans-serif;margin:0}
-h3{font:500 15.5px 'Fredoka',sans-serif;margin:0 0 8px}
-.badge{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--card);border:1.5px solid var(--ln);color:var(--mut)}
-.badge.live{border-color:var(--ok);color:var(--ok)}
-.badge.wait{border-color:var(--warn);color:var(--warn)}
-.badge.err{border-color:var(--err);color:var(--err)}
-button,select,input,textarea{font:inherit;color:var(--tx)}
-button{font-weight:700;border:1.5px solid var(--ln);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;transition:.15s}
-button:hover{border-color:var(--acc)}
-button.p{background:var(--acc);border-color:var(--acc);color:var(--on)}
-button.p:hover{background:var(--acc-h)}
-button.ok{border-color:var(--ok);color:var(--ok)}
-button.danger{border-color:var(--err);color:var(--err)}
-input,select,textarea{border:1.5px solid var(--ln);border-radius:10px;padding:8px 11px;background:#13101c;width:100%}
-label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:8px 0 3px}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tx);
+  font: 13.5px/1.5 'Plus Jakarta Sans', system-ui, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-/* Ana Sahne ve Tasarım Modu Yan Yana Düzeni */
-.stage-grid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
-.stage-grid.design-active{grid-template-columns:1fr 390px}
-@media(max-width:1024px){.stage-grid.design-active{grid-template-columns:1fr}}
+/* ÜST KOMUTA BARI */
+header {
+  height: 60px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo-box {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: grid; place-items: center; font-weight: 800; font-size: 16px; color: #fff;
+}
+h1 { font-size: 17px; font-weight: 800; margin: 0; letter-spacing: -0.3px; }
+.badge {
+  font-size: 11.5px; font-weight: 700; padding: 4px 10px;
+  border-radius: 999px; background: var(--panel-2);
+  border: 1px solid var(--border); color: var(--mut);
+}
+.badge.ok { border-color: rgba(16,185,129,.4); color: var(--ok); background: rgba(16,185,129,.08); }
+.badge.warn { border-color: rgba(245,158,11,.4); color: var(--warn); background: rgba(245,158,11,.08); }
 
-canvas{width:100%;height:auto;display:block;border-radius:18px;border:1.5px solid var(--ln);background:#14111f;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-.box{background:var(--card);border:1.5px solid var(--ln);border-radius:18px;padding:16px;margin-top:12px}
-#panel,#ap,#designSidebar{display:none}
-#panel.on,#designSidebar.on{display:block}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.tabs button.on{background:var(--acc);color:var(--on);border-color:var(--acc)}
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-td,th{text-align:left;padding:9px 10px;border-bottom:1px solid var(--ln);vertical-align:middle}
-th{color:var(--mut);font-weight:700;font-size:11.5px;text-transform:uppercase}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}
-.bar{height:8px;border-radius:9px;background:var(--bg);margin:4px 0 9px;overflow:hidden;border:1px solid var(--ln)}
-.bar i{display:block;height:100%;border-radius:9px;background:var(--acc);transition:width .3s}
-.chip{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--bg);color:var(--mut);margin-left:5px;border:1px solid var(--ln);display:inline-block}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
-.mail-grid{display:grid;grid-template-columns:350px 1fr;gap:14px}
-@media(max-width:850px){.mail-grid{grid-template-columns:1fr}}
-.mail-list{max-height:480px;overflow-y:auto;border-right:1px solid var(--ln);padding-right:8px}
-.mail-item{padding:10px 12px;border-radius:12px;border:1px solid transparent;cursor:pointer;margin-bottom:7px;background:#13101d}
-.mail-item:hover,.mail-item.active{border-color:var(--acc);background:#1d182d}
-.mail-item.unread{border-left:4px solid var(--acc)}
-. mail-item.stuck{border-left:4px solid var(--err)}
-.note{font-size:12px;color:var(--mut)}
-.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}
-pre.code{background:var(--code-bg);color:var(--code-tx);padding:12px;border-radius:12px;overflow-x:auto;font:12.5px/1.55 'JetBrains Mono',monospace;max-height:440px;white-space:pre-wrap;border:1px solid var(--ln)}
-#card{display:none;position:fixed;right:16px;bottom:16px;width:min(430px,calc(100vw - 32px));max-height:88vh;overflow:auto;z-index:50;box-shadow:0 15px 45px rgba(0,0,0,.7);border:1.5px solid var(--acc)}
-.item-card{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:#13101d;border:1px solid var(--ln);margin-bottom:6px;cursor:pointer}
-.item-card.selected{border-color:var(--acc);background:#211b36}
-footer{text-align:center;font-size:11.5px;color:var(--mut);margin:20px 0 6px}
+/* HIZLI GÖREV ÇUBUĞU */
+.cmd-bar {
+  display: flex; align-items: center; gap: 8px; flex: 1; max-width: 720px;
+}
+input, select, textarea {
+  font: inherit; color: var(--tx); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 9px; padding: 7px 11px; width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--acc); }
+button {
+  font: inherit; font-weight: 700; font-size: 12.5px;
+  color: var(--tx); background: var(--panel-2);
+  border: 1px solid var(--border); border-radius: 9px;
+  padding: 7px 13px; cursor: pointer; transition: .15s; white-space: nowrap;
+}
+button:hover { border-color: var(--acc); }
+button.p { background: var(--acc); border-color: var(--acc); color: #fff; }
+button.p:hover { background: var(--acc-h); }
+button.ok { border-color: var(--ok); color: var(--ok); }
+button.danger { border-color: rgba(239,68,68,.5); color: var(--err); }
+
+/* 3 SÜTUNLU ANA ÇALIŞMA ALANI */
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 310px 1fr 410px;
+  overflow: hidden;
+}
+@media (max-width: 1200px) {
+  body { height: auto; overflow: auto; }
+  .workspace { grid-template-columns: 1fr; height: auto; }
+}
+
+/* SOL PANEL: PERSONEL & EŞYA STÜDYOSU */
+.side-left {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.panel-head {
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-head h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--mut); margin: 0; }
+.scroll-area { flex: 1; overflow-y: auto; padding: 12px; }
+
+.agent-card {
+  background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 12px; margin-bottom: 8px;
+  cursor: pointer; transition: .15s; position: relative;
+}
+.agent-card:hover { border-color: var(--acc); }
+.agent-card.working { border-left: 3px solid var(--ok); }
+.agent-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.agent-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.agent-role { font-size: 11.5px; color: var(--mut); margin-top: 2px; }
+.agent-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--mut); margin-top: 8px; padding-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+
+/* ORTA SAHNE: 2.5D İZOMETRİK KAT PLANI */
+.center-stage {
+  background: radial-gradient(circle at center, #151b2b 0%, #090b10 100%);
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+}
+.stage-toolbar {
+  position: absolute; top: 12px; left: 12px; right: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  pointer-events: none; z-index: 10;
+}
+.stage-toolbar > * { pointer-events: auto; }
+.canvas-wrap {
+  flex: 1; display: grid; place-items: center; padding: 10px; overflow: hidden;
+}
+canvas {
+  width: 100%; height: 100%; max-width: 1100px; max-height: 740px;
+  object-fit: contain; cursor: pointer;
+}
+
+/* SAĞ PANEL: YAZIŞMALAR, ORTAK KLASÖR VE KOTALAR */
+.side-right {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.tabs {
+  display: flex; border-bottom: 1px solid var(--border); background: var(--bg);
+}
+.tabs button {
+  flex: 1; border: none; border-bottom: 2px solid transparent;
+  border-radius: 0; background: transparent; padding: 11px 6px;
+  color: var(--mut); font-size: 12px;
+}
+.tabs button.on { color: var(--tx); border-bottom-color: var(--acc); background: var(--panel); }
+
+.mail-card {
+  background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 11px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer;
+}
+.mail-card:hover, .mail-card.active { border-color: var(--acc); }
+.mail-card.pending { border-left: 3px solid var(--warn); }
+.mail-card.done { border-left: 3px solid var(--ok); opacity: .88; }
+
+.quota-row { margin-bottom: 10px; background: var(--panel-2); padding: 9px 11px; border-radius: 10px; border: 1px solid var(--border); }
+.bar { height: 6px; background: var(--bg); border-radius: 99px; overflow: hidden; margin-top: 5px; }
+.bar i { display: block; height: 100%; background: var(--acc); }
+
+pre.code {
+  background: #07090e; color: #e2e8f0; padding: 12px; border-radius: 10px;
+  font: 12px/1.55 'JetBrains Mono', monospace; overflow-x: auto;
+  white-space: pre-wrap; border: 1px solid var(--border); max-height: 360px;
+}
+
+/* MODAL PENCERESİ */
+.modal-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  z-index: 100; place-items: center; padding: 16px;
+}
+.modal-backdrop.on { display: grid; }
+.modal-box {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 16px; width: min(460px, 100%); padding: 18px;
+  max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,.8);
+}
+label { display: block; font-size: 11.5px; font-weight: 700; color: var(--mut); margin: 10px 0 4px; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.note { font-size: 11.5px; color: var(--mut); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <h1>Tonoz AI Ofisi</h1>
-      <span id="engBadge" class="badge">Bağlanıyor...</span>
-      <span id="modelBadge" class="badge">Modeller Taranıyor...</span>
-      <span id="coolBadge" class="badge" style="display:none"></span>
-    </div>
-    <div class="row" style="margin:0">
-      <button id="designToggleBtn" onclick="toggleDesignStudio()">🛋️ Ofis Tasarım Modu</button>
-      <button id="bl" class="p">Yönetici Girişi</button>
-    </div>
-  </header>
 
-  <!-- CANLI SAHNE VE SAĞ TASARIM STÜDYOSU (YAN YANA) -->
-  <div id="stageGrid" class="stage-grid">
+<!-- ÜST KOMUTA BARI -->
+<header>
+  <div class="brand">
+    <div class="logo-box">T</div>
     <div>
-      <canvas id="cv" width="1600" height="1060" role="img" aria-label="Tonoz AI Ofisi İzometrik Simülasyonu"></canvas>
+      <h1>TONOZ AI KOMUTA MERKEZİ</h1>
+      <div class="note" id="subStatus">Firestore Gerçek Zamanlı Multi-Agent Ofisi</div>
     </div>
-
-    <!-- OFİS TASARIM MODU PANELİ (KANVASIN HEMEN YANINDA AÇILIR) -->
-    <aside id="designSidebar" class="box" style="margin-top:0;max-height:530px;overflow-y:auto">
-      <div class="row" style="justify-content:space-between;margin-top:0">
-        <h3 style="margin:0">🛋️ Canlı Ofis Tasarım Modu</h3>
-        <button onclick="toggleDesignStudio()">Kapat</button>
-      </div>
-      <p class="note" style="margin-top:0">Kanvas üzerindeki kareleri görerek eşya ekleyin, tıklayıp taşıyın veya gizleyin. Değişiklikler doğrudan Firestore'a kaydedilir.</p>
-      
-      <div class="row">
-        <select id="newItemType" style="flex:1">
-          <option value="table">☕ Toplantı / Kahve Masası</option>
-          <option value="plant">🌿 Büyük Salon Bitkisi</option>
-          <option value="sofa">🛋️ Dinlenme Koltuğu</option>
-          <option value="server">🖥️ Sunucu & Veri Kabini</option>
-          <option value="board">📊 Proje Sunum Tahtası</option>
-          <option value="water">💧 Su Sebili</option>
-        </select>
-        <button class="p" onclick="addNewOfficeItem()">+ Ekle</button>
-      </div>
-
-      <div id="selectedItemEditor" style="display:none;padding:10px;border-radius:12px;background:#120f1c;border:1px solid var(--acc);margin:10px 0"></div>
-
-      <label>Firestore'daki Mevcut Ofis Eşyaları</label>
-      <div id="officeItemsList"></div>
-    </aside>
+    <span id="engBadge" class="badge">Bağlanıyor...</span>
+    <span id="coolBadge" class="badge warn" style="display:none"></span>
   </div>
 
-  <div id="ap" class="box"></div>
+  <!-- HIZLI GÖREV VERME ÇUBUĞU -->
+  <div class="cmd-bar" id="cmdBar" style="display:none">
+    <select id="targetAgent" style="max-width:210px"></select>
+    <input id="ti" placeholder="Departmana yeni görev emri yazın (Örn: Haritacılık makalesi ve koordinat kodu üretin)...">
+    <button id="go" class="p">Görev Emri Ver</button>
+    <button id="stepBtn" class="ok" title="Mola süresini beklemeden sıradaki görevi hemen çalıştır">⚡ Şimdi İşlet</button>
+  </div>
 
-  <section id="panel">
-    <div class="box">
-      <div class="row" style="margin-top:0">
-        <select id="targetAgent" style="max-width:250px" title="Görevi ilk teslim alacak departman"></select>
-        <input id="ti" style="flex:1;min-width:240px" placeholder="Departmana görev verin (Örn: Haritacılık makalesi ve koordinat kodu hazırlayın)">
-        <button id="go" class="p">Görevi Başlat</button>
-        <button id="stepBtn" title="Bekleme süresini atlayıp sıradaki mesajı hemen işle">⚡ Şimdi İşlet</button>
-        <button id="unstickBtn" title="Takılan veya hata alan görevleri kurtar">🔧 Takılanları Kurtar</button>
-        <button id="resetProj" class="danger" title="Tüm yazışmaları ve dosyaları sıfırla">🗑️ Yeni Proje (Temizle)</button>
-        <button id="stop">Acil Durdur</button>
+  <div class="row" style="margin:0">
+    <button id="resetProj" class="danger" style="display:none" title="Proje mesajlarını ve dosyaları temizle">🗑️ Yeni Proje</button>
+    <button id="stop" style="display:none">⏸ Duraklat</button>
+    <button id="bl" class="p">Yönetici Girişi</button>
+  </div>
+</header>
+
+<!-- 3 SÜTUNLU ÇALIŞMA ALANI -->
+<div class="workspace">
+
+  <!-- SOL PANEL: PERSONEL KADROSU & OFİS EŞYA TASARIMI -->
+  <aside class="side-left">
+    <div class="panel-head">
+      <h2 id="leftTitle">👥 ŞİRKET PERSONELİ (0)</h2>
+      <div class="row" style="margin:0;gap:4px">
+        <button onclick="switchLeftMode('staff')" id="btnModeStaff" class="p" style="padding:4px 9px;font-size:11px">Personel</button>
+        <button onclick="switchLeftMode('design')" id="btnModeDesign" style="padding:4px 9px;font-size:11px">🛋️ Eşya & Tasarım</button>
       </div>
-      <div class="tabs" id="tabs"></div>
     </div>
-    <div id="pn" class="box"></div>
-  </section>
+    <div class="scroll-area" id="leftContent"></div>
+  </aside>
 
-  <aside id="card" class="box" aria-live="polite"></aside>
-  <footer>Created by Tonoz · Firestore Gerçek Zamanlı Multi-Agent Mimarisi</footer>
+  <!-- ORTA SAHNE: YENİ NESİL FERAH İZOMETRİK OFİS -->
+  <main class="center-stage">
+    <div class="stage-toolbar">
+      <div class="row" style="margin:0">
+        <span class="badge" id="roomHint">💡 Personeli düzenlemek için üzerine tıklayın</span>
+      </div>
+      <div class="row" style="margin:0" id="approvalBanner"></div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="cv" width="1400" height="920"></canvas>
+    </div>
+  </main>
+
+  <!-- SAĞ PANEL: KURUMSAL YAZIŞMALAR, ORTAK KLASÖR, KOTALAR -->
+  <aside class="side-right">
+    <div class="tabs" id="rightTabs">
+      <button class="on" onclick="setTab('mail')">✉️ Yazışmalar <span id="cntMail"></span></button>
+      <button onclick="setTab('files')">📁 Ortak Klasör <span id="cntFiles"></span></button>
+      <button onclick="setTab('quota')">📊 Kota & Log</button>
+    </div>
+    <div class="scroll-area" id="rightContent"></div>
+  </aside>
+
+</div>
+
+<!-- PERSONEL EKLE / DÜZENLE MODALI -->
+<div class="modal-backdrop" id="agentModal">
+  <div class="modal-box">
+    <h3 id="modalTitle" style="margin:0 0 8px">Personel Kartı</h3>
+    <label>İsim & Hitap (Örn: Ahmet Bey, Selin Hanım)</label>
+    <input id="mName" placeholder="Ahmet Bey">
+    <label>Unvan / Departman</label>
+    <input id="mRole" placeholder="Kod & Yazılım Uzmanı">
+    <div class="row">
+      <div style="flex:1">
+        <label>Masa / İstasyon (1-8)</label>
+        <select id="mRoom"></select>
+      </div>
+      <div style="flex:1">
+        <label>Kıyafet Rengi</label>
+        <input id="mColor" type="color" value="#6366f1" style="height:36px;padding:2px">
+      </div>
+    </div>
+    <label>Birincil Yapay Zeka Modeli (Sizin Aktif Kotalarınız)</label>
+    <select id="mModel"></select>
+    <label>Yedek Model (429 / 503 Durumunda Anında Devreye Girer)</label>
+    <select id="mBackup"></select>
+    <label>Uzmanlık ve Görev Talimatları (Skills)</label>
+    <textarea id="mSkills" rows="4" placeholder="Bu personelin görev tanımını ve yeteneklerini yazın..."></textarea>
+    <div class="row" style="margin-top:14px;justify-content:space-between">
+      <div>
+        <button class="danger" id="mDelBtn" style="display:none">Personeli Sil</button>
+      </div>
+      <div class="row" style="margin:0">
+        <button onclick="closeAgentModal()">Vazgeç</button>
+        <button class="p" onclick="saveAgentModal()">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
 /* ============================================================================
-   1. FIREBASE YAPILANDIRMASI VE AKILLI MODEL HAVUZU
+   1. SİZİN HESABINIZDAKİ GERÇEK KOTALAR VE DOĞRUDAN API EŞLEŞTİRMESİ
    ============================================================================ */
 const FB = {
   apiKey: 'AIzaSyAoPd-gsCIEzXJ8_TOeZBvcSICNvHvW29Q',
@@ -157,100 +316,95 @@ const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 const hhmm = () => new Date().toTimeString().slice(0, 5);
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
-// Arayüzde seçilen etiketlerin Google API'deki gerçek karşılıkları (Dinamik keşif ile güncellenir)
+/*
+  ÖNEMLİ DÜZELTME:
+  Artık her model önce KENDİ gerçek API kodunu çağırır!
+  Gemini 2.5 Flash (26/20 dolu olduğu için) en son çare olarak tutulur.
+  503 veya 429 alınırsa beklemeden sıradaki açık modele (Failover) geçer.
+*/
 const MODELS = [
-  { n: 'Gemini 3.8 Flash',      pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'Yönetici & Strateji (20/gün)' },
-  { n: 'Gemini 3.6 Flash',      pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'Planlama & Analiz (20/gün)' },
-  { n: 'Gemini 3 Flash',        pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'Kalite & Denetim (20/gün)' },
-  { n: 'Gemini 2.5 Flash',      pref: ['gemini-2.5-flash', 'gemini-2.0-flash'], l: 20,    u: 0, rpm: 5,  desc: 'İK & Koordinasyon (20/gün)' },
-  { n: 'Gemini 3.5 Flash Lite', pref: ['gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-2.0-flash'], l: 500, u: 0, rpm: 15, desc: 'Hızlı Üretim (500/gün)' },
-  { n: 'Gemini 3.1 Flash Lite', pref: ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash'], l: 500, u: 0, rpm: 15, desc: 'Genel Üretim (500/gün)' },
-  { n: 'Gemma 4 31B',           pref: ['gemma-3-27b-it', 'gemini-2.0-flash', 'gemini-2.5-flash'], l: 14400, u: 0, rpm: 30, desc: 'Geniş Yedek Havuz (14.4K/gün)' },
-  { n: 'Gemma 4 26B',           pref: ['gemma-3-27b-it', 'gemini-2.0-flash', 'gemini-2.5-flash'], l: 14400, u: 0, rpm: 30, desc: 'Yedek Üretim Havuzu (14.4K/gün)' }
+  {
+    n: 'Gemini 3.5 Flash Lite',
+    chain: ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'],
+    rpm: 15, l: 500, u: 0,
+    desc: '500 RPD · 15 RPM (En Yüksek Kota - Önerilen)'
+  },
+  {
+    n: 'Gemini 3.1 Flash Lite',
+    chain: ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'],
+    rpm: 15, l: 500, u: 0,
+    desc: '500 RPD · 15 RPM (Geniş Üretim Havuzu)'
+  },
+  {
+    n: 'Gemini 3.8 Flash',
+    chain: ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'],
+    rpm: 5, l: 20, u: 0,
+    desc: '20 RPD · 5 RPM (Yönetici & Strateji Modeli)'
+  },
+  {
+    n: 'Gemini 3.6 Flash',
+    chain: ['gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite'],
+    rpm: 5, l: 20, u: 0,
+    desc: '20 RPD · 5 RPM (Planlama Modeli)'
+  },
+  {
+    n: 'Gemini 3 Flash',
+    chain: ['gemini-3-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'],
+    rpm: 5, l: 20, u: 0,
+    desc: '20 RPD · 5 RPM (Denetim Modeli)'
+  },
+  {
+    n: 'Gemini 2.5 Flash',
+    chain: ['gemini-2.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'],
+    rpm: 5, l: 20, u: 0,
+    desc: '20 RPD · 5 RPM (Kotası Dolarsa Lite Modele Geçer)'
+  },
+  {
+    n: 'Antigravity',
+    chain: ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'],
+    rpm: 60, l: 100, u: 0,
+    desc: '100 RPD · 60 RPM (Ajan Destek Havuzu)'
+  }
 ];
 
 const store = {
   staff: [],
   mails: [],
-  tasks: [],
   files: [],
-  items: [], // Firestore'dan çekilen dinamik ofis eşyaları
+  items: [],
   log: [],
-  availableApiModels: [], // Google API'den canlı sorgulanan çalışan modeller
-  cooldownUntilByModel: {}, // 429 alan modelleri geçici dinlendiren harita
-  failCountByMail: {}, // Aynı mailde takılmayı önleyen sayaç
+  availableApiModels: [],
+  blockedModelsUntil: {},
+  failCountByMail: {},
+  leftMode: 'staff', // 'staff' | 'design'
+  rightTab: 'mail',  // 'mail' | 'files' | 'quota'
   selectedMailId: null,
   selectedFileId: null,
   selectedItemId: null,
-  designMode: false,
+  editingAgentId: null,
   geminiKey: '',
-  cooldownSec: 65, // Dakikada 5 istek sınırına (RPM) takılmamak için güvenli mola
-  maxChainDepth: 12
+  cooldownSec: 25 // Lite modellerde 15 RPM hakkı olduğu için 25 sn mola çok akıcı ve güvenlidir
 };
 
-/* ============================================================================
-   2. GOOGLE API CANLI MODEL KEŞFİ (404 HATALARINI KÖKTEN BİTİRİR)
-   ============================================================================ */
-async function discoverWorkingModels() {
-  if (!store.geminiKey) return;
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(store.geminiKey)}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    const valid = (data.models || [])
-      .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
-      .map(m => m.name.replace('models/', ''));
-    
-    if (valid.length) {
-      store.availableApiModels = valid;
-      $('#modelBadge').className = 'badge live';
-      $('#modelBadge').textContent = `✓ ${valid.length} Aktif API Modeli Hazır`;
-      lg(`Google API tarandı: Hesabınızda çalışan ${valid.length} model doğrulandı.`);
-    }
-  } catch (e) {
-    console.warn('Model listesi alınamadı:', e);
-  }
-}
+let db = null, auth = null, CONN = false, OWN = false, busy = false, halt = false, un = [];
+const FV = () => firebase.firestore.FieldValue;
 
-// Ajanın model ismine göre Google API'de %100 çalışan ve 429 yememiş gerçek modeli bulur
-function resolveWorkingApiModel(agent) {
-  const now = Date.now();
-  const candidates = [agent.model, agent.backup, 'Gemini 3.5 Flash Lite', 'Gemini 2.5 Flash', 'Gemma 4 31B'];
-  
-  for (const label of candidates) {
-    const pool = MODELS.find(m => m.n === label);
-    if (!pool || pool.u >= pool.l) continue;
-
-    for (const apiName of pool.pref) {
-      // Eğer API'den canlı liste çekildiyse, sadece o listede gerçekten var olan modeli seç (404'ü engeller)
-      if (store.availableApiModels.length > 0 && !store.availableApiModels.includes(apiName)) {
-        continue;
-      }
-      // Bu model yakın zamanda 429 (Rate Limit) yediyse dinlenme süresi bitene kadar atla
-      if ((store.cooldownUntilByModel[apiName] || 0) > now) {
-        continue;
-      }
-      return { pool, apiName };
-    }
-  }
-
-  // Eğer listedeki tercihlerin hiçbiri eşleşmediyse, hesabın desteklediği ilk flash/gemma modelini seç
-  const fallbackApi = store.availableApiModels.find(m => /flash|gemma/i.test(m) && (store.cooldownUntilByModel[m] || 0) <= now)
-                      || 'gemini-2.5-flash';
-  return { pool: MODELS[4], apiName: fallbackApi };
+function lg(msg) {
+  store.log.unshift(`${hhmm()} · ${msg}`);
+  if (store.log.length > 80) store.log.length = 80;
+  if (store.rightTab === 'quota') renderRight();
 }
 
 /* ============================================================================
-   3. İZOMETRİK 2.5D OFİS & CANLI EŞYA TASARIM MOTORU
+   2. YENİ NESİL FERAH 2.5D İZOMETRİK OFİS MİMARİSİ (CANVAS)
    ============================================================================ */
 const cv = $('#cv'), cx = cv.getContext('2d');
-cx.scale(2, 2);
-const TW = 28, TH = 14, OX = 400, OY = 118, N = 14, WL = 90;
+const N = 16; // 16x16 geniş ve ferah ofis alanı
+const TW = 36, TH = 18, OX = 700, OY = 135;
 const P = (x, y, z = 0) => [OX + (x - y) * TW, OY + (x + y) * TH - z];
-const hs = (c, d) => 'hsl(' + c[0] + ' ' + c[1] + '% ' + Math.max(4, Math.min(97, c[2] + d)) + '%)';
+let T = 0;
 
-// Ekran koordinatından (Mouse tıklaması) İzometrik Grid (X, Y) koordinatına dönüşüm
-function screenToIsoGrid(sx, sy) {
+function screenToGrid(sx, sy) {
   const dx = (sx - OX) / TW;
   const dy = (sy - OY) / TH;
   const gx = Math.floor((dx + dy) / 2);
@@ -258,483 +412,275 @@ function screenToIsoGrid(sx, sy) {
   return [Math.max(0, Math.min(N - 1, gx)), Math.max(0, Math.min(N - 1, gy))];
 }
 
-function poly(p, f, s) {
+// 8 Ferah Çalışma İstasyonu (Üstte 4, Altta 4 VIP Oda/Bölme)
+const STATIONS = [
+  { i: 0, x: 1,  y: 1,  sx: 2,  sy: 2,  door: [2, 4],  color: '#6366f1', title: 'İstasyon 1' },
+  { i: 1, x: 5,  y: 1,  sx: 6,  sy: 2,  door: [6, 4],  color: '#ec4899', title: 'İstasyon 2' },
+  { i: 2, x: 9,  y: 1,  sx: 10, sy: 2,  door: [10, 4], color: '#06b6d4', title: 'İstasyon 3' },
+  { i: 3, x: 13, y: 1,  sx: 14, sy: 2,  door: [14, 4], color: '#10b981', title: 'İstasyon 4' },
+  { i: 4, x: 1,  y: 12, sx: 2,  sy: 13, door: [2, 11], color: '#f59e0b', title: 'İstasyon 5' },
+  { i: 5, x: 5,  y: 12, sx: 6,  sy: 13, door: [6, 11], color: '#8b5cf6', title: 'İstasyon 6' },
+  { i: 6, x: 9,  y: 12, sx: 10, sy: 13, door: [10, 11],color: '#3b82f6', title: 'İstasyon 7' },
+  { i: 7, x: 13, y: 12, sx: 14, sy: 13, door: [14, 11],color: '#f43f5e', title: 'İstasyon 8' }
+];
+
+const ZONES = {
+  toplanti: [[7, 7], [8, 7], [7, 8]],
+  mola: [[2, 7], [3, 7], [2, 8]],
+  arsiv: [[13, 7], [13, 8]]
+};
+
+function poly(pts, fill, stroke, lw = 1) {
   cx.beginPath();
-  p.forEach((q, i) => i ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]));
+  pts.forEach((p, idx) => idx ? cx.lineTo(p[0], p[1]) : cx.moveTo(p[0], p[1]));
   cx.closePath();
-  cx.fillStyle = f; cx.fill();
-  if (s) { cx.strokeStyle = s; cx.lineWidth = 1; cx.stroke(); }
+  if (fill) { cx.fillStyle = fill; cx.fill(); }
+  if (stroke) { cx.strokeStyle = stroke; cx.lineWidth = lw; cx.stroke(); }
 }
-function box(x, y, w, d, h, z, c, g) {
+
+function isoBox(x, y, w, d, h, z, topCol, leftCol, rightCol) {
   const t = z + h;
-  poly([P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x, y + d, t)], g || hs(c, -8));
-  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], hs(c, -17));
-  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], hs(c, 7));
-}
-function glass(x, y, w, d, h) {
-  const t = h;
-  poly([P(x, y + d, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.22)', 'rgba(160,140,220,.45)');
-  poly([P(x + w, y, 0), P(x + w, y + d, 0), P(x + w, y + d, t), P(x + w, y, t)], 'rgba(200,190,240,.28)', 'rgba(160,140,220,.45)');
-  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], 'rgba(255,255,255,.4)');
-}
-const disc = (x, y, r, c) => { cx.beginPath(); cx.arc(x, y, r, 0, 7); cx.fillStyle = c; cx.fill(); };
-const el = (x, y, a, b, c) => { cx.beginPath(); cx.ellipse(x, y, a, b, 0, 0, 7); cx.fillStyle = c; cx.fill(); };
-const rr = (x, y, w, h, r, c) => { cx.beginPath(); cx.roundRect(x, y, w, h, r); cx.fillStyle = c; cx.fill(); };
-
-const WOOD = [32, 62, 62], DK = [28, 30, 32], WT = [260, 40, 90], COR = [12, 80, 65],
-      GRN = [140, 50, 45], BLU = [205, 70, 62], YEL = [45, 85, 65], PNK = [340, 55, 62], CH = [255, 40, 55];
-
-const RM = [
-  [0, 0, 3, 1], [4, 0, 3, 1], [8, 0, 3, 1],
-  [0, 10, 3, 0], [4, 10, 3, 0], [8, 10, 3, 0],
-  [12, 0, 2, 1], [12, 10, 2, 0]
-].map((r, i) => ({
-  i, x: r[0], y: r[1], w: r[2], top: r[3], wy: r[3] ? 3 : 9,
-  hue: [265, 330, 200, 150, 45, 15, 285, 100][i],
-  dx: r[2] == 3 ? r[0] + 1 : r[0], dy: r[3] ? 0 : 12,
-  sx: r[2] == 3 ? r[0] + 1 : r[0], sy: r[3] ? 1 : 11
-}));
-
-const BL = Array.from({ length: N }, () => Array(N).fill(0));
-const blk = (x, y, w = 1, d = 1) => {
-  for (let i = 0; i < w; i++) for (let j = 0; j < d; j++) {
-    if (y + j >= 0 && y + j < N && x + i >= 0 && x + i < N) BL[y + j][x + i] = 1;
-  }
-};
-RM.forEach(r => {
-  blk(r.dx, r.dy, 2, 1);
-  for (let x = r.x + 1; x < r.x + r.w; x++) blk(x, r.wy);
-});
-[3, 7, 11].forEach(x => { blk(x, 0, 1, 4); blk(x, 9, 1, 5); });
-
-const SP = {
-  yemek: [[4, 6], [0, 6], [1, 6]],
-  mola: [[10, 7], [12, 8], [10, 5]],
-  toplanti: [[7, 5], [6, 7], [8, 7]],
-  arsiv: [[12, 5], [12, 6]]
-};
-
-let busy = false, halt = false, OWN = false, T = 0;
-
-function bfs(s, t) {
-  const q = [s], pr = {}; pr[s] = 1;
-  while (q.length) {
-    const c = q.shift();
-    if (c[0] == t[0] && c[1] == t[1]) break;
-    for (const d of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      const x = c[0] + d[0], y = c[1] + d[1];
-      if (x < 0 || y < 0 || x >= N || y >= N || BL[y][x] || pr[[x, y]]) continue;
-      pr[[x, y]] = c; q.push([x, y]);
-    }
-  }
-  const p = []; if (!pr[t]) return p;
-  let c = t;
-  while (!(c[0] == s[0] && c[1] == s[1])) { p.unshift([c[0] + .5, c[1] + .5]); c = pr[c]; }
-  return p;
-}
-function walk(a, x, y) {
-  a.path = bfs([Math.floor(a.ax), Math.floor(a.ay)], [x, y]);
-  return new Promise(r => { a.res = r; if (!a.path.length) r(); });
-}
-const door = a => { const r = RM[a.room] || RM[0]; return [r.x, r.top ? 4 : 8]; };
-const seat = a => { const r = RM[a.room] || RM[0]; return [r.sx, r.sy]; };
-const goHome = a => walk(a, ...seat(a));
-const say = (a, i, t) => { a.bi = i; a.bt = t; a.on = 1; };
-const hush = a => { a.on = 0; };
-
-function upd(dt) {
-  store.staff.forEach(a => {
-    a.mv = 0;
-    if (a.path.length) {
-      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.6 * dt;
-      a.mv = 1;
-      if (d <= s) {
-        a.ax = p[0]; a.ay = p[1]; a.path.shift();
-        if (!a.path.length && a.res) { const r = a.res; a.res = 0; r(); }
-      } else { a.ax += dx / d * s; a.ay += dy / d * s; }
-    }
-  });
+  poly([P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x, y + d, t)], leftCol);
+  poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, t), P(x + w, y, t)], rightCol);
+  poly([P(x, y, t), P(x + w, y, t), P(x + w, y + d, t), P(x, y + d, t)], topCol);
 }
 
-// Odaların sabit çalışma masaları
-const BASE_OB = [];
-RM.forEach(r => {
-  BASE_OB.push({
-    k: r.dx + r.dy + 1.5,
-    f: () => {
-      const x = r.dx, y = r.dy, a = store.staff.find(s => s.room === r.i);
-      box(x + .06, y + .1, .12, .8, 24, 0, DK);
-      box(x + 1.82, y + .1, .12, .8, 24, 0, DK);
-      box(x, y, 2, 1, 5, 24, WOOD);
-      box(x + .85, y + .22, .3, .25, 4, 29, DK);
-      box(x + .55, y + .2, .9, .1, 17, 33, DK, a && a.mon ? '#10b981' : '#3a3358');
-      box(x + .6, y + .55, .8, .28, 1.5, 29, WT);
-    }
-  });
-  BASE_OB.push({
-    k: r.sx + r.sy + .1,
-    f: () => {
-      box(r.sx + .2, r.sy + .2, .6, .6, 5, 12, CH);
-      box(r.sx + .2, r.sy + .15, .6, .08, 18, 12, CH);
-    }
-  });
-});
+function drawFloorAndWalls() {
+  // Ana zemin
+  poly([P(0, 0), P(N, 0), P(N, N), P(0, N)], '#131824', '#26304a', 2);
+  // Platform kalınlığı
+  poly([P(0, N), P(N, N), P(N, N, -14), P(0, N, -14)], '#0d111a');
+  poly([P(N, 0), P(N, N), P(N, N, -14), P(N, 0, -14)], '#090c12');
 
-// Firestore'dan gelen dinamik eşyaları çizen fonksiyon
-function drawCustomItem(item) {
-  if (item.hidden) return;
-  const x = Number(item.x || 5), y = Number(item.y || 5);
-  const h = Number(item.hue ?? 32);
-  const col = [h, 65, 58];
-  const isSel = store.designMode && store.selectedItemId === item.id;
-
-  // Seçili eşya vurgusu (Tasarım modunda)
-  if (isSel) {
-    poly([P(x, y), P(x + 1, y), P(x + 1, y + 1), P(x, y + 1)], 'rgba(124,92,239,.45)', '#10b981');
-  }
-
-  if (item.type === 'table') {
-    box(x, y, 2, 1, 4, 22, col);
-    box(x + .1, y + .1, .18, .8, 22, 0, DK);
-    box(x + 1.7, y + .1, .18, .8, 22, 0, DK);
-    box(x + .5, y + .3, .3, .3, 2, 26, WT);
-  } else if (item.type === 'plant') {
-    box(x + .25, y + .25, .5, .5, 12, 0, [22, 55, 50]);
-    const q = P(x + .5, y + .5, 16);
-    [[0, -14, 10], [-8, -8, 8], [8, -8, 8], [0, -23, 7]].forEach(l =>
-      disc(q[0] + l[0] + Math.sin(T * 1.5 + x) * 1.5, q[1] + l[1], l[2], hs([h || 140, 55, 45], 6))
-    );
-  } else if (item.type === 'sofa') {
-    box(x, y, 2, 1, 10, 0, col);
-    box(x, y + .75, 2, .25, 24, 0, col);
-    box(x, y, .25, 1, 16, 0, col);
-    box(x + 1.75, y, .25, 1, 16, 0, col);
-  } else if (item.type === 'server') {
-    box(x + .1, y + .1, .8, .8, 44, 0, DK);
-    [12, 24, 36].forEach(z => box(x + .88, y + .2, .06, .6, 3, z, [140, 80, 60]));
-  } else if (item.type === 'board') {
-    box(x + .1, y + .4, 1.8, .15, 36, 12, WT);
-    box(x + .2, y + .4, .1, .1, 12, 0, DK);
-    box(x + 1.7, y + .4, .1, .1, 12, 0, DK);
-  } else {
-    box(x + .2, y + .2, .6, .6, 32, 0, BLU);
-    box(x + .25, y + .25, .5, .5, 12, 32, WT);
-  }
-
-  // Tasarım modundaysa eşyanın adını üstünde göster
-  if (store.designMode) {
-    const q = P(x + .5, y + .5, 46);
-    cx.font = '700 10px Nunito,sans-serif'; cx.textAlign = 'center';
-    const w = cx.measureText(item.name || item.type).width + 10;
-    rr(q[0] - w / 2, q[1] - 8, w, 15, 6, isSel ? '#10b981' : 'rgba(0,0,0,.75)');
-    cx.fillStyle = '#fff'; cx.fillText(item.name || item.type, q[0], q[1] + 3);
-  }
-}
-
-function floor() {
+  // Kare ızgara
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
+      const isCorridor = j >= 5 && j <= 10;
+      const tileFill = (i + j) % 2 === 0
+        ? (isCorridor ? '#161d2b' : '#131926')
+        : (isCorridor ? '#182030' : '#151b29');
       poly(
         [P(i, j), P(i + 1, j), P(i + 1, j + 1), P(i, j + 1)],
-        (i + j) % 2 ? '#1a1628' : '#151221',
-        store.designMode ? 'rgba(124,92,239,.35)' : null
+        tileFill,
+        store.leftMode === 'design' ? 'rgba(99,102,241,0.28)' : 'rgba(255,255,255,0.02)'
       );
     }
   }
-  RM.forEach(r => poly([P(r.x, r.top ? 0 : 10), P(r.x + r.w, r.top ? 0 : 10), P(r.x + r.w, r.top ? 3 : 14), P(r.x, r.top ? 3 : 14)], 'hsla(' + r.hue + ',45%,22%,.45)'));
-  poly([P(0, N), P(N, N), P(N, N, -12), P(0, N, -12)], '#211a33');
-  poly([P(N, 0), P(N, N), P(N, N, -12), P(N, 0, -12)], '#1b1428');
+
+  // Arka duvarlar
+  poly([P(0, 0), P(0, N), P(0, N, 75), P(0, 0, 75)], '#171e2e', '#26314a');
+  poly([P(0, 0), P(N, 0), P(N, 0, 75), P(0, 0, 75)], '#1b2336', '#26314a');
+
+  // Ortak alan halıları (Kahve Lounge, Merkez Toplantı, Ortak Klasör Sunucu Alanı)
+  poly([P(1.5, 6.2), P(4.2, 6.2), P(4.2, 9.2), P(1.5, 9.2)], 'rgba(245,158,11,0.12)', 'rgba(245,158,11,0.35)');
+  poly([P(6.0, 6.0), P(10.0, 6.0), P(10.0, 9.5), P(6.0, 9.5)], 'rgba(99,102,241,0.12)', 'rgba(99,102,241,0.35)');
+  poly([P(12.2, 6.2), P(14.8, 6.2), P(14.8, 9.2), P(12.2, 9.2)], 'rgba(16,185,129,0.12)', 'rgba(16,185,129,0.35)');
+
+  // İstasyon zemin halıları
+  STATIONS.forEach(st => {
+    poly([P(st.x, st.y), P(st.x + 2.4, st.y), P(st.x + 2.4, st.y + 2.4), P(st.x, st.y + 2.4)], st.color + '1c', st.color + '66');
+  });
 }
 
-function walls() {
-  poly([P(0, 0), P(0, N), P(0, N, WL), P(0, 0, WL)], '#1e192b');
-  poly([P(0, 0), P(N, 0), P(N, 0, WL), P(0, 0, WL)], '#191524');
-  poly([P(0, 0), P(0, N), P(0, N, 6), P(0, 0, 6)], '#2a233d');
-  poly([P(0, 0), P(N, 0), P(N, 0, 6), P(0, 0, 6)], '#251f35');
+function drawStationDesk(st) {
+  const a = store.staff.find(s => Number(s.room) === st.i);
+  const x = st.x + 0.3, y = st.y + 0.3;
+  // Modern masa
+  isoBox(x, y, 1.8, 0.9, 4, 20, '#cbd5e1', '#94a3b8', '#64748b');
+  isoBox(x + 0.1, y + 0.1, 0.15, 0.7, 20, 0, '#334155', '#1e293b', '#0f172a');
+  isoBox(x + 1.55, y + 0.1, 0.15, 0.7, 20, 0, '#334155', '#1e293b', '#0f172a');
+  // Monitör (Çalışırken parlak yeşil/mavi yanar)
+  const monActive = a && a.mon;
+  isoBox(x + 0.45, y + 0.15, 0.9, 0.1, 15, 24, '#1e293b', monActive ? '#10b981' : '#334155', '#0f172a');
+  // Koltuk
+  isoBox(st.sx - 0.25, st.sy - 0.25, 0.55, 0.55, 5, 11, st.color, '#334155', '#1e293b');
 }
 
-function over() {
-  RM.forEach(r => { const y = r.wy + .4; glass(r.x + 1, y, r.w - 1, .2, 34); glass(r.x, y, .12, .2, 34); });
-  [3, 7, 11].forEach(x => { glass(x + .4, 0, .2, 4, 34); glass(x + .4, 9, .2, 5, 34); });
-}
+function drawCustomObject(item) {
+  if (item.hidden) return;
+  const x = Number(item.x || 7), y = Number(item.y || 7);
+  const isSel = store.leftMode === 'design' && store.selectedItemId === item.id;
+  if (isSel) {
+    poly([P(x, y), P(x + 1.4, y), P(x + 1.4, y + 1.4), P(x, y + 1.4)], 'rgba(16,185,129,0.28)', '#10b981', 2);
+  }
 
-function dAg(a) {
-  const q = P(a.ax, a.ay, 0), sit = !a.mv && Math.hypot(a.ax - seat(a)[0] - .5, a.ay - seat(a)[1] - .5) < .06,
-        b = a.mv ? Math.abs(Math.sin(T * 12 + a.ph)) * 2.5 : 0, x = q[0], y = q[1] + (sit ? -5 : 0) - b;
-  el(q[0], q[1] + 1, 11, 5, 'rgba(0,0,0,.4)');
-  if (!sit) { cx.fillStyle = '#302845'; cx.fillRect(x - 6, y - 9, 4, 9); cx.fillRect(x + 2, y - 9, 4, 9); }
-  rr(x - 8, y - 26, 16, 19, 6, a.c); rr(x - 11, y - 24, 4, 12, 2, a.c); rr(x + 7, y - 24, 4, 12, 2, a.c);
-  disc(x, y - 34, 10.5, '#fbcfe8'); cx.fillStyle = a.h; cx.beginPath(); cx.arc(x, y - 35, 11, Math.PI, 0); cx.fill();
-  const bl = (T + a.ph) % 4 < .12 ? .5 : 2.4;
-  el(x - 4, y - 33, 1.8, bl, '#221a29'); el(x + 4, y - 33, 1.8, bl, '#221a29');
-}
-
-// Oda tabelası yok; doğrudan personelin üzerinde İsim ve Unvan yazar
-function tag(a) {
-  const q = P(a.ax, a.ay, 0); cx.textAlign = 'center';
-  const label = `${a.name} · ${a.role}`;
-  cx.font = '700 10px Nunito,sans-serif';
-  const w = cx.measureText(label).width + 12;
-  rr(q[0] - w / 2, q[1] - 66, w, 17, 8, 'rgba(18,14,28,.92)');
-  cx.fillStyle = '#f0ecff'; cx.fillText(label, q[0], q[1] - 54);
-}
-
-function dBub(a) {
-  if (!a.on) return;
-  const q = P(a.ax, a.ay, 0), t = a.bt ? a.bt.slice(0, 42) : '';
-  cx.font = '700 10.5px Nunito,sans-serif'; cx.textAlign = 'center';
-  const w = cx.measureText(t).width + 18, x = Math.max(w / 2 + 4, Math.min(796 - w / 2, q[0])), y = q[1] - 86;
-  cx.fillStyle = '#181523'; cx.strokeStyle = '#10b981'; cx.lineWidth = 1.5;
-  cx.beginPath(); cx.roundRect(x - w / 2, y - 10, w, 20, 9); cx.fill(); cx.stroke();
-  cx.fillStyle = '#10b981'; cx.fillText(t, x, y + 4);
-}
-
-function draw() {
-  cx.clearRect(0, 0, 800, 530);
-  floor(); walls();
-  const dynItems = store.items.map(it => ({ k: Number(it.x || 5) + Number(it.y || 5) + 1.2, f: () => drawCustomItem(it) }));
-  const agents = store.staff.map(a => ({ k: a.ax + a.ay + .02, f: () => dAg(a) }));
-  BASE_OB.concat(dynItems).concat(agents).sort((p, q) => p.k - q.k).forEach(o => o.f());
-  over();
-  store.staff.forEach(tag);
-  store.staff.forEach(dBub);
-}
-let lt = 0;
-function frame(ts) {
-  const dt = Math.min(.05, (ts - lt) / 1000 || 0); lt = ts; T = ts / 1000;
-  upd(dt); draw(); requestAnimationFrame(frame);
-}
-requestAnimationFrame(frame);
-
-/* ============================================================================
-   4. CANLI OFİS TASARIM STÜDYOSU (EKLE, GÖR, TAŞI, GİZLE, SİL)
-   ============================================================================ */
-function toggleDesignStudio() {
-  if (!OWN) return alert('Tasarım modunu kullanmak için Yönetici Girişi yapmalısınız.');
-  store.designMode = !store.designMode;
-  $('#stageGrid').classList.toggle('design-active', store.designMode);
-  $('#designSidebar').classList.toggle('on', store.designMode);
-  $('#designToggleBtn').className = store.designMode ? 'p' : '';
-  renderDesignSidebar();
-}
-
-function renderDesignSidebar() {
-  if (!store.designMode) return;
-  const listEl = $('#officeItemsList');
-  const edEl = $('#selectedItemEditor');
-  const sel = store.items.find(x => x.id === store.selectedItemId);
-
-  if (sel) {
-    edEl.style.display = 'block';
-    edEl.innerHTML = `
-      <div class="row" style="justify-content:space-between;margin-top:0">
-        <b>✏️ Seçili: ${esc(sel.name)}</b>
-        <span class="chip">Konum: X:${sel.x}, Y:${sel.y}</span>
-      </div>
-      <label>Eşya Adı</label>
-      <input id="edItemName" value="${esc(sel.name)}" oninput="updateSelectedItemField('name', this.value)">
-      <div class="row">
-        <div style="flex:1">
-          <label>X Koordinatı (0-13)</label>
-          <input type="number" min="0" max="13" value="${sel.x}" onchange="updateSelectedItemField('x', +this.value)">
-        </div>
-        <div style="flex:1">
-          <label>Y Koordinatı (0-13)</label>
-          <input type="number" min="0" max="13" value="${sel.y}" onchange="updateSelectedItemField('y', +this.value)">
-        </div>
-        <div style="flex:1">
-          <label>Renk Tonu (0-360)</label>
-          <input type="number" min="0" max="360" step="15" value="${sel.hue || 32}" onchange="updateSelectedItemField('hue', +this.value)">
-        </div>
-      </div>
-      <div class="row" style="margin-bottom:0">
-        <button onclick="updateSelectedItemField('hidden', !${!!sel.hidden})">${sel.hidden ? '👁️ Göster' : '🙈 Gizle'}</button>
-        <button class="danger" onclick="deleteSelectedItem('${sel.id}')">🗑️ Eşyayı Sil</button>
-      </div>
-      <div class="note" style="margin-top:6px">💡 İpucu: Eşyayı taşımak için doğrudan sol taraftaki kanvas üzerinde istediğiniz kareye de tıklayabilirsiniz!</div>
-    `;
+  if (item.type === 'table') {
+    isoBox(x, y, 2.2, 1.2, 4, 20, '#e2e8f0', '#94a3b8', '#64748b');
+    isoBox(x + 0.2, y + 0.2, 0.2, 0.8, 20, 0, '#334155', '#1e293b', '#0f172a');
+    isoBox(x + 1.8, y + 0.2, 0.2, 0.8, 20, 0, '#334155', '#1e293b', '#0f172a');
+  } else if (item.type === 'sofa') {
+    isoBox(x, y, 1.8, 0.9, 9, 0, '#f59e0b', '#d97706', '#b45309');
+    isoBox(x, y, 1.8, 0.25, 20, 0, '#fbbf24', '#d97706', '#92400e');
+  } else if (item.type === 'server') {
+    isoBox(x, y, 0.9, 0.9, 44, 0, '#334155', '#1e293b', '#0f172a');
+    isoBox(x + 0.1, y + 0.85, 0.7, 0.08, 4, 32, '#10b981', '#10b981', '#059669');
+    isoBox(x + 0.1, y + 0.85, 0.7, 0.08, 4, 22, '#6366f1', '#6366f1', '#4f46e5');
+  } else if (item.type === 'plant') {
+    isoBox(x + 0.2, y + 0.2, 0.5, 0.5, 12, 0, '#b45309', '#92400e', '#78350f');
+    const q = P(x + 0.45, y + 0.45, 22);
+    cx.beginPath(); cx.arc(q[0], q[1], 13, 0, 7); cx.fillStyle = '#10b981'; cx.fill();
+    cx.beginPath(); cx.arc(q[0] - 7, q[1] + 5, 9, 0, 7); cx.fillStyle = '#059669'; cx.fill();
+    cx.beginPath(); cx.arc(q[0] + 7, q[1] + 5, 9, 0, 7); cx.fillStyle = '#34d399'; cx.fill();
   } else {
-    edEl.style.display = 'none';
-  }
-
-  listEl.innerHTML = store.items.length ? store.items.map(it => `
-    <div class="item-card ${it.id === store.selectedItemId ? 'selected' : ''}" onclick="store.selectedItemId='${it.id}';renderDesignSidebar()">
-      <div>
-        <b>${esc(it.name || it.type)}</b>
-        <div class="note">Tür: ${esc(it.type)} · Kare: (${it.x}, ${it.y}) ${it.hidden ? '· [GİZLİ]' : ''}</div>
-      </div>
-      <button onclick="event.stopPropagation();toggleItemVisibility('${it.id}')">${it.hidden ? 'Göster' : 'Gizle'}</button>
-    </div>
-  `).join('') : '<p class="note">Henüz kayıtlı eşya yok. Yukarıdan yeni eşya ekleyin.</p>';
-}
-
-function addNewOfficeItem() {
-  const type = $('#newItemType').value;
-  const names = { table: 'Toplantı Masası', plant: 'Salon Bitkisi', sofa: 'Dinlenme Koltuğu', server: 'Sunucu Kabini', board: 'Proje Tahtası', water: 'Su Sebili' };
-  const newItem = {
-    id: 'it_' + Date.now(),
-    type,
-    name: names[type] || 'Ofis Eşyası',
-    x: 6, y: 6,
-    hue: Math.floor(Math.random() * 360),
-    hidden: false
-  };
-  store.items.push(newItem);
-  store.selectedItemId = newItem.id;
-  saveOfficeItemsToFirestore();
-  renderDesignSidebar();
-}
-
-function updateSelectedItemField(field, val) {
-  const it = store.items.find(x => x.id === store.selectedItemId);
-  if (!it) return;
-  it[field] = val;
-  saveOfficeItemsToFirestore();
-  renderDesignSidebar();
-}
-
-function toggleItemVisibility(id) {
-  const it = store.items.find(x => x.id === id);
-  if (!it) return;
-  it.hidden = !it.hidden;
-  saveOfficeItemsToFirestore();
-  renderDesignSidebar();
-}
-
-function deleteSelectedItem(id) {
-  store.items = store.items.filter(x => x.id !== id);
-  if (store.selectedItemId === id) store.selectedItemId = null;
-  saveOfficeItemsToFirestore();
-  renderDesignSidebar();
-}
-
-function saveOfficeItemsToFirestore() {
-  if (!CONN || !OWN) return;
-  db.doc('public/office').set({
-    updatedAt: FV().serverTimestamp(),
-    items: store.items
-  }, { merge: true }).catch(e => lg('Eşya kayıt hatası: ' + e.message));
-}
-
-/* ============================================================================
-   5. PERSONEL SENKRONİZASYONU (SADECE FIRESTORE'DAN ÇEKİLİR)
-   ============================================================================ */
-const PAL = [
-  ['#8b5cf6', '#4c1d95'], ['#ec4899', '#831843'], ['#10b981', '#064e3b'], ['#f59e0b', '#78350f'],
-  ['#3b82f6', '#1e3a8a'], ['#6366f1', '#312e81'], ['#14b8a6', '#134e4a'], ['#f43f5e', '#881337']
-];
-let sid = 0;
-
-function mkAgent(o) {
-  const p = PAL[(sid++) % 8], r = RM[o.room] || RM[0];
-  const a = {
-    id: o.id || ('s' + sid), name: o.name, role: o.role, room: o.room || 0,
-    model: o.model || 'Gemini 3.5 Flash Lite', backup: o.backup || 'Gemma 4 31B',
-    skills: o.skills || '', used: o.usedToday || 0,
-    c: o.color || p[0], h: o.hair || p[1],
-    ax: r.sx + .5, ay: r.sy + .5, path: [], mon: 0, act: false,
-    bt: '', bi: '', on: 0, st: o.status || 'Görev Bekliyor', ph: Math.random() * 6,
-    alive: true, by: o.createdBy || 'owner', saved: true
-  };
-  store.staff.push(a);
-  life(a);
-  return a;
-}
-
-async function life(a) {
-  await sleep(rnd(1200, 4500));
-  while (a.alive) {
-    if (busy || halt || a.act) { await sleep(900); continue; }
-    a.act = true;
-    const r = Math.random();
-    if (r < .55) {
-      a.st = 'Masasında'; a.mon = 1;
-      await sleep(rnd(7000, 12000)); a.mon = 0;
-    } else if (r < .82) {
-      const k = ['yemek', 'mola', 'toplanti'][Math.floor(Math.random() * 3)];
-      const sp = SP[k][Math.floor(Math.random() * 3)];
-      a.st = k == 'yemek' ? 'Yemekhanede' : k == 'mola' ? 'Kahve Molasında' : 'Toplantı Alanında';
-      hush(a); await walk(a, sp[0], sp[1]);
-      await sleep(rnd(6000, 10000));
-    } else {
-      a.st = 'Ortak Klasörde'; hush(a);
-      const sp = SP.arsiv[Math.floor(Math.random() * 2)];
-      await walk(a, sp[0], sp[1]);
-      await sleep(3500);
-    }
-    hush(a); await goHome(a); a.st = 'Hazır'; a.act = false;
-    await sleep(rnd(4000, 8000));
+    isoBox(x, y, 1.2, 0.3, 34, 10, '#f8fafc', '#cbd5e1', '#94a3b8');
   }
 }
 
-function syncStaff(list) {
-  const ids = new Set(list.map(x => x.id));
-  store.staff.filter(a => !ids.has(a.id)).forEach(a => { a.alive = false; });
-  store.staff = store.staff.filter(a => ids.has(a.id));
-  list.forEach(x => {
-    const room = x.room != null && x.room >= 0 && x.room < RM.length ? x.room : 0;
-    let a = store.staff.find(s => s.id === x.id);
-    if (!a) a = mkAgent({ ...x, room });
-    else {
-      const rc = a.room !== room;
-      Object.assign(a, {
-        name: x.name, role: x.role, model: x.model || a.model,
-        backup: x.backup || a.backup, skills: x.skills || '',
-        used: x.usedToday || a.used, room
-      });
-      if (rc) { a.act = true; goHome(a).then(() => a.act = false); }
+function drawAgentCharacter(a) {
+  const q = P(a.ax, a.ay, 0);
+  const bounce = a.mv ? Math.abs(Math.sin(T * 10 + a.ph)) * 3 : 0;
+  const x = q[0], y = q[1] - bounce;
+
+  // Gölge
+  cx.beginPath(); cx.ellipse(q[0], q[1] + 2, 12, 6, 0, 0, 7);
+  cx.fillStyle = 'rgba(0,0,0,0.45)'; cx.fill();
+
+  // Gövde
+  cx.beginPath(); cx.roundRect(x - 9, y - 28, 18, 22, 7);
+  cx.fillStyle = a.c || '#6366f1'; cx.fill();
+  cx.strokeStyle = '#ffffff33'; cx.lineWidth = 1; cx.stroke();
+
+  // Baş
+  cx.beginPath(); cx.arc(x, y - 37, 10.5, 0, 7);
+  cx.fillStyle = '#fde68a'; cx.fill();
+
+  // Saç
+  cx.beginPath(); cx.arc(x, y - 39, 11, Math.PI, 0);
+  cx.fillStyle = '#1e293b'; cx.fill();
+
+  // Gözler
+  cx.fillStyle = '#0f172a';
+  cx.fillRect(x - 4, y - 37, 2.2, 2.8);
+  cx.fillRect(x + 2, y - 37, 2.2, 2.8);
+}
+
+function drawAgentLabelAndBubble(a) {
+  const q = P(a.ax, a.ay, 0);
+  const x = q[0], y = q[1];
+
+  // İsim + Unvan Rozeti
+  const titleText = `${a.name} · ${a.role}`;
+  cx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+  cx.textAlign = 'center';
+  const tw = cx.measureText(titleText).width + 16;
+
+  cx.beginPath(); cx.roundRect(x - tw / 2, y - 68, tw, 19, 9);
+  cx.fillStyle = 'rgba(15, 23, 42, 0.92)'; cx.fill();
+  cx.strokeStyle = a.c || '#6366f1'; cx.lineWidth = 1.2; cx.stroke();
+
+  cx.fillStyle = '#f8fafc';
+  cx.fillText(titleText, x, y - 55);
+
+  // Aktif Konuşma / Durum Balonu
+  if (a.on && a.bt) {
+    const btxt = a.bt.slice(0, 44);
+    cx.font = '700 11.5px "Plus Jakarta Sans", sans-serif';
+    const bw = cx.measureText(btxt).width + 20;
+    const bx = Math.max(bw / 2 + 8, Math.min(1392 - bw / 2, x));
+    const by = y - 92;
+
+    cx.beginPath(); cx.roundRect(bx - bw / 2, by - 11, bw, 22, 10);
+    cx.fillStyle = '#10b981'; cx.fill();
+    cx.fillStyle = '#052e16';
+    cx.fillText(btxt, bx, by + 4);
+  }
+}
+
+function drawZoneSigns() {
+  const signs = [
+    ['☕ KAHVE & MOLA LOUNGE', 2.8, 7.6, '#f59e0b'],
+    ['🤝 MERKEZ TOPLANTI ALANI', 8.0, 7.6, '#6366f1'],
+    [`📁 ORTAK KLASÖR (${store.files.length} Dosya)`, 13.5, 7.6, '#10b981']
+  ];
+  cx.font = '800 11px "Plus Jakarta Sans", sans-serif';
+  cx.textAlign = 'center';
+  signs.forEach(([txt, gx, gy, col]) => {
+    const q = P(gx, gy, 42);
+    const w = cx.measureText(txt).width + 18;
+    cx.beginPath(); cx.roundRect(q[0] - w / 2, q[1] - 10, w, 20, 9);
+    cx.fillStyle = 'rgba(15,23,42,0.88)'; cx.fill();
+    cx.strokeStyle = col; cx.lineWidth = 1.2; cx.stroke();
+    cx.fillStyle = col; cx.fillText(txt, q[0], q[1] + 4);
+  });
+}
+
+function updateAgentsMovement(dt) {
+  store.staff.forEach(a => {
+    a.mv = 0;
+    if (a.path && a.path.length) {
+      const p = a.path[0], dx = p[0] - a.ax, dy = p[1] - a.ay, d = Math.hypot(dx, dy), s = 2.8 * dt;
+      a.mv = 1;
+      if (d <= s) {
+        a.ax = p[0]; a.ay = p[1]; a.path.shift();
+        if (!a.path.length && a.res) { const r = a.res; a.res = null; r(); }
+      } else {
+        a.ax += (dx / d) * s; a.ay += (dy / d) * s;
+      }
     }
   });
-  updateTargetSelect();
 }
 
-function updateTargetSelect() {
-  const sel = $('#targetAgent');
-  if (!sel) return;
-  const cur = sel.value;
-  sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">${esc(a.name)} · ${esc(a.role)}</option>`).join('');
-  if (cur && store.staff.some(a => a.id === cur)) sel.value = cur;
-}
+let lastTs = 0;
+function renderCanvasLoop(ts) {
+  const dt = Math.min(0.05, (ts - lastTs) / 1000 || 0);
+  lastTs = ts; T = ts / 1000;
+  updateAgentsMovement(dt);
 
-function lg(t) {
-  store.log.unshift(hhmm() + ' · ' + t);
-  if (store.log.length > 80) store.log.length = 80;
-  if (tab === 'tasks') render();
+  cx.clearRect(0, 0, 1400, 920);
+  drawFloorAndWalls();
+
+  const renderQueue = [];
+  STATIONS.forEach(st => renderQueue.push({ k: st.x + st.y + 1.5, f: () => drawStationDesk(st) }));
+  store.items.forEach(it => renderQueue.push({ k: Number(it.x || 7) + Number(it.y || 7) + 1.2, f: () => drawCustomObject(it) }));
+  store.staff.forEach(a => renderQueue.push({ k: a.ax + a.ay + 0.1, f: () => drawAgentCharacter(a) }));
+
+  renderQueue.sort((p, q) => p.k - q.k).forEach(o => o.f());
+  drawZoneSigns();
+  store.staff.forEach(drawAgentLabelAndBubble);
+
+  requestAnimationFrame(renderCanvasLoop);
 }
+requestAnimationFrame(renderCanvasLoop);
+
+function moveAgentTo(a, tx, ty) {
+  a.path = [[tx, ty]];
+  return new Promise(r => { a.res = r; });
+}
+const getStation = a => STATIONS[Number(a.room) % STATIONS.length] || STATIONS[0];
+const goHomeDesk = a => { const st = getStation(a); return moveAgentTo(a, st.sx, st.sy); };
+const sayBubble = (a, txt) => { a.bt = txt; a.on = 1; };
+const clearBubble = a => { a.on = 0; };
 
 /* ============================================================================
-   6. GERÇEK GEMINI MOTORU (TAKILMA ÖNLEYİCİ & 429/404 KORUMALI)
+   3. KUSURSUZ GEMINI API ÇAĞRISI (OTOMATİK MODEL ZİNCİRİ - FAILOVER)
    ============================================================================ */
 let nextAllowedCallTime = 0;
 
-async function incrementModelQuota(poolObj, agent) {
-  if (poolObj) poolObj.u++;
-  agent.used = (agent.used || 0) + 1;
-  if (CONN && OWN) {
-    const dayRef = db.collection('usage').doc(todayKey());
-    const poolsUpdate = {};
-    MODELS.forEach(m => { poolsUpdate[m.n] = m.u; });
-    await dayRef.set({ updatedAt: FV().serverTimestamp(), pools: poolsUpdate }, { merge: true }).catch(() => {});
-    await db.collection('staff').doc(agent.id).set({ usedToday: agent.used, lastActionAt: FV().serverTimestamp() }, { merge: true }).catch(() => {});
-  }
-}
-
-async function callGeminiAgent(agent, incomingMail, threadMails, relatedFiles) {
+async function callGeminiWithFailover(agent, incomingMail, threadMails, relatedFiles) {
   const apiKey = store.geminiKey;
-  if (!apiKey) throw new Error('Firestore settings/secret belgesinde apiKey bulunamadı!');
+  if (!apiKey) throw new Error('Firestore settings/secret içinde apiKey bulunamadı!');
 
-  const { pool, apiName } = resolveWorkingApiModel(agent);
+  // Ajanın birincil ve yedek modeline göre denenecek gerçek API modellerinin zincirini kur
+  const primaryPool = MODELS.find(m => m.n === agent.model) || MODELS[0];
+  const backupPool = MODELS.find(m => m.n === agent.backup) || MODELS[1];
+  const tryChain = [...new Set([
+    ...primaryPool.chain,
+    ...backupPool.chain,
+    'gemini-3.5-flash-lite',
+    'gemini-3.1-flash-lite',
+    'gemini-3.8-flash'
+  ])];
 
   const companyDirectory = store.staff.map(s =>
     `- ID: "${s.id}" | İsim: ${s.name} (${s.role}) | Uzmanlık: ${s.skills || ''}`
   ).join('\n');
 
   const historyText = threadMails.slice(-4).map(m =>
-    `[${m.f} -> ${m.t} (${m.type})]: ${m.subj}\n${m.body}`
+    `[${m.f} -> ${m.t}]: ${m.subj}\n${m.body}`
   ).join('\n---\n');
 
   const filesOverview = relatedFiles.slice(0, 4).map(f =>
-    `Dosya: ${f.path} (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, 2800)}`
+    `Dosya: ${f.path} (Yazan: ${f.owner})\nİçerik:\n${(f.content || '').slice(0, 2600)}`
   ).join('\n===\n') || 'Ortak klasör boş.';
 
   const systemInstruction = `Sen "Tonoz AI Ofisi" şirketinde çalışan "${agent.name}", unvanın "${agent.role}".
@@ -748,9 +694,9 @@ ${companyDirectory}
 3. İşini hemen yap, dosya üretiyorsan "fileToSave" içine tam içeriği yaz ve bir sonraki departmana ilet.
 4. SADECE geçerli bir JSON döndür:
 {
-  "canvasBubble": "Kısa durum (Örn: Kodları yazıyor)",
+  "canvasBubble": "Kısa durum (Örn: Makaleyi yazıyor)",
   "fileToSave": {
-    "path": "Dosya adı (Örn: makale.md veya script.js) - yoksa ''",
+    "path": "Dosya adı (Örn: makale.md veya kod.js) - yoksa ''",
     "kind": "md | code | svg | json",
     "content": "Dosya içeriği"
   },
@@ -768,61 +714,67 @@ ${companyDirectory}
   }
 }`;
 
-  const userPrompt = `GELEN GÖREV / MESAJ:
-Gönderen: ${incomingMail.f}
-Konu: ${incomingMail.subj}
-İçerik: ${incomingMail.body}
+  const userPrompt = `GELEN GÖREV / MESAJ:\nGönderen: ${incomingMail.f}\nKonu: ${incomingMail.subj}\nİçerik: ${incomingMail.body}\n\nÖNCEKİ YAZIŞMALAR:\n${historyText}\n\nORTAK KLASÖR:\n${filesOverview}`;
 
-ÖNCEKİ YAZIŞMALAR:
-${historyText}
+  let lastError = null;
+  const now = Date.now();
 
-ORTAK KLASÖR:
-${filesOverview}`;
+  // Zincirdeki modelleri sırayla dene: Biri 429 veya 503 verirse ANINDA diğerine geç!
+  for (const apiModel of tryChain) {
+    if ((store.blockedModelsUntil[apiModel] || 0) > now) continue;
 
-  const isGemma = apiName.startsWith('gemma');
-  const bodyPayload = isGemma ? {
-    contents: [{ role: 'user', parts: [{ text: systemInstruction + '\n\n' + userPrompt }] }],
-    generationConfig: { temperature: 0.4 }
-  } : {
-    systemInstruction: { parts: [{ text: systemInstruction }] },
-    contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-    generationConfig: { temperature: 0.4, responseMimeType: 'application/json' }
-  };
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${apiModel}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+          generationConfig: { temperature: 0.4, responseMimeType: 'application/json' }
+        })
+      });
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${apiName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(bodyPayload)
-  });
+      if (res.status === 429 || res.status === 503 || res.status === 404) {
+        // Bu modeli 2 dakika dinlendir ve HİÇ BEKLEMEDEN sıradaki modele geç!
+        store.blockedModelsUntil[apiModel] = Date.now() + 120000;
+        lg(`🔄 ${apiModel} yoğun/dolu (${res.status}), anında yedek modele geçiliyor...`);
+        lastError = new Error(`${apiModel} (${res.status})`);
+        continue;
+      }
 
-  if (res.status === 429) {
-    // Bu model RPM/Kota sınırına takıldı -> 3 dakika dinlendir
-    store.cooldownUntilByModel[apiName] = Date.now() + 180000;
-    throw new Error(`Model (${apiName}) dakika/günlük kota sınırına ulaştı (429). Yedek modele geçiliyor ve görev 90 sn ertelendi.`);
+      if (!res.ok) {
+        const errTxt = await res.text();
+        lastError = new Error(`HTTP ${res.status}: ${errTxt.slice(0, 120)}`);
+        continue;
+      }
+
+      const data = await res.json();
+      let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      rawText = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+      const parsed = JSON.parse(rawText);
+
+      // Başarılı olan modelin sayacını artır
+      primaryPool.u++;
+      agent.used = (agent.used || 0) + 1;
+      if (CONN && OWN) {
+        const poolsObj = {};
+        MODELS.forEach(m => { poolsObj[m.n] = m.u; });
+        db.collection('usage').doc(todayKey()).set({ updatedAt: FV().serverTimestamp(), pools: poolsObj }, { merge: true }).catch(() => {});
+        db.collection('staff').doc(agent.id).set({ usedToday: agent.used, lastActionAt: FV().serverTimestamp() }, { merge: true }).catch(() => {});
+      }
+
+      return parsed;
+    } catch (e) {
+      lastError = e;
+    }
   }
 
-  if (res.status === 404) {
-    // Bu model hesaba kapalı -> listeden çıkar
-    store.availableApiModels = store.availableApiModels.filter(m => m !== apiName);
-    throw new Error(`Model (${apiName}) bu API anahtarında desteklenmiyor (404). Otomatik devre dışı bırakıldı.`);
-  }
-
-  if (!res.ok) {
-    const errTxt = await res.text();
-    throw new Error(`API Hatası (${res.status}): ${errTxt.slice(0, 180)}`);
-  }
-
-  await incrementModelQuota(pool, agent);
-  const data = await res.json();
-  let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-  rawText = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
-  return JSON.parse(rawText);
+  throw lastError || new Error('Tüm modeller denendi ancak yanıt alınamadı.');
 }
 
 async function processNextPendingMail(forceNow = false) {
   if (busy || halt || !store.geminiKey) return;
-
   const now = Date.now();
   if (!forceNow && now < nextAllowedCallTime) return;
 
@@ -833,37 +785,38 @@ async function processNextPendingMail(forceNow = false) {
 
   const agent = store.staff.find(s => s.id === pending.toId || s.name === pending.t);
   if (!agent) {
-    lg(`⚠️ Alıcı ajan bulunamadı (${pending.t}), mesaj kapatıldı.`);
     await markMailProcessed(pending.id);
     return;
   }
 
   busy = true;
-  updateEngineBadges(`Çalışıyor: ${agent.name}`);
+  $('#engBadge').className = 'badge ok';
+  $('#engBadge').textContent = `⚡ Çalışıyor: ${agent.name}`;
 
   try {
     agent.act = true;
-    await goHome(agent);
+    await goHomeDesk(agent);
     agent.mon = 1;
     agent.st = 'Çalışıyor';
-    say(agent, 'think', 'Görev üzerinde çalışıyor...');
-    render();
+    sayBubble(agent, 'Görevi işliyor...');
+    renderLeft();
 
     const threadMails = store.mails.filter(m => m.threadId === pending.threadId);
-    const decision = await callGeminiAgent(agent, pending, threadMails, store.files);
+    const decision = await callGeminiWithFailover(agent, pending, threadMails, store.files);
 
-    if (decision.canvasBubble) say(agent, 'type', decision.canvasBubble);
+    if (decision.canvasBubble) sayBubble(agent, decision.canvasBubble);
 
+    // Dosya üretildiyse Ortak Klasör alanına yürüsün ve kaydetsin
     if (decision.fileToSave && decision.fileToSave.path && decision.fileToSave.content) {
-      const sp = SP.arsiv[0];
-      agent.st = 'Ortak Klasöre dosya yüklüyor';
-      await walk(agent, sp[0], sp[1]);
-      say(agent, 'doc', decision.fileToSave.path + ' yüklendi');
+      agent.st = 'Ortak Klasöre yüklüyor';
+      await moveAgentTo(agent, ZONES.arsiv[0][0], ZONES.arsiv[0][1]);
+      sayBubble(agent, `📄 ${decision.fileToSave.path}`);
       await saveSharedFile(decision.fileToSave.path, decision.fileToSave.content, decision.fileToSave.kind || 'md', `${agent.name} · ${agent.role}`);
-      lg(`📁 ${agent.name} ortak klasöre dosya kaydetti: ${decision.fileToSave.path}`);
-      await sleep(1400);
+      lg(`📁 ${agent.name} ortak klasöre dosya bıraktı: ${decision.fileToSave.path}`);
+      await sleep(1200);
     }
 
+    // Giden mesajları sırayla ilgili ajanlara teslim et
     const outList = Array.isArray(decision.outgoingMails) ? decision.outgoingMails : [];
     for (let i = 0; i < outList.length; i++) {
       const out = outList[i];
@@ -876,12 +829,10 @@ async function processNextPendingMail(forceNow = false) {
       if (!target) continue;
 
       if (target.id !== 'owner') {
-        const d = door(target);
-        agent.st = target.name + ' ile görüşüyor';
-        await walk(agent, d[0], d[1]);
-        say(agent, 'mail', target.name + ' odasında');
-      } else {
-        say(agent, 'doc', 'Yöneticiye sunuyor');
+        const st = getStation(target);
+        agent.st = `${target.name} ile görüşüyor`;
+        await moveAgentTo(agent, st.door[0], st.door[1]);
+        sayBubble(agent, `✉️ → ${target.name}`);
       }
 
       const delayMs = (i + 1) * (store.cooldownSec * 1000);
@@ -894,55 +845,32 @@ async function processNextPendingMail(forceNow = false) {
         threadId: pending.threadId || pending.id,
         notBeforeMs: Date.now() + delayMs
       });
-      lg(`✉️ ${agent.name} → ${target.name}: ${out.subject}`);
-      await sleep(1400);
-    }
 
-    if (decision.submitFinalApproval && decision.submitFinalApproval.ready) {
-      showApprovalBox(pending.subj, decision.submitFinalApproval.summary || 'Çalışma tamamlandı.');
+      lg(`✉️ ${agent.name} → ${target.name}: ${out.subject}`);
+      await sleep(1200);
     }
 
     await markMailProcessed(pending.id);
-    agent.mon = 0; hush(agent);
-    await goHome(agent);
+    agent.mon = 0; clearBubble(agent);
+    await goHomeDesk(agent);
     agent.st = 'Hazır';
     agent.act = false;
 
     nextAllowedCallTime = Date.now() + (store.cooldownSec * 1000);
   } catch (err) {
     console.error(err);
+    lg(`⚠️ Hata (${agent.name}): ${err.message}`);
     const fails = (store.failCountByMail[pending.id] || 0) + 1;
     store.failCountByMail[pending.id] = fails;
-
-    lg(`⚠️ ${agent.name} (${fails}/3 deneme): ${err.message}`);
-
-    if (fails >= 3) {
-      lg(`🛑 "${pending.subj}" görevi 3 kez hata aldığı için kuyruğu tıkamaması adına kapatıldı.`);
-      await markMailProcessed(pending.id);
-    } else {
-      // Hata alan maili Firestore'da 90 saniye ileri ertele ki anında tekrar çarpıp kotayı bitirmesin
-      await postponeMail(pending.id, Date.now() + 90000);
-    }
-
-    agent.mon = 0; agent.act = false; hush(agent);
-    nextAllowedCallTime = Date.now() + 25000;
+    if (fails >= 3) await markMailProcessed(pending.id);
+    agent.mon = 0; agent.act = false; clearBubble(agent);
+    nextAllowedCallTime = Date.now() + 15000;
   } finally {
     busy = false;
-    render();
+    $('#engBadge').textContent = halt ? '⏸ Duraklatıldı' : '🟢 Komuta Merkezi Aktif';
+    renderLeft();
+    renderRight();
   }
-}
-
-// Takılan tüm görevlerin süresini sıfırlayıp kurtaran fonksiyon
-async function unstickAllTasks() {
-  store.failCountByMail = {};
-  store.cooldownUntilByModel = {};
-  nextAllowedCallTime = 0;
-  const pending = store.mails.filter(m => !m.processed && m.toId !== 'owner');
-  for (const m of pending) {
-    await postponeMail(m.id, Date.now());
-  }
-  lg(`🔧 Takılan ${pending.length} görev sıfırlandı, motor yeniden tetikleniyor...`);
-  processNextPendingMail(true);
 }
 
 setInterval(() => {
@@ -950,29 +878,295 @@ setInterval(() => {
   const rem = Math.ceil((nextAllowedCallTime - Date.now()) / 1000);
   if (rem > 0 && !busy) {
     coolEl.style.display = 'inline-block';
-    coolEl.className = 'badge wait';
-    coolEl.textContent = `☕ Güvenli Mola (${rem} sn)`;
+    coolEl.textContent = `☕ Kota Koruması (${rem} sn)`;
   } else {
     coolEl.style.display = 'none';
   }
-  if (!busy && !halt && OWN) {
-    processNextPendingMail(false);
-  }
-}, 3000);
+  if (!busy && !halt && OWN) processNextPendingMail(false);
+}, 2500);
 
-function updateEngineBadges(stateText) {
-  const b = $('#engBadge');
-  if (!OWN) { b.className = 'badge'; b.textContent = 'Ziyaretçi Modu'; return; }
-  b.className = 'badge live';
-  b.textContent = stateText || (halt ? '⏸ Duraklatıldı' : '🟢 Otonom Motor Aktif');
+/* ============================================================================
+   4. SOL VE SAĞ PANELLERİN ARAYÜZ RENDER FONKSİYONLARI
+   ============================================================================ */
+function switchLeftMode(mode) {
+  store.leftMode = mode;
+  $('#btnModeStaff').className = mode === 'staff' ? 'p' : '';
+  $('#btnModeDesign').className = mode === 'design' ? 'p' : '';
+  $('#roomHint').textContent = mode === 'design'
+    ? '🛋️ TASARIM MODU: Soldan eşya seçin ve taşımak istediğiniz kareye kanvas üzerinde tıklayın!'
+    : '💡 Personeli düzenlemek için üzerine veya sol kartına tıklayın';
+  renderLeft();
+}
+
+function renderLeft() {
+  const box = $('#leftContent');
+  if (store.leftMode === 'staff') {
+    $('#leftTitle').textContent = `👥 ŞİRKET PERSONELİ (${store.staff.length})`;
+    box.innerHTML = `
+      ${OWN ? `<button class="p" style="width:100%;margin-bottom:10px" onclick="openAgentModal()">+ Yeni Ajan / Personel Tanımla</button>` : ''}
+      ${store.staff.map(a => `
+        <div class="agent-card ${a.mon ? 'working' : ''}" onclick="${OWN ? `openAgentModal('${a.id}')` : ''}">
+          <div class="agent-top">
+            <div><span class="agent-dot" style="background:${a.c}"></span><b>${esc(a.name)}</b></div>
+            <span class="badge ${a.mon ? 'ok' : ''}">${esc(a.st || 'Hazır')}</span>
+          </div>
+          <div class="agent-role">${esc(a.role)} · İstasyon ${(Number(a.room) || 0) + 1}</div>
+          <div class="agent-meta">
+            <span>🤖 ${esc(a.model)}</span>
+            <span>Bugün: <b>${a.used || 0}</b> istek</span>
+          </div>
+        </div>
+      `).join('') || '<p class="note">Henüz personel bulunmuyor.</p>'}
+    `;
+  } else {
+    $('#leftTitle').textContent = `🛋️ OFİS EŞYALARI (${store.items.length})`;
+    const sel = store.items.find(x => x.id === store.selectedItemId);
+    box.innerHTML = `
+      <div class="row" style="margin-top:0;margin-bottom:10px">
+        <select id="addItemSelect" style="flex:1">
+          <option value="table">☕ Toplantı Masası</option>
+          <option value="sofa">🛋️ Dinlenme Koltuğu</option>
+          <option value="plant">🌿 Büyük Salon Bitkisi</option>
+          <option value="server">🖥️ Sunucu Kabini</option>
+          <option value="board">📊 Sunum Tahtası</option>
+        </select>
+        <button class="p" onclick="addOfficeItem()">+ Ekle</button>
+      </div>
+      ${sel ? `
+        <div style="background:#1e2638;border:1px solid var(--acc);border-radius:11px;padding:10px;margin-bottom:10px">
+          <b>✏️ Seçili: ${esc(sel.name)}</b>
+          <div class="note" style="margin:4px 0">Konum: X=${sel.x}, Y=${sel.y} (Taşımak için kanvasa tıklayın)</div>
+          <div class="row" style="margin-top:8px">
+            <button onclick="toggleItemHide('${sel.id}')">${sel.hidden ? '👁️ Göster' : '🙈 Gizle'}</button>
+            <button class="danger" onclick="removeOfficeItem('${sel.id}')">🗑️ Sil</button>
+          </div>
+        </div>
+      ` : ''}
+      ${store.items.map(it => `
+        <div class="agent-card" style="${it.id === store.selectedItemId ? 'border-color:var(--acc)' : ''}" onclick="store.selectedItemId='${it.id}';renderLeft()">
+          <div class="agent-top">
+            <b>${esc(it.name || it.type)}</b>
+            <span class="badge">${it.hidden ? 'Gizli' : `(${it.x}, ${it.y})`}</span>
+          </div>
+        </div>
+      `).join('') || '<p class="note">Ofiste ekli eşya yok. Yukarıdan ekleyin.</p>'}
+    `;
+  }
+}
+
+function setTab(t) {
+  store.rightTab = t;
+  const btns = $('#rightTabs').querySelectorAll('button');
+  btns[0].className = t === 'mail' ? 'on' : '';
+  btns[1].className = t === 'files' ? 'on' : '';
+  btns[2].className = t === 'quota' ? 'on' : '';
+  renderRight();
+}
+
+function renderRight() {
+  const pendCnt = store.mails.filter(m => !m.processed && m.toId !== 'owner').length;
+  $('#cntMail').textContent = pendCnt ? `(${pendCnt})` : `(${store.mails.length})`;
+  $('#cntFiles').textContent = `(${store.files.length})`;
+
+  const box = $('#rightContent');
+
+  if (store.rightTab === 'mail') {
+    const sel = store.mails.find(m => m.id === store.selectedMailId) || store.mails[0];
+    if (sel) store.selectedMailId = sel.id;
+
+    box.innerHTML = `
+      ${sel ? `
+        <div style="background:#0d111a;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px">
+          <div class="row" style="justify-content:space-between;margin-top:0">
+            <b>${esc(sel.subj)}</b>
+            <span class="badge ${sel.processed ? 'ok' : 'warn'}">${sel.processed ? '✓ İşlendi' : '⏳ Kuyrukta'}</span>
+          </div>
+          <div class="note" style="margin:4px 0 8px"><b>${esc(sel.f)}</b> → <b>${esc(sel.t)}</b> · ${esc(sel.time)}</div>
+          <div style="white-space:pre-wrap;font-size:13px;line-height:1.6;max-height:210px;overflow-y:auto;padding:8px;background:var(--panel);border-radius:8px">${esc(sel.body)}</div>
+          ${OWN ? `
+            <div class="row" style="margin-top:8px">
+              <input id="replyInput" style="flex:1" placeholder="Bu yazışmaya talimat ekle...">
+              <button class="p" onclick="sendReply('${sel.id}')">Gönder</button>
+              ${!sel.processed ? `<button class="ok" onclick="forceRunMail('${sel.id}')">⚡ İşlet</button>` : ''}
+            </div>
+          ` : ''}
+        </div>
+      ` : ''}
+      <div class="note" style="margin-bottom:6px;font-weight:700">TÜM KURUM İÇİ YAZIŞMALAR</div>
+      ${store.mails.map(m => `
+        <div class="mail-card ${m.id === store.selectedMailId ? 'active' : ''} ${m.processed ? 'done' : 'pending'}" onclick="store.selectedMailId='${m.id}';renderRight()">
+          <div class="row" style="justify-content:space-between;margin:0;font-size:11.5px">
+            <b>${esc(m.f)} → ${esc(m.t)}</b>
+            <span class="note">${esc(m.time)}</span>
+          </div>
+          <div style="font-weight:600;margin-top:3px">${esc(m.subj)}</div>
+        </div>
+      `).join('') || '<p class="note">Henüz yazışma yok. Üst bardan bir departmana görev verin.</p>'}
+    `;
+  }
+  else if (store.rightTab === 'files') {
+    const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
+    if (sf) store.selectedFileId = sf.id;
+
+    box.innerHTML = `
+      ${sf ? `
+        <div style="margin-bottom:12px">
+          <div class="row" style="justify-content:space-between;margin-top:0">
+            <div>
+              <b>📄 ${esc(sf.path)}</b>
+              <div class="note">Üreten: ${esc(sf.owner)} · v${sf.version || 1}</div>
+            </div>
+            <div class="row" style="margin:0">
+              <button class="p" onclick="downloadSharedFile('${sf.id}')">📥 İndir</button>
+              <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">Kopyala</button>
+            </div>
+          </div>
+          <pre class="code">${esc(sf.content)}</pre>
+        </div>
+      ` : ''}
+      <div class="note" style="margin-bottom:6px;font-weight:700">ORTAK KLASÖR DOSYALARI</div>
+      ${store.files.map(f => `
+        <div class="mail-card ${f.id === store.selectedFileId ? 'active' : ''}" onclick="store.selectedFileId='${f.id}';renderRight()">
+          <b>📄 ${esc(f.path)}</b>
+          <div class="note">${esc(f.owner)} · v${f.version || 1}</div>
+        </div>
+      `).join('') || '<p class="note">Ortak klasörde henüz üretilmiş dosya yok.</p>'}
+    `;
+  }
+  else {
+    box.innerHTML = `
+      <div class="note" style="margin-bottom:8px;font-weight:700">AKTİF MODEL HAVUZLARI VE GÜNLÜK LİMİTLER</div>
+      ${MODELS.map(m => {
+        const pct = Math.min(100, (m.u / m.l) * 100);
+        return `
+          <div class="quota-row">
+            <div class="row" style="justify-content:space-between;margin:0">
+              <b>${esc(m.n)}</b>
+              <span><b>${m.u} / ${m.l}</b></span>
+            </div>
+            <div class="note">${esc(m.desc)}</div>
+            <div class="bar"><i style="width:${pct}%"></i></div>
+          </div>
+        `;
+      }).join('')}
+      <div class="note" style="margin:14px 0 6px;font-weight:700">CANLI SİSTEM KAYITLARI</div>
+      <div class="note" style="background:#07090e;padding:10px;border-radius:10px;border:1px solid var(--border);line-height:1.7">
+        ${store.log.map(esc).join('<br>') || 'Sistem hazır.'}
+      </div>
+    `;
+  }
 }
 
 /* ============================================================================
-   7. FIRESTORE İŞLEMLERİ
+   5. EŞYA TASARIMI, PERSONEL MODALI VE KANVAS ETKİLEŞİMİ
    ============================================================================ */
-let db = null, auth = null, CONN = false, vt = 0, un = [];
-const FV = () => firebase.firestore.FieldValue;
+cv.addEventListener('click', e => {
+  if (!OWN) return;
+  const r = cv.getBoundingClientRect();
+  const sx = (e.clientX - r.left) / r.width * 1400;
+  const sy = (e.clientY - r.top) / r.height * 920;
 
+  if (store.leftMode === 'design' && store.selectedItemId) {
+    const [gx, gy] = screenToGrid(sx, sy);
+    const it = store.items.find(x => x.id === store.selectedItemId);
+    if (it) {
+      it.x = gx; it.y = gy;
+      saveItemsToFirestore();
+      renderLeft();
+    }
+    return;
+  }
+
+  let best = null, bestDist = 36;
+  store.staff.forEach(a => {
+    const q = P(a.ax, a.ay, 0);
+    const d = Math.hypot(q[0] - sx, (q[1] - 25) - sy);
+    if (d < bestDist) { bestDist = d; best = a; }
+  });
+  if (best) openAgentModal(best.id);
+});
+
+function addOfficeItem() {
+  const type = $('#addItemSelect').value;
+  const titles = { table: 'Toplantı Masası', sofa: 'Dinlenme Koltuğu', plant: 'Salon Bitkisi', server: 'Sunucu Kabini', board: 'Sunum Tahtası' };
+  const it = { id: 'it_' + Date.now(), type, name: titles[type] || 'Eşya', x: 7, y: 7, hidden: false };
+  store.items.push(it);
+  store.selectedItemId = it.id;
+  saveItemsToFirestore();
+  renderLeft();
+}
+
+function toggleItemHide(id) {
+  const it = store.items.find(x => x.id === id);
+  if (it) { it.hidden = !it.hidden; saveItemsToFirestore(); renderLeft(); }
+}
+
+function removeOfficeItem(id) {
+  store.items = store.items.filter(x => x.id !== id);
+  store.selectedItemId = null;
+  saveItemsToFirestore();
+  renderLeft();
+}
+
+function saveItemsToFirestore() {
+  if (CONN && OWN) {
+    db.doc('public/office').set({ updatedAt: FV().serverTimestamp(), items: store.items }, { merge: true });
+  }
+}
+
+function openAgentModal(id) {
+  const a = id ? store.staff.find(x => x.id === id) : null;
+  store.editingAgentId = a ? a.id : null;
+  $('#modalTitle').textContent = a ? `Personeli Düzenle: ${a.name}` : 'Yeni Yapay Zeka Personeli Ekle';
+  $('#mName').value = a ? a.name : '';
+  $('#mRole').value = a ? a.role : '';
+  $('#mColor').value = a && a.c ? a.c : '#6366f1';
+  $('#mSkills').value = a ? (a.skills || '') : '';
+
+  $('#mRoom').innerHTML = STATIONS.map(st =>
+    `<option value="${st.i}" ${a && Number(a.room) === st.i ? 'selected' : ''}>İstasyon ${st.i + 1}</option>`
+  ).join('');
+
+  const modelOpts = sel => MODELS.map(m => `<option value="${esc(m.n)}" ${m.n === sel ? 'selected' : ''}>${esc(m.n)} (${esc(m.desc)})</option>`).join('');
+  $('#mModel').innerHTML = modelOpts(a ? a.model : 'Gemini 3.5 Flash Lite');
+  $('#mBackup').innerHTML = modelOpts(a ? a.backup : 'Gemini 3.1 Flash Lite');
+
+  $('#mDelBtn').style.display = a ? 'inline-block' : 'none';
+  $('#mDelBtn').onclick = () => {
+    if (!confirm(`${a.name} silinsin mi?`)) return;
+    if (CONN && OWN) db.collection('staff').doc(a.id).delete();
+    closeAgentModal();
+  };
+
+  $('#agentModal').classList.add('on');
+}
+
+function closeAgentModal() { $('#agentModal').classList.remove('on'); }
+
+async function saveAgentModal() {
+  const name = $('#mName').value.trim();
+  const role = $('#mRole').value.trim();
+  if (!name || !role) return alert('İsim ve unvan zorunludur.');
+  const payload = {
+    name, role,
+    room: Number($('#mRoom').value || 0),
+    color: $('#mColor').value,
+    hair: '#1e293b',
+    model: $('#mModel').value,
+    backup: $('#mBackup').value,
+    skills: $('#mSkills').value.trim(),
+    active: true,
+    status: 'Hazır',
+    createdBy: 'owner'
+  };
+  const docId = store.editingAgentId || db.collection('staff').doc().id;
+  await db.collection('staff').doc(docId).set(payload, { merge: true });
+  closeAgentModal();
+}
+
+/* ============================================================================
+   6. FIRESTORE GERÇEK ZAMANLI BAĞLANTILAR
+   ============================================================================ */
 const nm = id => {
   if (id === 'owner') return 'Sen (Burak Bey)';
   const s = store.staff.find(x => x.id === id || x.name === id);
@@ -980,61 +1174,101 @@ const nm = id => {
 };
 const tm = t => t && t.toDate ? t.toDate().toTimeString().slice(0, 5) : hhmm();
 
-async function createInternalMail({ fromId, fromName, toId, toName, subject, body, type, threadId, notBeforeMs }) {
-  if (CONN && OWN) {
-    const ts = FV().serverTimestamp();
-    const tid = db.collection('tasks').doc().id;
-    if (toId !== 'owner') {
-      await db.collection('tasks').doc(tid).set({
-        title: subject, description: body.slice(0, 1500),
-        owner: toId, createdBy: fromId, status: 'bekliyor',
-        priority: 1, createdAt: ts, updatedAt: ts
-      }).catch(() => {});
+function syncStaffList(docs) {
+  const ids = new Set(docs.map(x => x.id));
+  store.staff = store.staff.filter(a => ids.has(a.id));
+  docs.forEach(x => {
+    const room = Number(x.room || 0) % STATIONS.length;
+    const st = STATIONS[room];
+    let a = store.staff.find(s => s.id === x.id);
+    if (!a) {
+      a = {
+        id: x.id, name: x.name, role: x.role, room,
+        model: x.model || 'Gemini 3.5 Flash Lite',
+        backup: x.backup || 'Gemini 3.1 Flash Lite',
+        skills: x.skills || '', used: x.usedToday || 0,
+        c: x.color || st.color, ax: st.sx, ay: st.sy,
+        path: [], mon: 0, act: false, bt: '', on: 0, st: x.status || 'Hazır', ph: Math.random() * 6
+      };
+      store.staff.push(a);
+    } else {
+      Object.assign(a, {
+        name: x.name, role: x.role, room,
+        model: x.model || a.model, backup: x.backup || a.backup,
+        skills: x.skills || '', used: x.usedToday || a.used, c: x.color || a.c
+      });
     }
-    await db.collection('mails').add({
-      from: fromId, to: toId, subject, body, type: type || 'görev',
-      taskId: tid, threadId: threadId || ('th_' + Date.now()),
-      processed: toId === 'owner',
-      notBefore: firebase.firestore.Timestamp.fromMillis(notBeforeMs || Date.now()),
-      createdAt: ts
-    });
+  });
+
+  const sel = $('#targetAgent');
+  if (sel) {
+    const cur = sel.value;
+    sel.innerHTML = store.staff.map(a => `<option value="${esc(a.id)}">Alıcı: ${esc(a.name)} (${esc(a.role)})</option>`).join('');
+    if (cur && store.staff.some(a => a.id === cur)) sel.value = cur;
   }
+  renderLeft();
 }
 
-async function postponeMail(mailId, newTimeMs) {
-  const m = store.mails.find(x => x.id === mailId);
-  if (m) m.notBeforeMs = newTimeMs;
-  if (CONN && OWN && !String(mailId).startsWith('m_')) {
-    await db.collection('mails').doc(mailId).update({
-      notBefore: firebase.firestore.Timestamp.fromMillis(newTimeMs)
-    }).catch(() => {});
-  }
+async function createInternalMail({ fromId, fromName, toId, toName, subject, body, type, threadId, notBeforeMs }) {
+  if (!CONN || !OWN) return;
+  const ts = FV().serverTimestamp();
+  await db.collection('mails').add({
+    from: fromId, to: toId, subject, body, type: type || 'görev',
+    threadId: threadId || ('th_' + Date.now()),
+    processed: toId === 'owner',
+    notBefore: firebase.firestore.Timestamp.fromMillis(notBeforeMs || Date.now()),
+    createdAt: ts
+  });
 }
 
 async function markMailProcessed(mailId) {
   const m = store.mails.find(x => x.id === mailId);
   if (m) m.processed = true;
-  if (CONN && OWN && !String(mailId).startsWith('m_')) {
+  if (CONN && OWN) {
+    await db.collection('mails').doc(mailId).update({ processed: true, readAt: FV().serverTimestamp() }).catch(() => {});
+  }
+}
+
+async function forceRunMail(mailId) {
+  if (CONN && OWN) {
     await db.collection('mails').doc(mailId).update({
-      processed: true, readAt: FV().serverTimestamp()
+      notBefore: firebase.firestore.Timestamp.fromMillis(Date.now() - 1000)
     }).catch(() => {});
   }
+  nextAllowedCallTime = 0;
+  processNextPendingMail(true);
+}
+
+async function sendReply(mailId) {
+  const m = store.mails.find(x => x.id === mailId);
+  const txt = $('#replyInput')?.value.trim();
+  if (!m || !txt) return;
+  const target = store.staff.find(s => s.id === m.fromId || s.id === m.toId) || store.staff[0];
+  if (!target) return;
+  await createInternalMail({
+    fromId: 'owner', fromName: 'Sen (Burak Bey)',
+    toId: target.id, toName: `${target.name} · ${target.role}`,
+    subject: 'RE: ' + m.subj, body: txt,
+    type: 'görev', threadId: m.threadId, notBeforeMs: Date.now()
+  });
+  $('#replyInput').value = '';
+  nextAllowedCallTime = 0;
+  processNextPendingMail(true);
 }
 
 async function saveSharedFile(path, content, kind, ownerName) {
+  if (!CONN || !OWN) return;
   const existing = store.files.find(f => f.path === path);
-  if (CONN && OWN) {
-    const ts = FV().serverTimestamp();
-    const docId = existing ? existing.id : db.collection('files').doc().id;
-    const ver = existing ? (existing.version || 1) + 1 : 1;
-    await db.collection('files').doc(docId).set({
-      path, content, owner: ownerName, kind: kind || 'md',
-      version: ver, createdAt: ts, updatedAt: ts
-    }, { merge: true });
-  }
+  const ts = FV().serverTimestamp();
+  const docId = existing ? existing.id : db.collection('files').doc().id;
+  const ver = existing ? (existing.version || 1) + 1 : 1;
+  await db.collection('files').doc(docId).set({
+    path, content, owner: ownerName, kind: kind || 'md',
+    version: ver, createdAt: ts, updatedAt: ts
+  }, { merge: true });
 }
 
-function downloadFile(fileId) {
+function downloadSharedFile(fileId) {
   const f = store.files.find(x => x.id === fileId);
   if (!f) return;
   const blob = new Blob([f.content], { type: 'text/plain;charset=utf-8' });
@@ -1045,361 +1279,28 @@ function downloadFile(fileId) {
   document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-async function resetProject() {
-  if (!confirm('Tüm yazışmalar, görevler ve ortak dosyalar silinecek (Personeller ve ofis eşyaları korunur). Emin misiniz?')) return;
-  if (CONN && OWN) {
-    const batch = db.batch();
-    const mSnap = await db.collection('mails').get();
-    mSnap.forEach(d => batch.delete(d.ref));
-    const tSnap = await db.collection('tasks').get();
-    tSnap.forEach(d => batch.delete(d.ref));
-    const fSnap = await db.collection('files').get();
-    fSnap.forEach(d => batch.delete(d.ref));
-    await batch.commit();
-    store.failCountByMail = {};
-    lg('🗑️ Proje sıfırlandı: Tüm mesajlar ve dosyalar temizlendi.');
-  }
-}
-
-function showApprovalBox(title, summary) {
-  const e = $('#ap');
-  e.style.display = 'block';
-  e.innerHTML = `
-    <h3>✅ Yönetici Onay Kutusu</h3>
-    <p style="margin:0 0 10px"><b>Konu:</b> ${esc(title)}<br><span class="note">${esc(summary)}</span></p>
-    <div class="row">
-      <button class="p" id="okBtn">Onayla</button>
-      <button id="revBtn">Revize İste</button>
-    </div>`;
-  $('#okBtn').onclick = () => { e.style.display = 'none'; lg('Burak Bey çalışmayı onayladı.'); };
-  $('#revBtn').onclick = () => {
-    const note = prompt('Revize talebinizi yazın:');
-    if (note) { $('#ti').value = 'REVİZE: ' + note; $('#go').click(); }
-    e.style.display = 'none';
-  };
-}
-
-/* ============================================================================
-   8. YÖNETİM PANELİ SEKMELERİ
-   ============================================================================ */
-let tab = 'mail';
-const TABS = [
-  ['mail',  '✉️ Yazışmalar'],
-  ['staff', '👥 Personel & Kotalar'],
-  ['tasks', '📋 Görev Kuyruğu & Log'],
-  ['files', '📁 Ortak Klasör']
-];
-
-function tabsUI() {
-  const unread = store.mails.filter(m => !m.processed && m.toId !== 'owner').length;
-  $('#tabs').innerHTML = TABS.map(t =>
-    `<button class="${tab == t[0] ? 'on' : ''}" onclick="tab='${t[0]}';tabsUI();render()">${t[1]}${
-      t[0] == 'mail' ? `<span class="chip">${store.mails.length}${unread ? ' · ' + unread + ' sırada' : ''}</span>` :
-      t[0] == 'files' ? `<span class="chip">${store.files.length}</span>` : ''
-    }</button>`
-  ).join('');
-}
-
-const poolOf = n => store.staff.filter(s => s.model === n);
-
-function render() {
-  if (!OWN) return;
-  tabsUI();
-  updateEngineBadges();
-  renderDesignSidebar();
-  const p = $('#pn');
-
-  if (tab === 'mail') {
-    const sel = store.mails.find(m => m.id === store.selectedMailId) || store.mails[0];
-    if (sel) store.selectedMailId = sel.id;
-
-    p.innerHTML = `
-      <div class="mail-grid">
-        <div class="mail-list">
-          <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Kurum İçi Yazışma Akışı</b>
-            <span class="note">${store.mails.filter(m => !m.processed && m.toId !== 'owner').length} sırada</span>
-          </div>
-          ${store.mails.length ? store.mails.map(m => `
-            <div class="mail-item ${m.id === store.selectedMailId ? 'active' : ''} ${!m.processed ? 'unread' : ''}" onclick="store.selectedMailId='${m.id}';render()">
-              <div style="display:flex;justify-content:space-between;font-size:11.5px">
-                <b>${esc(m.f)} → ${esc(m.t)}</b>
-                <span class="note">${esc(m.time)}</span>
-              </div>
-              <div style="font-weight:700;margin:3px 0">${esc(m.subj)}</div>
-              <div class="note" style="display:flex;justify-content:space-between">
-                <span>${esc(m.type.toUpperCase())}</span>
-                <span>${m.processed ? '✓ İşlendi' : '⏳ Sırada'}</span>
-              </div>
-            </div>
-          `).join('') : '<p class="note">Henüz yazışma yok.</p>'}
-        </div>
-        <div>
-          ${sel ? `
-            <div class="row" style="justify-content:space-between;margin-top:0;border-bottom:1px solid var(--ln);padding-bottom:10px">
-              <div>
-                <h3 style="margin:0">${esc(sel.subj)}</h3>
-                <div class="note">Gönderen: <b>${esc(sel.f)}</b> → Alıcı: <b>${esc(sel.t)}</b></div>
-              </div>
-              <div class="row" style="margin:0">
-                ${!sel.processed ? `<button class="ok" onclick="postponeMail('${sel.id}', Date.now());processNextPendingMail(true)">⚡ Hemen İşle</button>` : ''}
-                <span class="chip">${sel.processed ? 'Tamamlandı' : 'Sırada'}</span>
-              </div>
-            </div>
-            <div style="white-space:pre-wrap;line-height:1.65;margin:12px 0;padding:14px;background:#13101d;border-radius:12px;border:1px solid var(--ln)">${esc(sel.body)}</div>
-            <div class="row">
-              <input id="replyTxt" style="flex:1" placeholder="Bu yazışmaya müdahale et / talimat ekle...">
-              <button class="p" onclick="replyToMail('${sel.id}')">Gönder</button>
-            </div>
-          ` : '<p class="note">Detay için soldan bir yazışma seçin.</p>'}
-        </div>
-      </div>`;
-  }
-  else if (tab === 'staff') {
-    p.innerHTML = `
-      <div class="row" style="margin-top:0">
-        <button class="p" onclick="openAgentModal()">+ Yeni Ajan / Personel Ekle</button>
-      </div>
-      <table>
-        <tr><th>Personel & Unvan</th><th>Uzmanlık (Skills)</th><th>Atanan Model</th><th>Durum</th><th>İşlem</th></tr>
-        ${store.staff.map(s => `
-          <tr>
-            <td><span class="dot" style="background:${s.c}"></span><b>${esc(s.name)}</b><br><span class="note">${esc(s.role)} · Oda ${s.room + 1}</span></td>
-            <td><span class="note">${esc((s.skills || '').slice(0, 100))}...</span></td>
-            <td><b>${esc(s.model)}</b><br><span class="note">Yedek: ${esc(s.backup)} · Bugün: ${s.used || 0}</span></td>
-            <td><span class="chip">${esc(s.st)}</span></td>
-            <td><button onclick="openAgentModal('${s.id}')">Düzenle</button></td>
-          </tr>
-        `).join('')}
-      </table>
-      <h3 style="margin-top:18px">Günlük Model Havuzları (${todayKey()})</h3>
-      ${MODELS.map(m => {
-        const w = poolOf(m.n);
-        const pct = Math.min(100, (m.u / m.l) * 100);
-        return `
-          <div style="display:flex;justify-content:space-between;font-size:12.5px">
-            <span><b>${m.n}</b> <span class="note">(${m.desc})</span> ${w.length ? `<span class="chip">${w.map(x => esc(x.name)).join(', ')}</span>` : ''}</span>
-            <span><b>${m.u} / ${m.l}</b></span>
-          </div>
-          <div class="bar"><i style="width:${pct}%"></i></div>`;
-      }).join('')}`;
-  }
-  else if (tab === 'tasks') {
-    const pendingMails = store.mails.filter(m => !m.processed && m.toId !== 'owner');
-    const doneMails = store.mails.filter(m => m.processed);
-    p.innerHTML = `
-      <div class="cols">
-        <div>
-          <h3>⏳ Sırada Bekleyen Görevler (${pendingMails.length})</h3>
-          ${pendingMails.map(m => {
-            const waitSec = Math.max(0, Math.ceil(((m.notBeforeMs || 0) - Date.now()) / 1000));
-            return `
-            <div style="padding:10px;border:1px solid var(--ln);border-radius:12px;margin-bottom:8px;background:#13101d">
-              <b>${esc(m.t)}</b> <span class="note">← ${esc(m.f)}</span><br>
-              <span>${esc(m.subj)}</span>
-              <div class="row" style="justify-content:space-between;margin-bottom:0;margin-top:6px">
-                <span class="note">${waitSec > 0 ? `⏱ ${waitSec} sn sonra çalışacak` : '🟢 Sırası geldi'}</span>
-                <button onclick="markMailProcessed('${m.id}')">Atla / Kapat</button>
-              </div>
-            </div>`;
-          }).join('') || '<span class="note">Bekleyen görev yok.</span>'}
-        </div>
-        <div>
-          <h3>✅ Tamamlanan Adımlar (${doneMails.length})</h3>
-          ${doneMails.slice(0, 8).map(m => `
-            <div style="padding:8px;border-bottom:1px solid var(--ln)">
-              <b>${esc(m.f)} → ${esc(m.t)}</b><br><span class="note">${esc(m.subj)}</span>
-            </div>
-          `).join('') || '<span class="note">Tamamlanan adım yok.</span>'}
-        </div>
-        <div>
-          <h3>📡 Canlı Sistem & Kota Logları</h3>
-          <div class="note" style="max-height:360px;overflow-y:auto;line-height:1.65">
-            ${store.log.map(esc).join('<br>') || 'Kayıt yok.'}
-          </div>
-        </div>
-      </div>`;
-  }
-  else if (tab === 'files') {
-    const sf = store.files.find(f => f.id === store.selectedFileId) || store.files[0];
-    if (sf) store.selectedFileId = sf.id;
-
-    p.innerHTML = `
-      <div class="mail-grid">
-        <div class="mail-list">
-          <div class="row" style="justify-content:space-between;margin-top:0">
-            <b>Ortak Klasör Dosyaları</b>
-            <button onclick="newFilePrompt()">+ Dosya Ekle</button>
-          </div>
-          ${store.files.length ? store.files.map(f => `
-            <div class="mail-item ${f.id === store.selectedFileId ? 'active' : ''}" onclick="store.selectedFileId='${f.id}';render()">
-              <b>📄 ${esc(f.path)}</b>
-              <div class="note">Yazan: ${esc(f.owner)} · v${f.version || 1}</div>
-            </div>
-          `).join('') : '<p class="note">Dosya bulunmuyor.</p>'}
-        </div>
-        <div>
-          ${sf ? `
-            <div class="row" style="justify-content:space-between;margin-top:0">
-              <div>
-                <h3 style="margin:0">${esc(sf.path)} <span class="chip">v${sf.version || 1}</span></h3>
-                <span class="note">Yazan: <b>${esc(sf.owner)}</b></span>
-              </div>
-              <div class="row" style="margin:0">
-                <button class="p" onclick="downloadFile('${sf.id}')">📥 İndir</button>
-                <button onclick="navigator.clipboard.writeText(store.files.find(x=>x.id==='${sf.id}').content);alert('Kopyalandı!')">Kopyala</button>
-              </div>
-            </div>
-            <pre class="code">${esc(sf.content)}</pre>
-          ` : '<p class="note">Dosya seçin.</p>'}
-        </div>
-      </div>`;
-  }
-}
-
-function replyToMail(mailId) {
-  const m = store.mails.find(x => x.id === mailId);
-  const txt = $('#replyTxt')?.value.trim();
-  if (!m || !txt) return;
-  const target = store.staff.find(s => s.id === m.fromId || s.name === m.f) || store.staff[0];
-  if (!target) return;
-  createInternalMail({
-    fromId: 'owner', fromName: 'Sen (Burak Bey)',
-    toId: target.id, toName: `${target.name} · ${target.role}`,
-    subject: 'RE: ' + m.subj, body: txt,
-    type: 'görev', threadId: m.threadId, notBeforeMs: Date.now()
-  });
-  $('#replyTxt').value = '';
-}
-
-function newFilePrompt() {
-  const path = prompt('Dosya adı (örn: notlar.md):');
-  if (!path) return;
-  const content = prompt('İçerik:');
-  if (content == null) return;
-  saveSharedFile(path.trim(), content, 'md', 'Sen (Burak Bey)');
-}
-
-function openAgentModal(id) {
-  const a = id ? store.staff.find(s => s.id == id) : null, c = $('#card');
-  c.style.display = 'block';
-  const opt = sel => MODELS.map(m => `<option ${m.n === sel ? 'selected' : ''}>${m.n}</option>`).join('');
-  c.innerHTML = `
-    <h3>${a ? 'Personeli Düzenle' : 'Yeni Ajan Ekle'}</h3>
-    <label>İsim</label>
-    <input id="modalName" value="${esc(a ? a.name : '')}" placeholder="Kaan Bey">
-    <label>Unvan / Departman</label>
-    <input id="modalRole" value="${esc(a ? a.role : '')}" placeholder="İnsan Kaynakları Uzmanı">
-    <label>Oda (1-8)</label>
-    <select id="modalRoom">${RM.map(r => `<option value="${r.i}" ${a && a.room === r.i ? 'selected' : ''}>Oda ${r.i + 1}</option>`).join('')}</select>
-    <label>Ana Model</label>
-    <select id="modalModel">${opt(a ? a.model : 'Gemini 3.5 Flash Lite')}</select>
-    <label>Yedek Model</label>
-    <select id="modalBackup">${opt(a ? a.backup : 'Gemma 4 31B')}</select>
-    <label>Uzmanlık (Skills)</label>
-    <textarea id="modalSkills" rows="4">${esc(a ? a.skills : '')}</textarea>
-    <div class="row">
-      <button class="p" onclick="saveAgentData('${a ? a.id : ''}')">Kaydet</button>
-      ${a ? `<button class="danger" onclick="delAgent('${a.id}')">Sil</button>` : ''}
-      <button onclick="$('#card').style.display='none'">Kapat</button>
-    </div>`;
-}
-
-function saveAgentData(id) {
-  const name = $('#modalName').value.trim();
-  const role = $('#modalRole').value.trim();
-  if (!name || !role) return alert('İsim ve unvan zorunludur.');
-  const room = +$('#modalRoom').value;
-  const model = $('#modalModel').value;
-  const backup = $('#modalBackup').value;
-  const skills = $('#modalSkills').value.trim();
-
-  if (id) {
-    const a = store.staff.find(s => s.id == id);
-    Object.assign(a, { name, role, room, model, backup, skills });
-    fbSaveStaff(a);
-  } else {
-    const newId = db.collection('staff').doc().id;
-    const a = mkAgent({ id: newId, name, role, room, model, backup, skills });
-    fbSaveStaff(a);
-  }
-  $('#card').style.display = 'none';
-  updateTargetSelect();
-  render();
-}
-
-function delAgent(id) {
-  const a = store.staff.find(s => s.id == id);
-  if (!a || !confirm(a.name + ' silinsin mi?')) return;
-  a.alive = false;
-  store.staff = store.staff.filter(s => s !== a);
-  if (CONN && OWN) db.collection('staff').doc(id).delete();
-  $('#card').style.display = 'none';
-  updateTargetSelect();
-  render();
-}
-
-// Kanvas Tıklaması: Tasarım modundaysa seçili eşyayı tıklanan kareye taşır, değilse personeli açar
-cv.addEventListener('click', e => {
-  if (!OWN) return;
-  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 800, y = (e.clientY - r.top) / r.height * 530;
-
-  if (store.designMode && store.selectedItemId) {
-    const [gx, gy] = screenToIsoGrid(x, y);
-    updateSelectedItemField('x', gx);
-    updateSelectedItemField('y', gy);
-    return;
-  }
-
-  let best = null, bd = 26;
-  store.staff.forEach(a => {
-    const q = P(a.ax, a.ay, 0), d = Math.hypot(q[0] - x, q[1] - 24 - y);
-    if (d < bd) { bd = d; best = a; }
-  });
-  if (best) openAgentModal(best.id);
-});
-
-/* ============================================================================
-   9. FIREBASE AUTH VE CANLI DINLEYICILER
-   ============================================================================ */
-function fbSaveStaff(a) {
-  if (!CONN || !OWN) return;
-  db.collection('staff').doc(a.id).set({
-    name: a.name, role: a.role, room: a.room,
-    model: a.model, backup: a.backup, skills: a.skills || '',
-    color: a.c, hair: a.h, active: true, status: a.st || 'Hazır',
-    usedToday: a.used || 0, createdBy: a.by || 'owner'
-  }, { merge: true });
-}
-
-function stopOwnerListeners() { un.forEach(f => f()); un = []; }
-
-async function startOwnerListeners() {
-  clearInterval(vt); stopOwnerListeners();
+async function startOwnerSession() {
+  un.forEach(f => f()); un = [];
 
   try {
-    const secretDoc = await db.doc('settings/secret').get();
-    if (secretDoc.exists && secretDoc.data().apiKey) {
-      store.geminiKey = secretDoc.data().apiKey;
-      await discoverWorkingModels();
+    const sec = await db.doc('settings/secret').get();
+    if (sec.exists && sec.data().apiKey) {
+      store.geminiKey = sec.data().apiKey.trim();
+      lg('🔑 Gemini API anahtarı Firestore gizli kasasından yüklendi.');
     }
   } catch (e) {}
 
-  // Eşyaları Firestore public/office belgesinden canlı dinle
   un.push(db.doc('public/office').onSnapshot(d => {
     if (d.exists && Array.isArray(d.data().items)) {
       store.items = d.data().items.map((it, idx) =>
-        typeof it === 'string'
-          ? { id: 'it_' + idx, type: 'table', name: it, x: 9, y: 4, hue: 32, hidden: false }
-          : it
+        typeof it === 'string' ? { id: 'it_' + idx, type: 'table', name: it, x: 7, y: 7 } : it
       );
-      renderDesignSidebar();
+      renderLeft();
     }
   }));
 
   un.push(db.collection('staff').onSnapshot(q => {
-    syncStaff(q.docs.map(d => ({ id: d.id, ...d.data() })));
-    render();
+    syncStaffList(q.docs.map(d => ({ id: d.id, ...d.data() })));
   }));
 
   un.push(db.collection('mails').orderBy('createdAt', 'desc').limit(80).onSnapshot(q => {
@@ -1414,54 +1315,46 @@ async function startOwnerListeners() {
         time: tm(m.createdAt)
       };
     });
-    render();
+    renderRight();
   }));
 
   un.push(db.collection('files').orderBy('updatedAt', 'desc').limit(50).onSnapshot(q => {
     store.files = q.docs.map(d => ({ id: d.id, ...d.data(), time: tm(d.updatedAt) }));
-    render();
+    renderRight();
   }));
 
   un.push(db.collection('usage').doc(todayKey()).onSnapshot(d => {
     if (d.exists && d.data().pools) {
       const p = d.data().pools;
       MODELS.forEach(m => { if (p[m.n] != null) m.u = p[m.n]; });
-      render();
+      renderRight();
     }
   }));
 }
 
-async function pollPublic() {
-  try {
-    const d = await db.doc('public/office').get(), o = d.exists ? d.data() : {};
-    if (o.staff && o.staff.length) syncStaff(o.staff);
-    if (Array.isArray(o.items)) {
-      store.items = o.items.map((it, idx) => typeof it === 'string' ? { id: 'it_' + idx, type: 'table', name: it, x: 9, y: 4 } : it);
-    }
-  } catch (e) {}
-}
-
-function setOwner(b) {
-  OWN = b;
-  $('#panel').classList.toggle('on', b);
-  $('#bl').textContent = b ? 'Çıkış Yap' : 'Yönetici Girişi';
-  $('#bl').className = b ? '' : 'p';
-  updateEngineBadges();
-  render();
+function setOwnerUI(isOwn) {
+  OWN = isOwn;
+  $('#cmdBar').style.display = isOwn ? 'flex' : 'none';
+  $('#resetProj').style.display = isOwn ? 'inline-block' : 'none';
+  $('#stop').style.display = isOwn ? 'inline-block' : 'none';
+  $('#bl').textContent = isOwn ? 'Çıkış Yap' : 'Yönetici Girişi';
+  $('#bl').className = isOwn ? '' : 'p';
+  $('#engBadge').className = isOwn ? 'badge ok' : 'badge';
+  $('#engBadge').textContent = isOwn ? '🟢 Komuta Merkezi Aktif' : 'Vitrin Modu';
+  renderLeft();
+  renderRight();
 }
 
 $('#bl').onclick = () => {
-  if (CONN && !OWN) return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert('Giriş hatası: ' + e.message));
+  if (CONN && !OWN) return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   if (CONN && OWN) return auth.signOut();
 };
 
 $('#go').onclick = async () => {
   const txt = $('#ti').value.trim();
-  if (!txt) return alert('Lütfen görev konusunu yazın.');
-  const targetId = $('#targetAgent').value;
-  const target = store.staff.find(s => s.id === targetId) || store.staff[0];
-  if (!target) return alert('Firestore\'da personel bulunamadı.');
-
+  if (!txt) return alert('Lütfen görev emrini yazın.');
+  const target = store.staff.find(s => s.id === $('#targetAgent').value) || store.staff[0];
+  if (!target) return alert('Önce sol panelden personel ekleyin.');
   $('#ti').value = '';
   const subj = txt.length > 52 ? txt.slice(0, 52) + '...' : txt;
   await createInternalMail({
@@ -1470,21 +1363,36 @@ $('#go').onclick = async () => {
     subject: subj, body: txt,
     type: 'görev', threadId: 'th_' + Date.now(), notBeforeMs: Date.now()
   });
-  lg(`Sen → ${target.name}: ${subj}`);
+  nextAllowedCallTime = 0;
   processNextPendingMail(true);
 };
 
-$('#stepBtn').onclick = () => processNextPendingMail(true);
-$('#unstickBtn').onclick = unstickAllTasks;
-$('#resetProj').onclick = resetProject;
+$('#stepBtn').onclick = () => { nextAllowedCallTime = 0; processNextPendingMail(true); };
 
 $('#stop').onclick = () => {
   halt = !halt;
-  $('#stop').textContent = halt ? 'Devam Et' : 'Acil Durdur';
-  updateEngineBadges();
+  $('#stop').textContent = halt ? '▶️ Devam Et' : '⏸ Duraklat';
+  $('#engBadge').textContent = halt ? '⏸ Duraklatıldı' : '🟢 Komuta Merkezi Aktif';
 };
 
-async function fbLoad() {
+$('#resetProj').onclick = async () => {
+  if (!confirm('Tüm yazışmalar ve ortak klasör dosyaları silinip yeni proje başlatılsın mı?')) return;
+  const batch = db.batch();
+  const [mSnap, tSnap, fSnap] = await Promise.all([
+    db.collection('mails').get(),
+    db.collection('tasks').get(),
+    db.collection('files').get()
+  ]);
+  mSnap.forEach(d => batch.delete(d.ref));
+  tSnap.forEach(d => batch.delete(d.ref));
+  fSnap.forEach(d => batch.delete(d.ref));
+  await batch.commit();
+  store.blockedModelsUntil = {};
+  store.failCountByMail = {};
+  lg('🗑️ Tüm mesajlar ve dosyalar temizlendi, yeni projeye hazır!');
+};
+
+async function initFirebase() {
   for (const u of ['app', 'auth', 'firestore']) {
     await new Promise((r, j) => {
       const s = document.createElement('script');
@@ -1495,17 +1403,17 @@ async function fbLoad() {
   firebase.initializeApp(FB);
   db = firebase.firestore(); auth = firebase.auth(); CONN = true;
   auth.onAuthStateChanged(async u => {
-    if (!u) { setOwner(false); pollPublic(); vt = setInterval(pollPublic, 30000); return; }
-    try {
-      await db.doc('settings/guard').get();
-      setOwner(true); startOwnerListeners();
-    } catch (e) {
-      setOwner(false); await auth.signOut();
-      alert('Yönetici yetkisi doğrulanamadı.');
+    if (!u) {
+      setOwnerUI(false);
+      const pub = await db.doc('public/office').get();
+      if (pub.exists && pub.data().staff) syncStaffList(pub.data().staff);
+      return;
     }
+    setOwnerUI(true);
+    startOwnerSession();
   });
 }
-fbLoad();
+initFirebase();
 </script>
 </body>
 </html>
